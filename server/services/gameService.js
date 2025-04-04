@@ -15,24 +15,8 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null) => 
       conditions.push(eq(games.verified, verified));
     }
     
-    // Build query with filters - with separate aliases for players
-    let query = db
-      .select({
-        ...games,
-        whitePlayer: {
-          id: players.id,
-          name: players.name,
-          currentElo: players.currentElo
-        },
-        blackPlayer: {
-          id: players.id,
-          name: players.name,
-          currentElo: players.currentElo
-        }
-      })
-      .from(games)
-      .leftJoin(players, eq(games.whitePlayerId, players.id))
-      .leftJoin(players, eq(games.blackPlayerId, players.id));
+    // Build query with filtering
+    let query = db.select().from(games);
     
     // Add conditions if any
     if (conditions.length > 0) {
@@ -51,17 +35,37 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null) => 
         : query.orderBy(desc(games.date));
     }
     
-    const result = await query;
+    // Execute the query to get base game data
+    const gamesData = await query;
     
-    // Process the result to handle the joined data correctly
-    return result.map(row => {
-      const { whitePlayer, blackPlayer, ...gameData } = row;
+    // For each game, fetch the player info separately
+    const enrichedGames = await Promise.all(gamesData.map(async (game) => {
+      const [whitePlayer] = await db
+        .select({
+          id: players.id,
+          name: players.name,
+          currentElo: players.currentElo
+        })
+        .from(players)
+        .where(eq(players.id, game.whitePlayerId));
+        
+      const [blackPlayer] = await db
+        .select({
+          id: players.id,
+          name: players.name,
+          currentElo: players.currentElo
+        })
+        .from(players)
+        .where(eq(players.id, game.blackPlayerId));
+        
       return {
-        ...gameData,
+        ...game,
         whitePlayer,
         blackPlayer
       };
-    });
+    }));
+    
+    return enrichedGames;
   } catch (error) {
     console.error('Error in getAllGames:', error);
     throw error;
@@ -73,33 +77,39 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null) => 
  */
 const getGameById = async (id) => {
   try {
-    const [result] = await db
-      .select({
-        ...games,
-        whitePlayer: {
-          id: players.id,
-          name: players.name,
-          currentElo: players.currentElo
-        },
-        blackPlayer: {
-          id: players.id,
-          name: players.name,
-          currentElo: players.currentElo
-        }
-      })
+    // Get the base game data first
+    const [game] = await db
+      .select()
       .from(games)
-      .leftJoin(players, eq(games.whitePlayerId, players.id))
-      .leftJoin(players, eq(games.blackPlayerId, players.id))
       .where(eq(games.id, id));
     
-    if (!result) {
+    if (!game) {
       return null;
     }
     
-    // Process the result to handle the joined data correctly
-    const { whitePlayer, blackPlayer, ...gameData } = result;
+    // Get white player data
+    const [whitePlayer] = await db
+      .select({
+        id: players.id,
+        name: players.name,
+        currentElo: players.currentElo
+      })
+      .from(players)
+      .where(eq(players.id, game.whitePlayerId));
+      
+    // Get black player data
+    const [blackPlayer] = await db
+      .select({
+        id: players.id,
+        name: players.name,
+        currentElo: players.currentElo
+      })
+      .from(players)
+      .where(eq(players.id, game.blackPlayerId));
+    
+    // Combine the data
     return {
-      ...gameData,
+      ...game,
       whitePlayer,
       blackPlayer
     };
@@ -114,24 +124,10 @@ const getGameById = async (id) => {
  */
 const getGamesForPlayer = async (playerId, sortBy = 'date', order = 'desc') => {
   try {
-    // Build query to find games where player is either white or black
+    // First get all games where the player is either white or black
     let query = db
-      .select({
-        ...games,
-        whitePlayer: {
-          id: players.id,
-          name: players.name,
-          currentElo: players.currentElo
-        },
-        blackPlayer: {
-          id: players.id,
-          name: players.name,
-          currentElo: players.currentElo
-        }
-      })
+      .select()
       .from(games)
-      .leftJoin(players, eq(games.whitePlayerId, players.id))
-      .leftJoin(players, eq(games.blackPlayerId, players.id))
       .where(
         or(
           eq(games.whitePlayerId, playerId),
@@ -151,17 +147,36 @@ const getGamesForPlayer = async (playerId, sortBy = 'date', order = 'desc') => {
         : query.orderBy(desc(games.date));
     }
     
-    const result = await query;
+    const gamesData = await query;
     
-    // Process the result to handle the joined data correctly
-    return result.map(row => {
-      const { whitePlayer, blackPlayer, ...gameData } = row;
+    // For each game, fetch the player info
+    const enrichedGames = await Promise.all(gamesData.map(async (game) => {
+      const [whitePlayer] = await db
+        .select({
+          id: players.id,
+          name: players.name,
+          currentElo: players.currentElo
+        })
+        .from(players)
+        .where(eq(players.id, game.whitePlayerId));
+        
+      const [blackPlayer] = await db
+        .select({
+          id: players.id,
+          name: players.name,
+          currentElo: players.currentElo
+        })
+        .from(players)
+        .where(eq(players.id, game.blackPlayerId));
+        
       return {
-        ...gameData,
+        ...game,
         whitePlayer,
         blackPlayer
       };
-    });
+    }));
+    
+    return enrichedGames;
   } catch (error) {
     console.error(`Error in getGamesForPlayer (${playerId}):`, error);
     throw error;

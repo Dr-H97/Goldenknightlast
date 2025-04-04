@@ -110,7 +110,7 @@ const SubmitGame = () => {
     
     try {
       // Verify the PIN first
-      const isVerified = await verifyPin(currentUser.id, formData.pin);
+      const isVerified = await verifyPin(parseInt(currentUser.id), formData.pin);
       
       if (!isVerified) {
         setError('Invalid PIN');
