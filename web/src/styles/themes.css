@@ -10,6 +10,7 @@
   --white-piece: #ffffff;
   --black-piece: #333333;
   --card-bg-light: #ffffff;
+  --card-bg-alt-light: #f7f7f7;
   --header-bg-light: #ebebeb;
   --border-light: #dddddd;
   --success-light: #4caf50;
@@ -28,6 +29,7 @@
   --white-piece-dark: #cccccc;
   --black-piece-dark: #222222;
   --card-bg-dark: #2a2a2a;
+  --card-bg-alt-dark: #333333;
   --header-bg-dark: #252525;
   --border-dark: #444444;
   --success-dark: #66bb6a;
@@ -44,6 +46,7 @@
   --primary: var(--primary-light);
   --secondary: var(--secondary-light);
   --card-bg: var(--card-bg-light);
+  --card-bg-alt: var(--card-bg-alt-light);
   --header-bg: var(--header-bg-light);
   --border: var(--border-light);
   --success: var(--success-light);
@@ -66,6 +69,7 @@
   --primary: var(--primary-dark);
   --secondary: var(--secondary-dark);
   --card-bg: var(--card-bg-dark);
+  --card-bg-alt: var(--card-bg-alt-dark);
   --header-bg: var(--header-bg-dark);
   --border: var(--border-dark);
   --success: var(--success-dark);
