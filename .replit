@@ -1,4 +1,4 @@
-modules = ["java"]
+modules = ["java", "nodejs-20"]
 
 [nix]
 channel = "stable-24_05"
@@ -18,6 +18,18 @@ args = "ChessClubApp"
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "android-app-build"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "ChessClubWebApp"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "ChessClubBackend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "ChessClubFrontend"
 
 [[workflows.workflow]]
 name = "ChessClubApp"
@@ -48,5 +60,58 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "./gradlew installDebug && adb shell am start -n com.chessclub.app/.ui.login.LoginActivity"
 
+[[workflows.workflow]]
+name = "ChessClubWebApp"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "ChessClubBackend"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server/index.js"
+waitForPort = 3000
+
+[[workflows.workflow]]
+name = "ChessClubFrontend"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd web && npm run dev"
+waitForPort = 5000
+
 [deployment]
 run = ["sh", "-c", "./gradlew :app:installDebug && adb shell am start -n com.chessclub.app/.ui.login.LoginActivity"]
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
+localPort = 5000
+externalPort = 80

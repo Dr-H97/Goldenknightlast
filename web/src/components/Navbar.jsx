@@ -1,0 +1,68 @@
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+const Navbar = () => {
+  const { currentUser, logout, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+  
+  return (
+    <nav style={{
+      backgroundColor: '#1a1a1a',
+      padding: '10px 20px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px',
+      width: '100%',
+      boxSizing: 'border-box'
+    }}>
+      <div className="nav-left">
+        <h2 style={{ margin: 0 }}>Chess Club</h2>
+      </div>
+      
+      <div className="nav-middle" style={{
+        display: 'flex',
+        gap: '20px'
+      }}>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/rankings">Rankings</Link>
+        <Link to="/submit-game">Submit Game</Link>
+        <Link to="/profile">Profile</Link>
+        {isAdmin && <Link to="/admin">Admin</Link>}
+      </div>
+      
+      <div className="nav-right" style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px'
+      }}>
+        {currentUser && (
+          <>
+            <span>Hello, {currentUser.name}</span>
+            <button 
+              onClick={handleLogout}
+              style={{
+                padding: '5px 10px',
+                backgroundColor: 'transparent',
+                border: '1px solid #646cff',
+                borderRadius: '4px',
+                color: '#646cff',
+                cursor: 'pointer'
+              }}
+            >
+              Logout
+            </button>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
