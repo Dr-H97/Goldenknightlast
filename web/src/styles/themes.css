@@ -1,0 +1,230 @@
+/* Chess-themed Color Variables */
+:root {
+  /* Light Theme (Default) */
+  --background-light: #f0f0f0;
+  --text-light: #333333;
+  --primary-light: #646cff;
+  --secondary-light: #8892ff;
+  --board-light: #e6e0d4;
+  --board-dark: #7c6f59;
+  --white-piece: #ffffff;
+  --black-piece: #333333;
+  --card-bg-light: #ffffff;
+  --header-bg-light: #ebebeb;
+  --border-light: #dddddd;
+  --success-light: #4caf50;
+  --warning-light: #ff9800;
+  --error-light: #f44336;
+  --nav-active-light: #646cff;
+  --modal-overlay-light: rgba(0, 0, 0, 0.3);
+  
+  /* Dark Theme */
+  --background-dark: #1a1a1a;
+  --text-dark: #f0f0f0;
+  --primary-dark: #818cf8;
+  --secondary-dark: #a5b4fc;
+  --board-dark-theme: #3c3c3c;
+  --board-light-theme: #656565;
+  --white-piece-dark: #cccccc;
+  --black-piece-dark: #222222;
+  --card-bg-dark: #2a2a2a;
+  --header-bg-dark: #252525;
+  --border-dark: #444444;
+  --success-dark: #66bb6a;
+  --warning-dark: #ffa726;
+  --error-dark: #ef5350;
+  --nav-active-dark: #818cf8;
+  --modal-overlay-dark: rgba(0, 0, 0, 0.6);
+}
+
+/* Light Theme (Default) */
+:root[data-theme="light"] {
+  --background: var(--background-light);
+  --text: var(--text-light);
+  --primary: var(--primary-light);
+  --secondary: var(--secondary-light);
+  --card-bg: var(--card-bg-light);
+  --header-bg: var(--header-bg-light);
+  --border: var(--border-light);
+  --success: var(--success-light);
+  --warning: var(--warning-light);
+  --error: var(--error-light);
+  --nav-active: var(--nav-active-light);
+  --modal-overlay: var(--modal-overlay-light);
+  
+  /* Chess-specific colors */
+  --board-light-square: var(--board-light);
+  --board-dark-square: var(--board-dark);
+  --white-piece-color: var(--white-piece);
+  --black-piece-color: var(--black-piece);
+}
+
+/* Dark Theme */
+:root[data-theme="dark"] {
+  --background: var(--background-dark);
+  --text: var(--text-dark);
+  --primary: var(--primary-dark);
+  --secondary: var(--secondary-dark);
+  --card-bg: var(--card-bg-dark);
+  --header-bg: var(--header-bg-dark);
+  --border: var(--border-dark);
+  --success: var(--success-dark);
+  --warning: var(--warning-dark);
+  --error: var(--error-dark);
+  --nav-active: var(--nav-active-dark);
+  --modal-overlay: var(--modal-overlay-dark);
+  
+  /* Chess-specific colors */
+  --board-light-square: var(--board-light-theme);
+  --board-dark-square: var(--board-dark-theme);
+  --white-piece-color: var(--white-piece-dark);
+  --black-piece-color: var(--black-piece-dark);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  background-color: var(--card-bg);
+  color: var(--text);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:hover {
+  transform: rotate(15deg);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle-mobile {
+  margin: 0 auto;
+  width: 24px;
+  height: 24px;
+}
+
+/* App Container */
+body {
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card Styling */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.card-header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Links and Buttons */
+a {
+  color: var(--primary);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary);
+}
+
+button {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Navigation */
+nav {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.mobile-nav {
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.mobile-nav-item.active {
+  color: var(--nav-active);
+}
+
+/* Form Elements */
+input, select, textarea {
+  background-color: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tables */
+table {
+  border-color: var(--border);
+  transition: border-color 0.3s ease;
+}
+
+th, td {
+  border-color: var(--border);
+  transition: border-color 0.3s ease;
+}
+
+/* Modals */
+.modal-overlay {
+  background-color: var(--modal-overlay);
+  transition: background-color 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Chart Colors */
+.chart-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* User Status Indicators */
+.status-admin {
+  background-color: var(--warning);
+  transition: background-color 0.3s ease;
+}
+
+.status-active {
+  background-color: var(--success);
+  transition: background-color 0.3s ease;
+}
+
+.status-inactive {
+  background-color: var(--error);
+  transition: background-color 0.3s ease;
+}
+
+/* Chess-specific Elements */
+.chess-board {
+  border: 2px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.light-square {
+  background-color: var(--board-light-square);
+  transition: background-color 0.3s ease;
+}
+
+.dark-square {
+  background-color: var(--board-dark-square);
+  transition: background-color 0.3s ease;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const { currentUser, logout, isAdmin } = useAuth();
@@ -13,14 +14,16 @@ const Navbar = () => {
   
   return (
     <nav style={{
-      backgroundColor: '#1a1a1a',
+      backgroundColor: 'var(--card-bg)',
+      color: 'var(--text)',
       padding: '10px 20px',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: '20px',
       width: '100%',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      borderBottom: '1px solid var(--border)'
     }}>
       <div className="nav-left">
         <h2 style={{ margin: 0 }}>Chess Club</h2>
@@ -42,6 +45,7 @@ const Navbar = () => {
         alignItems: 'center',
         gap: '10px'
       }}>
+        <ThemeToggle />
         {currentUser && (
           <>
             <span>Hello, {currentUser.name}</span>
@@ -50,9 +54,9 @@ const Navbar = () => {
               style={{
                 padding: '5px 10px',
                 backgroundColor: 'transparent',
-                border: '1px solid #646cff',
+                border: '1px solid var(--primary)',
                 borderRadius: '4px',
-                color: '#646cff',
+                color: 'var(--primary)',
                 cursor: 'pointer'
               }}
             >

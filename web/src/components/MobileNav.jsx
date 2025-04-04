@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 // Simple mobile-friendly bottom navigation
 const MobileNav = () => {
@@ -55,6 +56,11 @@ const MobileNav = () => {
         <div className="mobile-nav-icon">👤</div>
         <span>Profile</span>
       </Link>
+      
+      <div className="mobile-nav-item">
+        <ThemeToggle mobile={true} />
+        <span>Theme</span>
+      </div>
     </nav>
   );
 };
