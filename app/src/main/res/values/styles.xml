@@ -1,0 +1,23 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- A circle shape for rank numbers -->
+    <drawable name="circle_background">
+        <shape android:shape="oval">
+            <solid android:color="@color/colorRankBackground" />
+        </shape>
+    </drawable>
+
+    <!-- A rounded rectangle for ELO display -->
+    <drawable name="elo_background">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorEloBackground" />
+            <corners android:radius="4dp" />
+        </shape>
+    </drawable>
+</resources>

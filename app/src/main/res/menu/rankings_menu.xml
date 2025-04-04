@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sort_elo"
+        android:title="@string/sort_by_elo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_name"
+        android:title="@string/sort_by_name"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_games"
+        android:title="@string/sort_by_games"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_wins"
+        android:title="@string/sort_by_wins"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+</menu>
