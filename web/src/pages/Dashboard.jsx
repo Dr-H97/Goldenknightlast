@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import '../styles/animations.css';
 
 // Register Chart.js components
 ChartJS.register(
@@ -127,6 +128,42 @@ const Dashboard = () => {
           // Build chart data
           setEloChartData(buildEloHistoryData(sortedGames, chartTimeRange));
           
+          // Calculate most played opponent
+          const opponentCounts = {};
+          sortedGames.forEach(game => {
+            const opponentId = game.whitePlayerId === currentUser.id ? game.blackPlayerId : game.whitePlayerId;
+            const opponentName = game.whitePlayerId === currentUser.id ? game.blackPlayer?.name : game.whitePlayer?.name;
+            
+            if (opponentId && opponentName) {
+              const key = `${opponentId}-${opponentName}`;
+              opponentCounts[key] = (opponentCounts[key] || 0) + 1;
+            }
+          });
+          
+          // Find the most played opponent
+          let mostPlayedOpponent = null;
+          let highestCount = 0;
+          
+          Object.entries(opponentCounts).forEach(([key, count]) => {
+            if (count > highestCount) {
+              highestCount = count;
+              mostPlayedOpponent = key.split('-')[1]; // Get the opponent name
+            }
+          });
+          
+          // Calculate win rates with white and black
+          const gamesAsWhite = sortedGames.filter(game => game.whitePlayerId === currentUser.id);
+          const winsAsWhite = gamesAsWhite.filter(game => game.result === '1-0').length;
+          const winRateAsWhite = gamesAsWhite.length > 0 
+            ? Math.round((winsAsWhite / gamesAsWhite.length) * 100) 
+            : 0;
+            
+          const gamesAsBlack = sortedGames.filter(game => game.blackPlayerId === currentUser.id);
+          const winsAsBlack = gamesAsBlack.filter(game => game.result === '0-1').length;
+          const winRateAsBlack = gamesAsBlack.length > 0 
+            ? Math.round((winsAsBlack / gamesAsBlack.length) * 100) 
+            : 0;
+          
           // Set player statistics
           setPlayerStats({
             totalGames: sortedGames.length,
@@ -139,7 +176,13 @@ const Dashboard = () => {
               (game.whitePlayerId === currentUser.id && game.result === '0-1') || 
               (game.blackPlayerId === currentUser.id && game.result === '1-0')
             ).length,
-            draws: sortedGames.filter(game => game.result === '1/2-1/2').length
+            draws: sortedGames.filter(game => game.result === '1/2-1/2').length,
+            mostPlayedOpponent,
+            gamesWithMostPlayed: mostPlayedOpponent ? highestCount : 0,
+            winRateAsWhite,
+            winRateAsBlack,
+            gamesAsWhite: gamesAsWhite.length,
+            gamesAsBlack: gamesAsBlack.length
           });
         }
         
@@ -190,11 +233,11 @@ const Dashboard = () => {
   
   return (
     <div className="container">
-      <h1>Welcome, {currentUser.name}!</h1>
+      <h1 className="fade-in">Welcome, {currentUser.name}!</h1>
       
       <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Player Stats Section */}
-        <div className="card">
+        <div className="card dashboard-card slide-up">
           <h2>Your Statistics</h2>
           {playerStats && (
             <div>
@@ -212,7 +255,7 @@ const Dashboard = () => {
         </div>
         
         {/* Recent Games Section */}
-        <div className="card">
+        <div className="card dashboard-card slide-up" style={{ animationDelay: '0.1s' }}>
           <h2>Recent Games</h2>
           {recentGames.length > 0 ? (
             <table>
@@ -225,8 +268,8 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {recentGames.map(game => (
-                  <tr key={game.id}>
+                {recentGames.map((game, index) => (
+                  <tr key={game.id} className="staggered-item">
                     <td>{formatDate(game.date)}</td>
                     <td>{renderOpponent(game)}</td>
                     <td>{renderPlayerResult(game)}</td>
@@ -251,14 +294,61 @@ const Dashboard = () => {
           
           <div style={{ marginTop: '10px' }}>
             <Link to="/submit-game">
-              <button className="btn-primary">Submit New Game</button>
+              <button className="btn-primary chess-piece-hover">Submit New Game</button>
             </Link>
           </div>
         </div>
       </div>
       
+      {/* Detailed Statistics Section */}
+      {playerStats && playerStats.totalGames > 0 && (
+        <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s' }}>
+          <h2>Detailed Statistics</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+            {/* Most Played Opponent */}
+            <div className="stat-card staggered-item">
+              <h3>Most Played Opponent</h3>
+              {playerStats.mostPlayedOpponent ? (
+                <div>
+                  <p className="stat-highlight">{playerStats.mostPlayedOpponent}</p>
+                  <p>Played {playerStats.gamesWithMostPlayed} games</p>
+                </div>
+              ) : (
+                <p>No games played yet</p>
+              )}
+            </div>
+            
+            {/* Win Rate with White */}
+            <div className="stat-card staggered-item">
+              <h3>Win Rate with White</h3>
+              {playerStats.gamesAsWhite > 0 ? (
+                <div>
+                  <p className="stat-highlight">{playerStats.winRateAsWhite}%</p>
+                  <p>From {playerStats.gamesAsWhite} games</p>
+                </div>
+              ) : (
+                <p>No games played as White</p>
+              )}
+            </div>
+            
+            {/* Win Rate with Black */}
+            <div className="stat-card staggered-item">
+              <h3>Win Rate with Black</h3>
+              {playerStats.gamesAsBlack > 0 ? (
+                <div>
+                  <p className="stat-highlight">{playerStats.winRateAsBlack}%</p>
+                  <p>From {playerStats.gamesAsBlack} games</p>
+                </div>
+              ) : (
+                <p>No games played as Black</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* ELO Rating History Chart */}
-      <div className="card" style={{ marginTop: '20px' }}>
+      <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.3s' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>ELO Rating History</h2>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -301,12 +391,16 @@ const Dashboard = () => {
         </div>
         
         {eloChartData ? (
-          <div style={{ height: '300px', marginTop: '20px' }}>
+          <div style={{ height: '300px', marginTop: '20px' }} className="fade-in">
             <Line 
               data={eloChartData}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeInOutQuart'
+                },
                 scales: {
                   y: {
                     beginAtZero: false,
@@ -347,11 +441,11 @@ const Dashboard = () => {
       </div>
       
       {/* Club Rankings Preview */}
-      <div className="card" style={{ marginTop: '20px' }}>
+      <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.4s' }}>
         <h2>Club Rankings</h2>
         <p>View the current rankings of all club members and see where you stand.</p>
         <Link to="/rankings">
-          <button className="btn-secondary">View Rankings</button>
+          <button className="btn-secondary chess-piece-hover">View Rankings</button>
         </Link>
       </div>
     </div>

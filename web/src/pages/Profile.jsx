@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import '../styles/animations.css';
 
 const Profile = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [gameHistory, setGameHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -14,6 +16,16 @@ const Profile = () => {
   });
   const [pinError, setPinError] = useState('');
   const [pinSuccess, setPinSuccess] = useState('');
+  
+  // Screen resize listener for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   useEffect(() => {
     fetchGameHistory();
@@ -173,29 +185,53 @@ const Profile = () => {
     return <div className="container">Loading profile...</div>;
   }
   
+  // Add handleLogout function
+  const handleLogout = () => {
+    logout();
+  };
+  
   return (
-    <div className="container">
-      <h1>Player Profile</h1>
+    <div className="container fade-in">
+      <h1 className="slide-up">Player Profile</h1>
       
-      {error && <div className="error">{error}</div>}
-      {pinSuccess && <div className="success">{pinSuccess}</div>}
+      {error && <div className="error slide-up">{error}</div>}
+      {pinSuccess && <div className="success slide-up">{pinSuccess}</div>}
       
-      <div className="profile-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
+      <div className="profile-grid slide-up" style={{ 
+        display: 'grid', 
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr', 
+        gap: '20px'
+      }}>
         {/* Player Info */}
-        <div className="card">
+        <div className="card dashboard-card">
           <h2>Player Information</h2>
           
           <p><strong>Name:</strong> {currentUser.name}</p>
           <p><strong>Current ELO:</strong> {currentUser.currentElo}</p>
           <p><strong>Account Type:</strong> {currentUser.isAdmin ? 'Admin' : 'Player'}</p>
           
-          <button 
-            onClick={() => setShowChangePinForm(!showChangePinForm)}
-            className="btn-secondary"
-            style={{ marginTop: '10px' }}
-          >
-            {showChangePinForm ? 'Cancel' : 'Change PIN'}
-          </button>
+          <div style={{ 
+            display: 'flex', 
+            gap: '10px', 
+            marginTop: '10px',
+            flexDirection: isMobile ? 'column' : 'row'
+          }}>
+            <button 
+              onClick={() => setShowChangePinForm(!showChangePinForm)}
+              className="btn-secondary chess-piece-hover"
+            >
+              {showChangePinForm ? 'Cancel' : 'Change PIN'}
+            </button>
+            
+            {isMobile && (
+              <button 
+                onClick={handleLogout}
+                className="btn-danger chess-piece-hover"
+              >
+                Logout
+              </button>
+            )}
+          </div>
           
           {showChangePinForm && (
             <form onSubmit={handleSubmitPinChange} style={{ marginTop: '15px' }}>
@@ -240,7 +276,7 @@ const Profile = () => {
                 />
               </div>
               
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-primary chess-piece-hover">
                 Update PIN
               </button>
             </form>
@@ -248,21 +284,21 @@ const Profile = () => {
         </div>
         
         {/* Player Stats */}
-        <div className="card">
+        <div className="card dashboard-card">
           <h2>Statistics</h2>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-            <div style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
+            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.wins}</h3>
               <p style={{ margin: 0 }}>Wins</p>
             </div>
             
-            <div style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
+            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.losses}</h3>
               <p style={{ margin: 0 }}>Losses</p>
             </div>
             
-            <div style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
+            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.draws}</h3>
               <p style={{ margin: 0 }}>Draws</p>
             </div>
@@ -274,41 +310,43 @@ const Profile = () => {
       </div>
       
       {/* Game History */}
-      <div className="card" style={{ marginTop: '20px' }}>
+      <div className="card dashboard-card slide-up" style={{ marginTop: '20px' }}>
         <h2>Game History</h2>
         
         {gameHistory.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Opponent</th>
-                <th>Color</th>
-                <th>Result</th>
-                <th>ELO Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {gameHistory.map(game => (
-                <tr key={game.id}>
-                  <td>{formatDate(game.date)}</td>
-                  <td>{getOpponentName(game)}</td>
-                  <td>{game.whitePlayerId === currentUser.id ? 'White' : 'Black'}</td>
-                  <td>{getGameResult(game)}</td>
-                  <td style={{ 
-                    color: getEloChange(game) > 0 
-                      ? '#51cf66' 
-                      : getEloChange(game) < 0 
-                        ? '#ff6b6b' 
-                        : 'inherit'
-                  }}>
-                    {getEloChange(game) > 0 ? '+' : ''}
-                    {getEloChange(game)}
-                  </td>
+          <div className="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Opponent</th>
+                  <th>Color</th>
+                  <th>Result</th>
+                  <th>ELO Change</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {gameHistory.map(game => (
+                  <tr key={game.id}>
+                    <td>{formatDate(game.date)}</td>
+                    <td>{getOpponentName(game)}</td>
+                    <td>{game.whitePlayerId === currentUser.id ? 'White' : 'Black'}</td>
+                    <td>{getGameResult(game)}</td>
+                    <td style={{ 
+                      color: getEloChange(game) > 0 
+                        ? '#51cf66' 
+                        : getEloChange(game) < 0 
+                          ? '#ff6b6b' 
+                          : 'inherit'
+                    }}>
+                      {getEloChange(game) > 0 ? '+' : ''}
+                      {getEloChange(game)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <p>No game history found.</p>
         )}
