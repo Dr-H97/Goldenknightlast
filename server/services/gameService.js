@@ -16,23 +16,26 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null) => 
     }
     
     // Build query with filters - use aliases for player joins
+    const wp = players.as('wp');
+    const bp = players.as('bp');
+    
     let query = db
       .select({
         ...games,
         whitePlayer: {
-          id: db.dynamic.ref('wp.id'),
-          name: db.dynamic.ref('wp.name'),
-          currentElo: db.dynamic.ref('wp.current_elo')
+          id: wp.id,
+          name: wp.name,
+          currentElo: wp.currentElo
         },
         blackPlayer: {
-          id: db.dynamic.ref('bp.id'),
-          name: db.dynamic.ref('bp.name'),
-          currentElo: db.dynamic.ref('bp.current_elo')
+          id: bp.id,
+          name: bp.name,
+          currentElo: bp.currentElo
         }
       })
       .from(games)
-      .leftJoin(players.as('wp'), eq(games.whitePlayerId, db.dynamic.ref('wp.id')))
-      .leftJoin(players.as('bp'), eq(games.blackPlayerId, db.dynamic.ref('bp.id')));
+      .leftJoin(wp, eq(games.whitePlayerId, wp.id))
+      .leftJoin(bp, eq(games.blackPlayerId, bp.id));
     
     // Add conditions if any
     if (conditions.length > 0) {
@@ -73,23 +76,26 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null) => 
  */
 const getGameById = async (id) => {
   try {
+    const wp = players.as('wp');
+    const bp = players.as('bp');
+    
     const [result] = await db
       .select({
         ...games,
         whitePlayer: {
-          id: db.dynamic.ref('wp.id'),
-          name: db.dynamic.ref('wp.name'),
-          currentElo: db.dynamic.ref('wp.current_elo')
+          id: wp.id,
+          name: wp.name,
+          currentElo: wp.currentElo
         },
         blackPlayer: {
-          id: db.dynamic.ref('bp.id'),
-          name: db.dynamic.ref('bp.name'),
-          currentElo: db.dynamic.ref('bp.current_elo')
+          id: bp.id,
+          name: bp.name,
+          currentElo: bp.currentElo
         }
       })
       .from(games)
-      .leftJoin(players.as('wp'), eq(games.whitePlayerId, db.dynamic.ref('wp.id')))
-      .leftJoin(players.as('bp'), eq(games.blackPlayerId, db.dynamic.ref('bp.id')))
+      .leftJoin(wp, eq(games.whitePlayerId, wp.id))
+      .leftJoin(bp, eq(games.blackPlayerId, bp.id))
       .where(eq(games.id, id));
     
     if (!result) {
@@ -114,24 +120,27 @@ const getGameById = async (id) => {
  */
 const getGamesForPlayer = async (playerId, sortBy = 'date', order = 'desc') => {
   try {
+    const wp = players.as('wp');
+    const bp = players.as('bp');
+    
     // Build query to find games where player is either white or black
     let query = db
       .select({
         ...games,
         whitePlayer: {
-          id: db.dynamic.ref('wp.id'),
-          name: db.dynamic.ref('wp.name'),
-          currentElo: db.dynamic.ref('wp.current_elo')
+          id: wp.id,
+          name: wp.name,
+          currentElo: wp.currentElo
         },
         blackPlayer: {
-          id: db.dynamic.ref('bp.id'),
-          name: db.dynamic.ref('bp.name'),
-          currentElo: db.dynamic.ref('bp.current_elo')
+          id: bp.id,
+          name: bp.name,
+          currentElo: bp.currentElo
         }
       })
       .from(games)
-      .leftJoin(players.as('wp'), eq(games.whitePlayerId, db.dynamic.ref('wp.id')))
-      .leftJoin(players.as('bp'), eq(games.blackPlayerId, db.dynamic.ref('bp.id')))
+      .leftJoin(wp, eq(games.whitePlayerId, wp.id))
+      .leftJoin(bp, eq(games.blackPlayerId, bp.id))
       .where(
         or(
           eq(games.whitePlayerId, playerId),

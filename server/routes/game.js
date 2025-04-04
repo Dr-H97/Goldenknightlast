@@ -81,11 +81,27 @@ router.post('/', async (req, res) => {
       });
     }
     
+    // Handle date conversion properly
+    let gameDate = new Date();
+    if (date) {
+      try {
+        // Try to create a Date object from the provided date
+        gameDate = new Date(date);
+        // Check if the date is valid
+        if (isNaN(gameDate.getTime())) {
+          gameDate = new Date(); // Default to current date if invalid
+        }
+      } catch (e) {
+        console.error('Error parsing date:', e);
+        gameDate = new Date();
+      }
+    }
+    
     const gameData = {
       whitePlayerId,
       blackPlayerId,
       result,
-      date: date || new Date(),
+      date: gameDate,
       verified: verified || false
     };
     
