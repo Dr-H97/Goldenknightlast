@@ -1,49 +1,39 @@
 package com.chessclub.app.model;
 
-/**
- * Model class representing a chess club player
- */
 public class Player {
     private int id;
     private String name;
-    private String pinCode; // Hashed pin code for authentication
+    private String pinHash;
     private int elo;
-    private int gamesPlayed;
     private int wins;
-    private int losses;
     private int draws;
+    private int losses;
     private boolean isAdmin;
     private String email;
-    private String phoneNumber;
+    private String phone;
 
-    // Default constructor
     public Player() {
-        this.elo = 1200; // Default starting ELO
-        this.gamesPlayed = 0;
+        this.elo = 1200; // Default ELO rating
         this.wins = 0;
-        this.losses = 0;
         this.draws = 0;
+        this.losses = 0;
         this.isAdmin = false;
     }
 
-    // Constructor with parameters
-    public Player(int id, String name, String pinCode, int elo, int gamesPlayed, 
-                 int wins, int losses, int draws, boolean isAdmin, 
-                 String email, String phoneNumber) {
+    public Player(int id, String name, String pinHash, int elo, int wins, int draws, int losses, boolean isAdmin, String email, String phone) {
         this.id = id;
         this.name = name;
-        this.pinCode = pinCode;
+        this.pinHash = pinHash;
         this.elo = elo;
-        this.gamesPlayed = gamesPlayed;
         this.wins = wins;
-        this.losses = losses;
         this.draws = draws;
+        this.losses = losses;
         this.isAdmin = isAdmin;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
-    // Getters and setters
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -60,12 +50,12 @@ public class Player {
         this.name = name;
     }
 
-    public String getPinCode() {
-        return pinCode;
+    public String getPinHash() {
+        return pinHash;
     }
 
-    public void setPinCode(String pinCode) {
-        this.pinCode = pinCode;
+    public void setPinHash(String pinHash) {
+        this.pinHash = pinHash;
     }
 
     public int getElo() {
@@ -76,14 +66,6 @@ public class Player {
         this.elo = elo;
     }
 
-    public int getGamesPlayed() {
-        return gamesPlayed;
-    }
-
-    public void setGamesPlayed(int gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
-    }
-
     public int getWins() {
         return wins;
     }
@@ -92,20 +74,20 @@ public class Player {
         this.wins = wins;
     }
 
-    public int getLosses() {
-        return losses;
-    }
-
-    public void setLosses(int losses) {
-        this.losses = losses;
-    }
-
     public int getDraws() {
         return draws;
     }
 
     public void setDraws(int draws) {
         this.draws = draws;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
     }
 
     public boolean isAdmin() {
@@ -124,40 +106,29 @@ public class Player {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     // Helper methods
-    public void incrementGamesPlayed() {
-        this.gamesPlayed++;
-    }
-
-    public void incrementWins() {
-        this.wins++;
-    }
-
-    public void incrementLosses() {
-        this.losses++;
-    }
-
-    public void incrementDraws() {
-        this.draws++;
+    public int getGamesPlayed() {
+        return wins + draws + losses;
     }
 
     public float getWinRate() {
+        int gamesPlayed = getGamesPlayed();
         if (gamesPlayed == 0) {
             return 0;
         }
-        return (float) wins / gamesPlayed * 100;
+        return (float) wins / gamesPlayed;
     }
 
     @Override
     public String toString() {
-        return name + " (" + elo + ")";
+        return name;
     }
 }

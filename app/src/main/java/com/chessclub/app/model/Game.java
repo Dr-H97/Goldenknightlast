@@ -2,30 +2,24 @@ package com.chessclub.app.model;
 
 import java.util.Date;
 
-/**
- * Model class representing a chess game between two players
- */
 public class Game {
-    public enum Result {
-        WHITE_WIN, BLACK_WIN, DRAW
-    }
+    public static final int WHITE_WINS = 1;
+    public static final int BLACK_WINS = 2;
+    public static final int DRAW = 0;
 
     private int id;
     private int whitePlayerId;
     private int blackPlayerId;
-    private Result result;
-    private Date date;
+    private int result;
+    private long date;
     private int whiteEloChange;
     private int blackEloChange;
 
-    // Default constructor
     public Game() {
-        this.date = new Date();
+        this.date = new Date().getTime();
     }
 
-    // Constructor with parameters
-    public Game(int id, int whitePlayerId, int blackPlayerId, Result result, 
-                Date date, int whiteEloChange, int blackEloChange) {
+    public Game(int id, int whitePlayerId, int blackPlayerId, int result, long date, int whiteEloChange, int blackEloChange) {
         this.id = id;
         this.whitePlayerId = whitePlayerId;
         this.blackPlayerId = blackPlayerId;
@@ -60,19 +54,19 @@ public class Game {
         this.blackPlayerId = blackPlayerId;
     }
 
-    public Result getResult() {
+    public int getResult() {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(int result) {
         this.result = result;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -92,77 +86,44 @@ public class Game {
         this.blackEloChange = blackEloChange;
     }
 
-    /**
-     * Gets the winner's player ID
-     * @return player ID of the winner, or -1 if draw
-     */
-    public int getWinnerId() {
-        switch (result) {
-            case WHITE_WIN:
-                return whitePlayerId;
-            case BLACK_WIN:
-                return blackPlayerId;
-            case DRAW:
-            default:
-                return -1; // No winner in case of a draw
-        }
-    }
-
-    /**
-     * Gets the loser's player ID
-     * @return player ID of the loser, or -1 if draw
-     */
-    public int getLoserId() {
-        switch (result) {
-            case WHITE_WIN:
-                return blackPlayerId;
-            case BLACK_WIN:
-                return whitePlayerId;
-            case DRAW:
-            default:
-                return -1; // No loser in case of a draw
-        }
-    }
-
-    /**
-     * Checks if the specified player won the game
-     * @param playerId The player ID to check
-     * @return true if the player won, false otherwise
-     */
-    public boolean playerWon(int playerId) {
-        return (result == Result.WHITE_WIN && playerId == whitePlayerId) || 
-               (result == Result.BLACK_WIN && playerId == blackPlayerId);
-    }
-
-    /**
-     * Checks if the specified player lost the game
-     * @param playerId The player ID to check
-     * @return true if the player lost, false otherwise
-     */
-    public boolean playerLost(int playerId) {
-        return (result == Result.WHITE_WIN && playerId == blackPlayerId) || 
-               (result == Result.BLACK_WIN && playerId == whitePlayerId);
-    }
-
-    /**
-     * Checks if the game ended in a draw
-     * @return true if draw, false otherwise
-     */
+    // Helper methods
     public boolean isDraw() {
-        return result == Result.DRAW;
+        return result == DRAW;
     }
 
-    /**
-     * Gets the ELO change for a specific player
-     * @param playerId The player ID
-     * @return The ELO change for the player
-     */
-    public int getEloChangeForPlayer(int playerId) {
-        if (playerId == whitePlayerId) {
-            return whiteEloChange;
-        } else if (playerId == blackPlayerId) {
-            return blackEloChange;
+    public boolean whiteWon() {
+        return result == WHITE_WINS;
+    }
+
+    public boolean blackWon() {
+        return result == BLACK_WINS;
+    }
+
+    public int getWinnerId() {
+        if (whiteWon()) {
+            return whitePlayerId;
+        } else if (blackWon()) {
+            return blackPlayerId;
         }
-        return 0;
+        return -1; // No winner (draw)
+    }
+
+    public int getLoserId() {
+        if (whiteWon()) {
+            return blackPlayerId;
+        } else if (blackWon()) {
+            return whitePlayerId;
+        }
+        return -1; // No loser (draw)
+    }
+
+    public String getResultText() {
+        if (whiteWon()) {
+            return "1-0";
+        } else if (blackWon()) {
+            return "0-1";
+        } else {
+            return "½-½";
+        }
     }
 }

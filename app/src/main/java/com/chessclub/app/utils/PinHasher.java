@@ -2,109 +2,43 @@ package com.chessclub.app.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
-/**
- * Utility class for securely hashing and verifying PIN codes
- */
 public class PinHasher {
-    private static final String HASH_ALGORITHM = "SHA-256";
-    private static final int SALT_LENGTH = 16; // bytes
-    private static final String HEX_CHARS = "0123456789ABCDEF";
-
+    
+    private static final String SALT = "ChessClubAppSalt2023";
+    
     /**
-     * Generate a secure hash of a PIN code with salt
-     * @param pin The PIN code to hash
-     * @return String containing salt and hash, separated by ':'
+     * Hash a PIN with salt using SHA-256
+     * @param pin The PIN to hash
+     * @return The hashed PIN or empty string if error
      */
     public static String hashPin(String pin) {
         try {
-            // Generate random salt
-            SecureRandom random = new SecureRandom();
-            byte[] salt = new byte[SALT_LENGTH];
-            random.nextBytes(salt);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            String saltedPin = pin + SALT;
+            md.update(saltedPin.getBytes());
+            byte[] digest = md.digest();
             
-            // Create hash
-            MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
-            digest.reset();
-            digest.update(salt);
-            byte[] hash = digest.digest(pin.getBytes());
-            
-            // Convert to strings
-            String saltString = bytesToHex(salt);
-            String hashString = bytesToHex(hash);
-            
-            // Return salt:hash
-            return saltString + ":" + hashString;
-        } catch (NoSuchAlgorithmException e) {
-            // Fallback to simple hashing if SHA-256 is not available
-            return pin.hashCode() + "";
-        }
-    }
-
-    /**
-     * Verify if a PIN matches a previously generated hash
-     * @param pin PIN to verify
-     * @param storedHash Previously generated hash to compare against
-     * @return true if PIN matches, false otherwise
-     */
-    public static boolean verifyPin(String pin, String storedHash) {
-        try {
-            // Split the stored hash into salt and hash parts
-            String[] parts = storedHash.split(":");
-            if (parts.length != 2) {
-                return false;
+            // Convert to hex string
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
             }
-            
-            String saltString = parts[0];
-            String hashString = parts[1];
-            
-            // Convert salt from hex to bytes
-            byte[] salt = hexToBytes(saltString);
-            
-            // Create hash with the same salt
-            MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
-            digest.reset();
-            digest.update(salt);
-            byte[] hash = digest.digest(pin.getBytes());
-            
-            // Convert to string
-            String newHashString = bytesToHex(hash);
-            
-            // Compare the hashes
-            return hashString.equals(newHashString);
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            // Fallback to simple comparison if SHA-256 is not available
-            return storedHash.equals(pin.hashCode() + "");
+            e.printStackTrace();
+            return "";
         }
     }
-
+    
     /**
-     * Convert bytes to hexadecimal string
-     * @param bytes Byte array to convert
-     * @return Hexadecimal string representation
+     * Verify a PIN against a hash
+     * @param pin The PIN to verify
+     * @param hash The hash to check against
+     * @return true if the PIN matches the hash
      */
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder result = new StringBuilder();
-        for (byte b : bytes) {
-            result.append(HEX_CHARS.charAt((b & 0xF0) >> 4));
-            result.append(HEX_CHARS.charAt((b & 0x0F)));
-        }
-        return result.toString();
-    }
-
-    /**
-     * Convert hexadecimal string to bytes
-     * @param hex Hexadecimal string to convert
-     * @return Byte array
-     */
-    private static byte[] hexToBytes(String hex) {
-        int len = hex.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i + 1), 16));
-        }
-        return data;
+    public static boolean verifyPin(String pin, String hash) {
+        String computedHash = hashPin(pin);
+        return computedHash.equals(hash);
     }
 }
