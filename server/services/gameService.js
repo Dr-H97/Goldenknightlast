@@ -378,11 +378,125 @@ const deleteGame = async (id) => {
   }
 };
 
+/**
+ * Update a game result and recalculate ELO ratings
+ */
+const updateGame = async (id, gameData) => {
+  try {
+    // Get the original game first to see if it's verified
+    const [originalGame] = await db
+      .select()
+      .from(games)
+      .where(eq(games.id, id));
+    
+    if (!originalGame) {
+      return null;
+    }
+    
+    const wasVerified = originalGame.verified;
+    const isVerified = gameData.verified !== undefined ? gameData.verified : wasVerified;
+    
+    // If the game was previously verified, revert the ELO changes
+    if (wasVerified) {
+      // Get player data
+      const [whitePlayer] = await db
+        .select()
+        .from(players)
+        .where(eq(players.id, originalGame.whitePlayerId));
+      
+      const [blackPlayer] = await db
+        .select()
+        .from(players)
+        .where(eq(players.id, originalGame.blackPlayerId));
+      
+      if (whitePlayer && blackPlayer) {
+        // Revert the old ratings by applying the inverse changes
+        const whiteElo = whitePlayer.currentElo - originalGame.whiteEloChange;
+        const blackElo = blackPlayer.currentElo - originalGame.blackEloChange;
+        
+        // Update players with reverted ratings
+        await db
+          .update(players)
+          .set({ currentElo: whiteElo })
+          .where(eq(players.id, whitePlayer.id));
+        
+        await db
+          .update(players)
+          .set({ currentElo: blackElo })
+          .where(eq(players.id, blackPlayer.id));
+      }
+    }
+    
+    // Create update object with only provided data
+    const updateObject = {};
+    if (gameData.result !== undefined) updateObject.result = gameData.result;
+    if (gameData.verified !== undefined) updateObject.verified = gameData.verified;
+    if (gameData.date !== undefined) updateObject.date = new Date(gameData.date);
+    
+    // Recalculate ELO changes if game is verified and result was changed
+    let whiteEloChange = originalGame.whiteEloChange || 0;
+    let blackEloChange = originalGame.blackEloChange || 0;
+    
+    if (isVerified && gameData.result !== undefined && gameData.result !== originalGame.result) {
+      // Get current player ELOs
+      const [whitePlayer] = await db
+        .select()
+        .from(players)
+        .where(eq(players.id, originalGame.whitePlayerId));
+      
+      const [blackPlayer] = await db
+        .select()
+        .from(players)
+        .where(eq(players.id, originalGame.blackPlayerId));
+      
+      if (whitePlayer && blackPlayer) {
+        // Calculate new ratings based on updated result
+        const { whiteNewElo, blackNewElo, whiteChange, blackChange } = calculateNewRatings(
+          whitePlayer.currentElo,
+          blackPlayer.currentElo,
+          gameData.result
+        );
+        
+        whiteEloChange = whiteChange;
+        blackEloChange = blackChange;
+        
+        // Update ELO changes in the update object
+        updateObject.whiteEloChange = whiteEloChange;
+        updateObject.blackEloChange = blackEloChange;
+        
+        // Update players with new ratings
+        await db
+          .update(players)
+          .set({ currentElo: whiteNewElo })
+          .where(eq(players.id, whitePlayer.id));
+        
+        await db
+          .update(players)
+          .set({ currentElo: blackNewElo })
+          .where(eq(players.id, blackPlayer.id));
+      }
+    }
+    
+    // Update the game record
+    const [updatedGame] = await db
+      .update(games)
+      .set(updateObject)
+      .where(eq(games.id, id))
+      .returning();
+    
+    return updatedGame;
+  } catch (error) {
+    console.error(`Error in updateGame (${id}):`, error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAllGames,
   getGameById,
   getGamesForPlayer,
   createGame,
   verifyGame,
-  deleteGame
+  deleteGame,
+  updateGame
 };

@@ -68,7 +68,7 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
       const recentGames = await db
         .select()
         .from(games)
-        .where(gte(games.date, formattedDate));
+        .where(gte(games.date, new Date(formattedDate)));
       
       // Calculate performance ratings for each player
       const playerPerformance = allPlayers.map(player => {

@@ -477,6 +477,14 @@ const GameManagement = () => {
   const [success, setSuccess] = useState('');
   const [filter, setFilter] = useState('all'); // all, verified, unverified
   
+  // For editing games
+  const [editingGameId, setEditingGameId] = useState(null);
+  const [editingGame, setEditingGame] = useState({
+    result: '1-0',
+    verified: false,
+    date: ''
+  });
+  
   // Fetch games
   useEffect(() => {
     fetchGames();
@@ -555,6 +563,66 @@ const GameManagement = () => {
     }
   };
   
+  // Start editing a game
+  const handleEditGame = (game) => {
+    setEditingGameId(game.id);
+    // Format date to YYYY-MM-DD for input[type=date]
+    const dateObj = new Date(game.date);
+    const formattedDate = dateObj.toISOString().split('T')[0];
+    
+    setEditingGame({
+      result: game.result,
+      verified: game.verified,
+      date: formattedDate
+    });
+  };
+  
+  // Handle editing changes
+  const handleEditingGameChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditingGame(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+  
+  // Save edited game
+  const handleSaveGame = async (e) => {
+    e.preventDefault();
+    
+    // Reset messages
+    setError('');
+    setSuccess('');
+    
+    try {
+      const response = await fetch(`/api/games/${editingGameId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingGame),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSuccess('Game updated successfully');
+        setEditingGameId(null);
+        fetchGames(); // Refresh game list
+      } else {
+        setError(data.message || 'Failed to update game');
+      }
+    } catch (error) {
+      console.error('Error updating game:', error);
+      setError('An error occurred while updating the game');
+    }
+  };
+  
+  // Cancel editing
+  const handleCancelEdit = () => {
+    setEditingGameId(null);
+  };
+  
   // Format date
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -598,6 +666,66 @@ const GameManagement = () => {
       {error && <div className="error">{error}</div>}
       {success && <div className="success">{success}</div>}
       
+      {/* Edit Game Form */}
+      {editingGameId && (
+        <div className="card" style={{ marginBottom: '20px' }}>
+          <h3>Edit Game</h3>
+          
+          <form onSubmit={handleSaveGame}>
+            <div className="form-group">
+              <label htmlFor="editResult">Result</label>
+              <select
+                id="editResult"
+                name="result"
+                className="form-control"
+                value={editingGame.result}
+                onChange={handleEditingGameChange}
+              >
+                <option value="1-0">White Wins (1-0)</option>
+                <option value="0-1">Black Wins (0-1)</option>
+                <option value="1/2-1/2">Draw (1/2-1/2)</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="editDate">Date</label>
+              <input
+                type="date"
+                id="editDate"
+                name="date"
+                className="form-control"
+                value={editingGame.date}
+                onChange={handleEditingGameChange}
+              />
+            </div>
+            
+            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input
+                type="checkbox"
+                id="editVerified"
+                name="verified"
+                checked={editingGame.verified}
+                onChange={handleEditingGameChange}
+              />
+              <label htmlFor="editVerified">Verified</label>
+            </div>
+            
+            <div className="form-message">
+              <p><strong>Note:</strong> Changing the result of a verified game will recalculate ELO ratings.</p>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button type="submit" className="btn-primary">
+                Save Changes
+              </button>
+              <button type="button" className="btn-secondary" onClick={handleCancelEdit}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+      
       {/* Game List */}
       <div className="card">
         <table>
@@ -625,6 +753,13 @@ const GameManagement = () => {
                 </td>
                 <td>{game.verified ? 'Verified' : 'Pending'}</td>
                 <td style={{ display: 'flex', gap: '5px' }}>
+                  <button 
+                    onClick={() => handleEditGame(game)}
+                    className="btn-primary"
+                    style={{ padding: '5px 10px' }}
+                  >
+                    Edit
+                  </button>
                   {!game.verified && (
                     <button 
                       onClick={() => handleVerifyGame(game.id)}

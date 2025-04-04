@@ -6,7 +6,8 @@ const {
   getGamesForPlayer,
   createGame,
   verifyGame,
-  deleteGame
+  deleteGame,
+  updateGame
 } = require('../services/gameService');
 
 // Get all games with optional filters
@@ -143,6 +144,41 @@ router.put('/:id/verify', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error verifying game'
+    });
+  }
+});
+
+// Update game
+router.put('/:id', async (req, res) => {
+  try {
+    const gameId = parseInt(req.params.id);
+    const { result, verified, date } = req.body;
+    
+    // Prepare update data
+    const updateData = {};
+    if (result !== undefined) updateData.result = result;
+    if (verified !== undefined) updateData.verified = verified;
+    if (date !== undefined) updateData.date = date;
+    
+    const updatedGame = await updateGame(gameId, updateData);
+    
+    if (!updatedGame) {
+      return res.status(404).json({
+        success: false,
+        message: 'Game not found'
+      });
+    }
+    
+    res.json({
+      success: true,
+      game: updatedGame,
+      message: 'Game updated successfully'
+    });
+  } catch (error) {
+    console.error('Error updating game:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating game'
     });
   }
 });
