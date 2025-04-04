@@ -16,8 +16,8 @@ const SubmitGame = () => {
     blackPlayerId: '',
     result: '',
     date: new Date().toISOString().split('T')[0],
-    pin: '',
-    otherPlayerId: ''
+    whitePlayerPin: '',
+    blackPlayerPin: ''
   });
   
   // Set the current user as one of the players by default
@@ -103,17 +103,23 @@ const SubmitGame = () => {
       return;
     }
     
-    if (!formData.pin) {
-      setError('Please enter your PIN to submit the game');
+    if (!formData.whitePlayerPin || !formData.blackPlayerPin) {
+      setError('Please enter PINs for both players to confirm the game submission');
       return;
     }
     
     try {
-      // Verify the PIN first
-      const isVerified = await verifyPin(parseInt(currentUser.id), formData.pin);
+      // Verify both players' PINs
+      const whitePlayerVerified = await verifyPin(parseInt(formData.whitePlayerId), formData.whitePlayerPin);
+      const blackPlayerVerified = await verifyPin(parseInt(formData.blackPlayerId), formData.blackPlayerPin);
       
-      if (!isVerified) {
-        setError('Invalid PIN');
+      if (!whitePlayerVerified) {
+        setError('Invalid PIN for White player');
+        return;
+      }
+      
+      if (!blackPlayerVerified) {
+        setError('Invalid PIN for Black player');
         return;
       }
       
@@ -146,7 +152,8 @@ const SubmitGame = () => {
           blackPlayerId: '',
           result: '',
           date: new Date().toISOString().split('T')[0],
-          pin: ''
+          whitePlayerPin: '',
+          blackPlayerPin: ''
         });
         
         // Redirect to dashboard after a short delay
@@ -253,16 +260,40 @@ const SubmitGame = () => {
             />
           </div>
           
+          <div style={{ marginTop: '20px', borderTop: '1px solid #ddd', paddingTop: '15px' }}>
+            <h3>Player Authentication</h3>
+            <p className="small">Both players must confirm this game submission with their PINs</p>
+          </div>
+
           <div className="form-group">
-            <label htmlFor="pin">Your PIN (to confirm submission)</label>
+            <label htmlFor="whitePlayerPin">
+              White Player PIN <small>({players.find(p => p.id.toString() === formData.whitePlayerId)?.name || 'Select player'})</small>
+            </label>
             <input
               type="password"
-              id="pin"
-              name="pin"
+              id="whitePlayerPin"
+              name="whitePlayerPin"
               className="form-control"
-              value={formData.pin}
+              value={formData.whitePlayerPin}
               onChange={handleInputChange}
               required
+              disabled={!formData.whitePlayerId}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="blackPlayerPin">
+              Black Player PIN <small>({players.find(p => p.id.toString() === formData.blackPlayerId)?.name || 'Select player'})</small>
+            </label>
+            <input
+              type="password"
+              id="blackPlayerPin"
+              name="blackPlayerPin"
+              className="form-control"
+              value={formData.blackPlayerPin}
+              onChange={handleInputChange}
+              required
+              disabled={!formData.blackPlayerId}
             />
           </div>
           
