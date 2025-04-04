@@ -5,6 +5,7 @@ import { useAuth } from './context/AuthContext';
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
+import MobileNav from './components/MobileNav';
 
 // Pages
 import Login from './pages/Login';
@@ -17,12 +18,19 @@ import NotFound from './pages/NotFound';
 
 function App() {
   const { currentUser } = useAuth();
+  
+  // Check if device is mobile
+  const isMobile = window.innerWidth <= 768;
 
   return (
     <Router>
-      {currentUser && <Navbar />}
+      {currentUser && !isMobile && <Navbar />}
       
-      <div className="app-container" style={{ width: '100%', padding: '20px' }}>
+      <div className="app-container" style={{ 
+        width: '100%', 
+        padding: isMobile ? '12px' : '20px',
+        paddingBottom: isMobile ? '70px' : '20px'  // Add padding for mobile nav
+      }}>
         <Routes>
           {/* Public routes */}
           <Route 
@@ -85,6 +93,9 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      
+      {/* Show mobile navigation on mobile devices */}
+      {currentUser && isMobile && <MobileNav />}
     </Router>
   );
 }

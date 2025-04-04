@@ -117,6 +117,9 @@ const SubmitGame = () => {
         return;
       }
       
+      // Format the date as a proper date string
+      const formattedDate = new Date(formData.date).toISOString();
+      
       // Submit the game
       const response = await fetch('/api/games', {
         method: 'POST',
@@ -127,7 +130,7 @@ const SubmitGame = () => {
           whitePlayerId: parseInt(formData.whitePlayerId),
           blackPlayerId: parseInt(formData.blackPlayerId),
           result: formData.result,
-          date: formData.date || new Date().toISOString().split('T')[0],
+          date: formattedDate,
           verified: false // Games should be verified by admin
         }),
       });
