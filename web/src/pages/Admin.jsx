@@ -62,6 +62,15 @@ const PlayerManagement = () => {
     initialElo: 1200
   });
   
+  // For editing players
+  const [editingPlayerId, setEditingPlayerId] = useState(null);
+  const [editingPlayer, setEditingPlayer] = useState({
+    name: '',
+    currentElo: 0,
+    isAdmin: false,
+    pin: ''
+  });
+  
   // Fetch players
   useEffect(() => {
     fetchPlayers();
@@ -148,6 +157,86 @@ const PlayerManagement = () => {
       console.error('Error adding player:', error);
       setError('An error occurred while adding the player');
     }
+  };
+  
+  // Start editing a player
+  const handleEditPlayer = (player) => {
+    setEditingPlayerId(player.id);
+    setEditingPlayer({
+      name: player.name,
+      currentElo: player.currentElo,
+      isAdmin: player.isAdmin,
+      pin: '' // We don't receive the hashed PIN from the server
+    });
+  };
+  
+  // Handle edit form changes
+  const handleEditingPlayerChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditingPlayer(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+  
+  // Save edited player
+  const handleSavePlayer = async (e) => {
+    e.preventDefault();
+    
+    // Reset messages
+    setError('');
+    setSuccess('');
+    
+    // Validate
+    if (!editingPlayer.name) {
+      setError('Name is required');
+      return;
+    }
+    
+    if (editingPlayer.pin && editingPlayer.pin.length < 4) {
+      setError('PIN must be at least 4 characters long');
+      return;
+    }
+    
+    try {
+      // Build update data (only include fields with values)
+      const updateData = {
+        name: editingPlayer.name,
+        currentElo: parseInt(editingPlayer.currentElo),
+        isAdmin: editingPlayer.isAdmin
+      };
+      
+      // Only include PIN if it was changed
+      if (editingPlayer.pin) {
+        updateData.pin = editingPlayer.pin;
+      }
+      
+      const response = await fetch(`/api/players/${editingPlayerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSuccess(`Player "${editingPlayer.name}" updated successfully`);
+        setEditingPlayerId(null);
+        fetchPlayers(); // Refresh player list
+      } else {
+        setError(data.message || 'Failed to update player');
+      }
+    } catch (error) {
+      console.error('Error updating player:', error);
+      setError('An error occurred while updating the player');
+    }
+  };
+  
+  // Cancel editing
+  const handleCancelEdit = () => {
+    setEditingPlayerId(null);
   };
   
   // Delete player
@@ -260,6 +349,76 @@ const PlayerManagement = () => {
         </div>
       )}
       
+      {/* Edit Player Form */}
+      {editingPlayerId && (
+        <div className="card" style={{ marginBottom: '20px' }}>
+          <h3>Edit Player</h3>
+          
+          <form onSubmit={handleSavePlayer}>
+            <div className="form-group">
+              <label htmlFor="editName">Name</label>
+              <input
+                type="text"
+                id="editName"
+                name="name"
+                className="form-control"
+                value={editingPlayer.name}
+                onChange={handleEditingPlayerChange}
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="editCurrentElo">Current ELO Rating</label>
+              <input
+                type="number"
+                id="editCurrentElo"
+                name="currentElo"
+                className="form-control"
+                value={editingPlayer.currentElo}
+                onChange={handleEditingPlayerChange}
+                min="100"
+                max="3000"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="editPin">New PIN (leave blank to keep current)</label>
+              <input
+                type="password"
+                id="editPin"
+                name="pin"
+                className="form-control"
+                value={editingPlayer.pin}
+                onChange={handleEditingPlayerChange}
+                minLength={4}
+              />
+              <small>PIN must be at least 4 characters long if provided</small>
+            </div>
+            
+            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input
+                type="checkbox"
+                id="editIsAdmin"
+                name="isAdmin"
+                checked={editingPlayer.isAdmin}
+                onChange={handleEditingPlayerChange}
+              />
+              <label htmlFor="editIsAdmin">Admin Access</label>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button type="submit" className="btn-primary">
+                Save Changes
+              </button>
+              <button type="button" className="btn-secondary" onClick={handleCancelEdit}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+      
       {/* Player List */}
       <div className="card">
         <table>
@@ -280,13 +439,22 @@ const PlayerManagement = () => {
                 <td>{player.currentElo}</td>
                 <td>{player.isAdmin ? 'Yes' : 'No'}</td>
                 <td>
-                  <button 
-                    onClick={() => handleDeletePlayer(player.id, player.name)}
-                    className="btn-danger"
-                    style={{ padding: '5px 10px' }}
-                  >
-                    Delete
-                  </button>
+                  <div style={{ display: 'flex', gap: '5px' }}>
+                    <button 
+                      onClick={() => handleEditPlayer(player)}
+                      className="btn-primary"
+                      style={{ padding: '5px 10px' }}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => handleDeletePlayer(player.id, player.name)}
+                      className="btn-danger"
+                      style={{ padding: '5px 10px' }}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
