@@ -12,8 +12,8 @@ const bcrypt = require('bcrypt');
 // Get all players
 router.get('/', async (req, res) => {
   try {
-    const { sortBy, order } = req.query;
-    const players = await getAllPlayers(sortBy, order);
+    const { sortBy, order, timeFilter = 'all' } = req.query;
+    const players = await getAllPlayers(sortBy, order, timeFilter);
     
     // Remove sensitive data from response
     const filteredPlayers = players.map(player => {

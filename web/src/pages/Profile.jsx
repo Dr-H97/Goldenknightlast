@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 import '../styles/animations.css';
 
 const Profile = () => {
@@ -131,10 +132,10 @@ const Profile = () => {
     }
   };
   
-  // Format date
+  // Format date with time
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   };
   
   // Determine result from player's perspective
@@ -209,6 +210,17 @@ const Profile = () => {
           <p><strong>Name:</strong> {currentUser.name}</p>
           <p><strong>Current ELO:</strong> {currentUser.currentElo}</p>
           <p><strong>Account Type:</strong> {currentUser.isAdmin ? 'Admin' : 'Player'}</p>
+          
+          {/* Theme Toggle */}
+          <div style={{ 
+            display: 'flex',
+            alignItems: 'center', 
+            marginTop: '15px',
+            marginBottom: '15px'
+          }}>
+            <p style={{ marginRight: '10px', marginBottom: '0' }}><strong>Theme:</strong></p>
+            <ThemeToggle large showText />
+          </div>
           
           <div style={{ 
             display: 'flex', 

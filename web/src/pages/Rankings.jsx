@@ -7,6 +7,7 @@ const Rankings = () => {
   const [error, setError] = useState('');
   const [sortBy, setSortBy] = useState('currentElo');
   const [order, setOrder] = useState('desc'); // Always default to descending for rankings
+  const [timeFilter, setTimeFilter] = useState('all'); // Default to all time
   const [filters, setFilters] = useState({
     minRating: '',
     maxRating: '',
@@ -23,7 +24,7 @@ const Rankings = () => {
   
   useEffect(() => {
     fetchPlayers();
-  }, [sortBy, order]);
+  }, [sortBy, order, timeFilter]);
   
   // Apply filters whenever players or filters change
   useEffect(() => {
@@ -45,7 +46,12 @@ const Rankings = () => {
     if (filters.minRating) {
       const minRating = parseInt(filters.minRating);
       if (!isNaN(minRating)) {
-        result = result.filter(player => player.currentElo >= minRating);
+        // Check if we're sorting by performance or regular ELO
+        if (sortBy === 'performance') {
+          result = result.filter(player => player.performanceRating >= minRating);
+        } else {
+          result = result.filter(player => player.currentElo >= minRating);
+        }
       }
     }
     
@@ -53,7 +59,12 @@ const Rankings = () => {
     if (filters.maxRating) {
       const maxRating = parseInt(filters.maxRating);
       if (!isNaN(maxRating)) {
-        result = result.filter(player => player.currentElo <= maxRating);
+        // Check if we're sorting by performance or regular ELO
+        if (sortBy === 'performance') {
+          result = result.filter(player => player.performanceRating <= maxRating);
+        } else {
+          result = result.filter(player => player.currentElo <= maxRating);
+        }
       }
     }
     
@@ -74,12 +85,15 @@ const Rankings = () => {
       maxRating: '',
       nameSearch: ''
     });
+    setTimeFilter('all');
+    setSortBy('currentElo');
+    setOrder('desc');
   };
   
   const fetchPlayers = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/players?sortBy=${sortBy}&order=${order}`);
+      const response = await fetch(`/api/players?sortBy=${sortBy}&order=${order}&timeFilter=${timeFilter}`);
       const data = await response.json();
       
       if (data.success) {
@@ -98,21 +112,28 @@ const Rankings = () => {
   const handleSort = (field) => {
     if (sortBy === field) {
       // If already sorting by this field, toggle the order, but always keep ELO in descending order
-      if (field === 'currentElo') {
-        setOrder('desc'); // Keep ELO sorting in descending (high to low) for rankings
+      if (field === 'currentElo' || field === 'performance') {
+        setOrder('desc'); // Keep ratings sorting in descending (high to low) for rankings
       } else {
         setOrder(order === 'asc' ? 'desc' : 'asc');
       }
     } else {
       // If sorting by a new field, set it and default to descending for ELO, ascending for names
       setSortBy(field);
-      setOrder(field === 'currentElo' ? 'desc' : 'asc');
+      setOrder(field === 'name' ? 'asc' : 'desc');
     }
   };
   
   const getSortIcon = (field) => {
     if (sortBy !== field) return '↕️';
     return order === 'asc' ? '↑' : '↓';
+  };
+  
+  const handleTimeFilterChange = (value) => {
+    setTimeFilter(value);
+    if (value !== 'all' && sortBy !== 'performance') {
+      setSortBy('performance');
+    }
   };
   
   if (loading) {
@@ -181,6 +202,38 @@ const Rankings = () => {
             Clear Filters
           </button>
         </div>
+        
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '15px' }}>
+          <div>
+            <label htmlFor="rankingType">Ranking Type: </label>
+            <select 
+              id="rankingType" 
+              className="form-control"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              style={{ minWidth: '150px' }}
+            >
+              <option value="currentElo">ELO Rating</option>
+              <option value="performance">Performance Rating</option>
+            </select>
+          </div>
+          
+          <div>
+            <label htmlFor="timeRange">Time Range: </label>
+            <select 
+              id="timeRange" 
+              className="form-control"
+              value={timeFilter}
+              onChange={(e) => handleTimeFilterChange(e.target.value)}
+              style={{ minWidth: '150px' }}
+            >
+              <option value="all">All Time</option>
+              <option value="week">Last Week</option>
+              <option value="month">Last Month</option>
+              <option value="year">Last Year</option>
+            </select>
+          </div>
+        </div>
       </div>
       
       <div className="card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s' }}>
@@ -199,10 +252,10 @@ const Rankings = () => {
                 Name {getSortIcon('name')}
               </th>
               <th 
-                onClick={() => handleSort('currentElo')}
+                onClick={() => handleSort(sortBy === 'performance' ? 'performance' : 'currentElo')}
                 style={{ cursor: 'pointer' }}
               >
-                ELO Rating {getSortIcon('currentElo')}
+                {sortBy === 'performance' ? 'Performance' : 'ELO'} Rating {getSortIcon(sortBy)}
               </th>
             </tr>
           </thead>
@@ -221,7 +274,11 @@ const Rankings = () => {
                   {index + 1}
                 </td>
                 <td>{player.name}</td>
-                <td>{player.currentElo}</td>
+                <td>
+                  {sortBy === 'performance' && player.performanceRating 
+                    ? player.performanceRating 
+                    : player.currentElo}
+                </td>
               </tr>
             ))}
           </tbody>

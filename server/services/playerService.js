@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 /**
  * Get all players with optional sorting
  */
-const getAllPlayers = async (sortBy = 'currentElo', order = 'desc') => {
+const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter = 'all') => {
   try {
     // Build sorting parameters
     const orderMap = {
@@ -34,7 +34,79 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc') => {
         : query.orderBy(players.currentElo, { direction: 'desc' });
     }
     
-    return await query;
+    const allPlayers = await query;
+    
+    // If we need to calculate performance over time
+    if (timeFilter !== 'all' && sortBy === 'performance') {
+      // We'll need to fetch all games to calculate performance ratings
+      const { games } = require('../schema');
+      const { and, gte } = require('drizzle-orm');
+      
+      // Calculate the date range based on the timeFilter
+      const currentDate = new Date();
+      let filterDate = new Date();
+      
+      switch(timeFilter) {
+        case 'week':
+          filterDate.setDate(currentDate.getDate() - 7);
+          break;
+        case 'month':
+          filterDate.setMonth(currentDate.getMonth() - 1);
+          break;
+        case 'year':
+          filterDate.setFullYear(currentDate.getFullYear() - 1);
+          break;
+        default:
+          // Default to all time - no additional filtering
+          return allPlayers;
+      }
+      
+      // Get all games within the timeframe
+      const recentGames = await db
+        .select()
+        .from(games)
+        .where(gte(games.date, filterDate.toISOString()));
+      
+      // Calculate performance ratings for each player
+      const playerPerformance = allPlayers.map(player => {
+        const playerGames = recentGames.filter(game => 
+          game.whitePlayerId === player.id || game.blackPlayerId === player.id
+        );
+        
+        if (playerGames.length === 0) {
+          return { ...player, performanceRating: player.currentElo };
+        }
+        
+        // Calculate win/loss/draw count
+        let wins = 0;
+        let losses = 0;
+        let draws = 0;
+        
+        playerGames.forEach(game => {
+          if (game.whitePlayerId === player.id) {
+            if (game.result === '1-0') wins++;
+            else if (game.result === '0-1') losses++;
+            else draws++;
+          } else {
+            if (game.result === '0-1') wins++;
+            else if (game.result === '1-0') losses++;
+            else draws++;
+          }
+        });
+        
+        // Simple performance formula: current_elo + ((wins - losses) * 20)
+        const performanceRating = player.currentElo + ((wins - losses) * 20);
+        
+        return { ...player, performanceRating };
+      });
+      
+      // Sort by performance rating
+      return playerPerformance.sort((a, b) => 
+        sortDirection === 'asc' ? a.performanceRating - b.performanceRating : b.performanceRating - a.performanceRating
+      );
+    }
+    
+    return allPlayers;
   } catch (error) {
     console.error('Error in getAllPlayers:', error);
     throw error;
