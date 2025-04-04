@@ -45,7 +45,6 @@ const Navbar = () => {
         alignItems: 'center',
         gap: '10px'
       }}>
-        <ThemeToggle />
         {currentUser && (
           <>
             <span>Hello, {currentUser.name}</span>

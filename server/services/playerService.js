@@ -61,11 +61,14 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
           return allPlayers;
       }
       
+      // Format date for database query
+      const formattedDate = filterDate.toISOString().split('T')[0];
+      
       // Get all games within the timeframe
       const recentGames = await db
         .select()
         .from(games)
-        .where(gte(games.date, filterDate.toISOString()));
+        .where(gte(games.date, formattedDate));
       
       // Calculate performance ratings for each player
       const playerPerformance = allPlayers.map(player => {
@@ -77,25 +80,49 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
           return { ...player, performanceRating: player.currentElo };
         }
         
-        // Calculate win/loss/draw count
-        let wins = 0;
-        let losses = 0;
-        let draws = 0;
+        let totalScore = 0;
+        const opponentRatings = [];
         
         playerGames.forEach(game => {
+          let score = 0;
+          let opponentId;
+          let opponentRating;
+          
           if (game.whitePlayerId === player.id) {
-            if (game.result === '1-0') wins++;
-            else if (game.result === '0-1') losses++;
-            else draws++;
+            if (game.result === '1-0') score = 1;
+            else if (game.result === '0-1') score = 0;
+            else score = 0.5; // Draw
+            
+            opponentId = game.blackPlayerId;
+            opponentRating = allPlayers.find(p => p.id === opponentId)?.currentElo || 1500;
           } else {
-            if (game.result === '0-1') wins++;
-            else if (game.result === '1-0') losses++;
-            else draws++;
+            if (game.result === '0-1') score = 1;
+            else if (game.result === '1-0') score = 0;
+            else score = 0.5; // Draw
+            
+            opponentId = game.whitePlayerId;
+            opponentRating = allPlayers.find(p => p.id === opponentId)?.currentElo || 1500;
           }
+          
+          totalScore += score;
+          opponentRatings.push(opponentRating);
         });
         
-        // Simple performance formula: current_elo + ((wins - losses) * 20)
-        const performanceRating = player.currentElo + ((wins - losses) * 20);
+        // Calculate performance rating using the formula
+        // R_avg + D where D = -400 * log10((1 - P) / P)
+        const R_avg = opponentRatings.reduce((sum, rating) => sum + rating, 0) / opponentRatings.length;
+        const P = totalScore / playerGames.length;
+        
+        let D;
+        if (P === 1) {
+          D = 800; // Maximum bonus for 100% score
+        } else if (P === 0) {
+          D = -800; // Maximum penalty for 0% score
+        } else {
+          D = -400 * Math.log10((1 - P) / P);
+        }
+        
+        const performanceRating = Math.round(R_avg + D);
         
         return { ...player, performanceRating };
       });

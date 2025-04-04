@@ -300,17 +300,17 @@ const Profile = () => {
           <h2>Statistics</h2>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
+            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: 'var(--card-bg-alt)', borderRadius: '5px', border: '1px solid var(--border)' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.wins}</h3>
               <p style={{ margin: 0 }}>Wins</p>
             </div>
             
-            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
+            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: 'var(--card-bg-alt)', borderRadius: '5px', border: '1px solid var(--border)' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.losses}</h3>
               <p style={{ margin: 0 }}>Losses</p>
             </div>
             
-            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: '#1a1a1a', borderRadius: '5px' }}>
+            <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: 'var(--card-bg-alt)', borderRadius: '5px', border: '1px solid var(--border)' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.draws}</h3>
               <p style={{ margin: 0 }}>Draws</p>
             </div>
