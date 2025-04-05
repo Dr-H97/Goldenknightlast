@@ -3,6 +3,7 @@ import { useWebSocket } from '../context/WebSocketContext';
 import { Link } from 'react-router-dom';
 import '../styles/animations.css';
 import '../styles/leaderboard.css';
+import '../styles/responsive-tables.css';
 import logo from '../assets/logo.svg';
 import kingIcon from '../assets/chess-king.svg';
 import queenIcon from '../assets/chess-queen.svg';
@@ -186,7 +187,7 @@ const Rankings = () => {
         </div>
       </div>
       
-      <div className="leaderboard-table-container slide-up">
+      <div className="leaderboard-table-container slide-up mobile-responsive-table">
         <div className="total-players">
           <span>Total Players: {players.length}</span>
         </div>
@@ -218,10 +219,10 @@ const Rankings = () => {
                 key={player.id} 
                 className={`staggered-item ${getRankClass(index)}`}
               >
-                <td>
+                <td data-label="Rank">
                   {getRankBadge(index)}
                 </td>
-                <td>
+                <td data-label="Player">
                   <div className="player-info">
                     <div className="player-avatar">
                       {getInitials(player.name)}
@@ -242,12 +243,12 @@ const Rankings = () => {
                     </div>
                   </div>
                 </td>
-                <td className="rating-cell">
+                <td className="rating-cell" data-label={sortBy === 'performance' ? 'Performance' : 'ELO'}>
                   {sortBy === 'performance' && player.performanceRating 
                     ? player.performanceRating 
                     : player.currentElo}
                 </td>
-                <td>
+                <td data-label="Games">
                   {player.gamesPlayed || 0}
                 </td>
               </tr>

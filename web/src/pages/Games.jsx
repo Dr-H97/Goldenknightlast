@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import '../styles/animations.css';
+import '../styles/responsive-tables.css';
 
 const Games = () => {
   const { currentUser } = useAuth();
@@ -132,10 +133,10 @@ const Games = () => {
     setSelectedPlayer('all');
   };
   
-  // Function to format the date
+  // Function to format the date with time
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
   };
   
   // Function to get player name by ID
@@ -243,7 +244,7 @@ const Games = () => {
           <small>{t('totalGames') || 'Total Games'}: {games.length}</small>
         </div>
         
-        <div className="table-responsive">
+        <div className="table-responsive mobile-responsive-table">
           <table>
             <thead>
               <tr>
@@ -259,27 +260,29 @@ const Games = () => {
             <tbody>
               {games.map((game) => (
                 <tr key={game.id} className="staggered-item">
-                  <td>{formatDate(game.date)}</td>
-                  <td>{getPlayerName(game.whitePlayerId)}</td>
-                  <td>{getPlayerName(game.blackPlayerId)}</td>
-                  <td>{renderPlayerResult(game)}</td>
+                  <td data-label={t('date') || 'Date'}>{formatDate(game.date)}</td>
+                  <td data-label={t('white') || 'White'}>{getPlayerName(game.whitePlayerId)}</td>
+                  <td data-label={t('black') || 'Black'}>{getPlayerName(game.blackPlayerId)}</td>
+                  <td data-label={t('result') || 'Result'}>{renderPlayerResult(game)}</td>
                   {selectedPlayer !== 'all' && (
-                    <td style={{ 
-                      color: (() => {
-                        const playerId = parseInt(selectedPlayer);
-                        const eloChange = game.whitePlayerId === playerId 
-                          ? game.whiteEloChange 
-                          : game.blackPlayerId === playerId 
-                            ? game.blackEloChange 
-                            : 0;
-                            
-                        return eloChange > 0 
-                          ? '#51cf66' 
-                          : eloChange < 0 
-                            ? '#ff6b6b' 
-                            : 'inherit';
-                      })()
-                    }}>
+                    <td 
+                      data-label={t('eloChange') || 'ELO Change'}
+                      style={{ 
+                        color: (() => {
+                          const playerId = parseInt(selectedPlayer);
+                          const eloChange = game.whitePlayerId === playerId 
+                            ? game.whiteEloChange 
+                            : game.blackPlayerId === playerId 
+                              ? game.blackEloChange 
+                              : 0;
+                              
+                          return eloChange > 0 
+                            ? '#51cf66' 
+                            : eloChange < 0 
+                              ? '#ff6b6b' 
+                              : 'inherit';
+                        })()
+                      }}>
                       {(() => {
                         const playerId = parseInt(selectedPlayer);
                         const eloChange = game.whitePlayerId === playerId 

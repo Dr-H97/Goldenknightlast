@@ -238,6 +238,25 @@
 .filter-button {
   margin-left: auto;
   align-self: flex-end;
+  background-color: var(--primary-accent);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+  border: none;
+.filter-button:hover {
+  background-color: var(--primary-accent-hover);
+  transform: translateY(-2px);
+}
+}
+
+.filter-button:hover {
+  background-color: var(--primary-accent-hover);
+  transform: translateY(-2px);
 }
 
 .submit-game-button {
