@@ -103,7 +103,7 @@ router.post('/', async (req, res) => {
       blackPlayerId,
       result,
       date: gameDate,
-      verified: verified || false
+      verified: true  // Auto-verify all games
     };
     
     const newGame = await createGame(gameData);

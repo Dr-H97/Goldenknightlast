@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import ThemeToggle from '../components/ThemeToggle';
+import LanguageToggle from '../components/LanguageToggle';
 import '../styles/animations.css';
 
 const Profile = () => {
   const { currentUser, logout } = useAuth();
+  const { t } = useLanguage();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [gameHistory, setGameHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,17 +71,17 @@ const Profile = () => {
     
     // Validate inputs
     if (!pinData.currentPin || !pinData.newPin || !pinData.confirmPin) {
-      setPinError('All fields are required');
+      setPinError(t('allFieldsRequired'));
       return;
     }
     
     if (pinData.newPin !== pinData.confirmPin) {
-      setPinError('New PIN and Confirm PIN must match');
+      setPinError(t('pinMustMatch'));
       return;
     }
     
     if (pinData.newPin.length < 4) {
-      setPinError('PIN must be at least 4 characters long');
+      setPinError(t('pinMinLength'));
       return;
     }
     
@@ -98,7 +101,7 @@ const Profile = () => {
       const verifyData = await verifyResponse.json();
       
       if (!verifyData.success) {
-        setPinError('Current PIN is incorrect');
+        setPinError(t('incorrectPin'));
         return;
       }
       
@@ -116,7 +119,7 @@ const Profile = () => {
       const updateData = await updateResponse.json();
       
       if (updateData.success) {
-        setPinSuccess('PIN updated successfully');
+        setPinSuccess(t('pinUpdateSuccess'));
         setPinData({
           currentPin: '',
           newPin: '',
@@ -124,11 +127,11 @@ const Profile = () => {
         });
         setShowChangePinForm(false);
       } else {
-        setPinError(updateData.message || 'Failed to update PIN');
+        setPinError(updateData.message || t('failedToUpdatePin'));
       }
     } catch (error) {
       console.error('Error updating PIN:', error);
-      setPinError('An error occurred while updating PIN');
+      setPinError(t('pinUpdateError'));
     }
   };
   
@@ -183,7 +186,7 @@ const Profile = () => {
   const stats = calculateStats();
   
   if (loading && !gameHistory.length) {
-    return <div className="container">Loading profile...</div>;
+    return <div className="container">{t('loadingProfile')}</div>;
   }
   
   // Add handleLogout function
@@ -193,7 +196,7 @@ const Profile = () => {
   
   return (
     <div className="container fade-in">
-      <h1 className="slide-up">Player Profile</h1>
+      <h1 className="slide-up">{t('profileTitle')}</h1>
       
       {error && <div className="error slide-up">{error}</div>}
       {pinSuccess && <div className="success slide-up">{pinSuccess}</div>}
@@ -205,21 +208,31 @@ const Profile = () => {
       }}>
         {/* Player Info */}
         <div className="card dashboard-card">
-          <h2>Player Information</h2>
+          <h2>{t('playerInfo')}</h2>
           
-          <p><strong>Name:</strong> {currentUser.name}</p>
-          <p><strong>Current ELO:</strong> {currentUser.currentElo}</p>
-          <p><strong>Account Type:</strong> {currentUser.isAdmin ? 'Admin' : 'Player'}</p>
+          <p><strong>{t('name')}:</strong> {currentUser.name}</p>
+          <p><strong>{t('currentElo')}:</strong> {currentUser.currentElo}</p>
+          <p><strong>{t('accountType')}:</strong> {currentUser.isAdmin ? t('admin') : t('player')}</p>
           
           {/* Theme Toggle */}
           <div style={{ 
             display: 'flex',
             alignItems: 'center', 
             marginTop: '15px',
+            marginBottom: '10px'
+          }}>
+            <p style={{ marginRight: '10px', marginBottom: '0' }}><strong>{t('theme')}:</strong></p>
+            <ThemeToggle large showText />
+          </div>
+          
+          {/* Language Toggle */}
+          <div style={{ 
+            display: 'flex',
+            alignItems: 'center', 
             marginBottom: '15px'
           }}>
-            <p style={{ marginRight: '10px', marginBottom: '0' }}><strong>Theme:</strong></p>
-            <ThemeToggle large showText />
+            <p style={{ marginRight: '10px', marginBottom: '0' }}><strong>{t('language')}:</strong></p>
+            <LanguageToggle large showText />
           </div>
           
           <div style={{ 
@@ -232,7 +245,7 @@ const Profile = () => {
               onClick={() => setShowChangePinForm(!showChangePinForm)}
               className="btn-secondary chess-piece-hover"
             >
-              {showChangePinForm ? 'Cancel' : 'Change PIN'}
+              {showChangePinForm ? t('cancel') : t('changePin')}
             </button>
             
             {isMobile && (
@@ -240,7 +253,7 @@ const Profile = () => {
                 onClick={handleLogout}
                 className="btn-danger chess-piece-hover"
               >
-                Logout
+                {t('logout')}
               </button>
             )}
           </div>
@@ -250,7 +263,7 @@ const Profile = () => {
               {pinError && <div className="error">{pinError}</div>}
               
               <div className="form-group">
-                <label htmlFor="currentPin">Current PIN</label>
+                <label htmlFor="currentPin">{t('currentPin')}</label>
                 <input
                   type="password"
                   id="currentPin"
@@ -263,7 +276,7 @@ const Profile = () => {
               </div>
               
               <div className="form-group">
-                <label htmlFor="newPin">New PIN</label>
+                <label htmlFor="newPin">{t('newPin')}</label>
                 <input
                   type="password"
                   id="newPin"
@@ -276,7 +289,7 @@ const Profile = () => {
               </div>
               
               <div className="form-group">
-                <label htmlFor="confirmPin">Confirm New PIN</label>
+                <label htmlFor="confirmPin">{t('confirmPin')}</label>
                 <input
                   type="password"
                   id="confirmPin"
@@ -289,7 +302,7 @@ const Profile = () => {
               </div>
               
               <button type="submit" className="btn-primary chess-piece-hover">
-                Update PIN
+                {t('updatePin')}
               </button>
             </form>
           )}
@@ -297,44 +310,44 @@ const Profile = () => {
         
         {/* Player Stats */}
         <div className="card dashboard-card">
-          <h2>Statistics</h2>
+          <h2>{t('statistics')}</h2>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
             <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: 'var(--card-bg-alt)', borderRadius: '5px', border: '1px solid var(--border)' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.wins}</h3>
-              <p style={{ margin: 0 }}>Wins</p>
+              <p style={{ margin: 0 }}>{t('wins')}</p>
             </div>
             
             <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: 'var(--card-bg-alt)', borderRadius: '5px', border: '1px solid var(--border)' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.losses}</h3>
-              <p style={{ margin: 0 }}>Losses</p>
+              <p style={{ margin: 0 }}>{t('losses')}</p>
             </div>
             
             <div className="stat-card" style={{ textAlign: 'center', padding: '10px', backgroundColor: 'var(--card-bg-alt)', borderRadius: '5px', border: '1px solid var(--border)' }}>
               <h3 style={{ margin: '0 0 5px 0' }}>{stats.draws}</h3>
-              <p style={{ margin: 0 }}>Draws</p>
+              <p style={{ margin: 0 }}>{t('draws')}</p>
             </div>
           </div>
           
-          <p><strong>Total Games:</strong> {stats.totalGames}</p>
-          <p><strong>Win Rate:</strong> {stats.winRate}%</p>
+          <p><strong>{t('totalGames')}:</strong> {stats.totalGames}</p>
+          <p><strong>{t('winRate')}:</strong> {stats.winRate}%</p>
         </div>
       </div>
       
       {/* Game History */}
       <div className="card dashboard-card slide-up" style={{ marginTop: '20px' }}>
-        <h2>Game History</h2>
+        <h2>{t('gameHistory')}</h2>
         
         {gameHistory.length > 0 ? (
           <div className="table-responsive">
             <table>
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Opponent</th>
-                  <th>Color</th>
-                  <th>Result</th>
-                  <th>ELO Change</th>
+                  <th>{t('date')}</th>
+                  <th>{t('opponent')}</th>
+                  <th>{t('color')}</th>
+                  <th>{t('result')}</th>
+                  <th>{t('eloChange')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -342,8 +355,8 @@ const Profile = () => {
                   <tr key={game.id}>
                     <td>{formatDate(game.date)}</td>
                     <td>{getOpponentName(game)}</td>
-                    <td>{game.whitePlayerId === currentUser.id ? 'White' : 'Black'}</td>
-                    <td>{getGameResult(game)}</td>
+                    <td>{game.whitePlayerId === currentUser.id ? t('white') : t('black')}</td>
+                    <td>{t(getGameResult(game).toLowerCase())}</td>
                     <td style={{ 
                       color: getEloChange(game) > 0 
                         ? '#51cf66' 
@@ -360,7 +373,7 @@ const Profile = () => {
             </table>
           </div>
         ) : (
-          <p>No game history found.</p>
+          <p>{t('noGameHistory')}</p>
         )}
       </div>
     </div>

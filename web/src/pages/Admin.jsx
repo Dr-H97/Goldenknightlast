@@ -475,7 +475,7 @@ const GameManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [filter, setFilter] = useState('all'); // all, verified, unverified
+  const [filter, setFilter] = useState('all'); // all, recent
   
   // For editing games
   const [editingGameId, setEditingGameId] = useState(null);
@@ -495,10 +495,11 @@ const GameManagement = () => {
       setLoading(true);
       
       let url = '/api/games?sortBy=date&order=desc';
-      if (filter === 'verified') {
-        url += '&verified=true';
-      } else if (filter === 'unverified') {
-        url += '&verified=false';
+      if (filter === 'recent') {
+        // Get games from the last 7 days
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        url += `&fromDate=${oneWeekAgo.toISOString()}`;
       }
       
       const response = await fetch(url);
@@ -647,18 +648,11 @@ const GameManagement = () => {
             All Games
           </button>
           <button 
-            className={`btn-secondary ${filter === 'verified' ? 'active' : ''}`}
-            onClick={() => setFilter('verified')}
-            style={{ backgroundColor: filter === 'verified' ? '#646cff' : '#868e96' }}
+            className={`btn-secondary ${filter === 'recent' ? 'active' : ''}`}
+            onClick={() => setFilter('recent')}
+            style={{ backgroundColor: filter === 'recent' ? '#646cff' : '#868e96' }}
           >
-            Verified
-          </button>
-          <button 
-            className={`btn-secondary ${filter === 'unverified' ? 'active' : ''}`}
-            onClick={() => setFilter('unverified')}
-            style={{ backgroundColor: filter === 'unverified' ? '#646cff' : '#868e96' }}
-          >
-            Unverified
+            Recent Games
           </button>
         </div>
       </div>
@@ -751,7 +745,7 @@ const GameManagement = () => {
                   {game.whitePlayer?.name}: {game.whiteEloChange > 0 ? '+' : ''}{game.whiteEloChange}<br />
                   {game.blackPlayer?.name}: {game.blackEloChange > 0 ? '+' : ''}{game.blackEloChange}
                 </td>
-                <td>{game.verified ? 'Verified' : 'Pending'}</td>
+                <td>Verified</td>
                 <td style={{ display: 'flex', gap: '5px' }}>
                   <button 
                     onClick={() => handleEditGame(game)}
@@ -760,15 +754,6 @@ const GameManagement = () => {
                   >
                     Edit
                   </button>
-                  {!game.verified && (
-                    <button 
-                      onClick={() => handleVerifyGame(game.id)}
-                      className="btn-success"
-                      style={{ padding: '5px 10px' }}
-                    >
-                      Verify
-                    </button>
-                  )}
                   <button 
                     onClick={() => handleDeleteGame(game.id)}
                     className="btn-danger"

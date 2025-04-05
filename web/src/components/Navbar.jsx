@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Navbar = () => {
   const { currentUser, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   const handleLogout = () => {
     logout();
@@ -25,18 +27,18 @@ const Navbar = () => {
       borderBottom: '1px solid var(--border)'
     }}>
       <div className="nav-left">
-        <h2 style={{ margin: 0 }}>Chess Club</h2>
+        <h2 style={{ margin: 0 }}>{t('appTitle')}</h2>
       </div>
       
       <div className="nav-middle" style={{
         display: 'flex',
         gap: '20px'
       }}>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/rankings">Rankings</Link>
-        <Link to="/submit-game">Submit Game</Link>
-        <Link to="/profile">Profile</Link>
-        {isAdmin && <Link to="/admin">Admin</Link>}
+        <Link to="/dashboard">{t('dashboard')}</Link>
+        <Link to="/rankings">{t('rankings')}</Link>
+        <Link to="/submit-game">{t('submitGame')}</Link>
+        <Link to="/profile">{t('profile')}</Link>
+        {isAdmin && <Link to="/admin">{t('adminNav')}</Link>}
       </div>
       
       <div className="nav-right" style={{
@@ -46,7 +48,7 @@ const Navbar = () => {
       }}>
         {currentUser && (
           <>
-            <span>Hello, {currentUser.name}</span>
+            <span>{t('greeting')}, {currentUser.name}</span>
             <button 
               onClick={handleLogout}
               style={{
@@ -58,7 +60,7 @@ const Navbar = () => {
                 cursor: 'pointer'
               }}
             >
-              Logout
+              {t('logout')}
             </button>
           </>
         )}

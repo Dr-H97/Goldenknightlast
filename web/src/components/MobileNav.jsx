@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 // Simple mobile-friendly bottom navigation
 const MobileNav = () => {
   const location = useLocation();
   const { currentUser, logout } = useAuth();
+  const { t } = useLanguage();
   
   // Don't show nav on login page
   if (location.pathname === '/login') {
@@ -19,7 +21,7 @@ const MobileNav = () => {
         className={`mobile-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
       >
         <div className="mobile-nav-icon">📊</div>
-        <span>Home</span>
+        <span>{t('dashboard')}</span>
       </Link>
       
       <Link 
@@ -27,7 +29,7 @@ const MobileNav = () => {
         className={`mobile-nav-item ${location.pathname === '/rankings' ? 'active' : ''}`}
       >
         <div className="mobile-nav-icon">🏆</div>
-        <span>Rankings</span>
+        <span>{t('rankings')}</span>
       </Link>
       
       <Link 
@@ -35,7 +37,7 @@ const MobileNav = () => {
         className={`mobile-nav-item ${location.pathname === '/submit-game' ? 'active' : ''}`}
       >
         <div className="mobile-nav-icon">♟️</div>
-        <span>New Game</span>
+        <span>{t('submitGame')}</span>
       </Link>
       
       {currentUser?.isAdmin && (
@@ -44,7 +46,7 @@ const MobileNav = () => {
           className={`mobile-nav-item ${location.pathname.startsWith('/admin') ? 'active' : ''}`}
         >
           <div className="mobile-nav-icon">⚙️</div>
-          <span>Admin</span>
+          <span>{t('adminNav')}</span>
         </Link>
       )}
       
@@ -53,7 +55,7 @@ const MobileNav = () => {
         className={`mobile-nav-item ${location.pathname === '/profile' ? 'active' : ''}`}
       >
         <div className="mobile-nav-icon">👤</div>
-        <span>Profile</span>
+        <span>{t('profile')}</span>
       </Link>
     </nav>
   );

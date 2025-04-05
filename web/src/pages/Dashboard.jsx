@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -27,6 +28,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
+  const { t } = useLanguage();
   const [recentGames, setRecentGames] = useState([]);
   const [allGames, setAllGames] = useState([]);
   const [playerStats, setPlayerStats] = useState(null);
@@ -224,7 +226,7 @@ const Dashboard = () => {
   };
   
   if (loading) {
-    return <div className="container">Loading dashboard data...</div>;
+    return <div className="container">{t('loading')}</div>;
   }
   
   if (error) {
@@ -233,21 +235,21 @@ const Dashboard = () => {
   
   return (
     <div className="container">
-      <h1 className="fade-in">Welcome, {currentUser.name}!</h1>
+      <h1 className="fade-in">{t('welcomeBack')}, {currentUser.name}!</h1>
       
       <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Player Stats Section */}
         <div className="card dashboard-card slide-up">
-          <h2>Your Statistics</h2>
+          <h2>{t('statistics')}</h2>
           {playerStats && (
             <div>
-              <p><strong>Current ELO Rating:</strong> {playerStats.currentElo}</p>
-              <p><strong>Total Games:</strong> {playerStats.totalGames}</p>
-              <p><strong>Record:</strong> {playerStats.wins}W - {playerStats.losses}L - {playerStats.draws}D</p>
+              <p><strong>{t('currentElo')}:</strong> {playerStats.currentElo}</p>
+              <p><strong>{t('totalGames')}:</strong> {playerStats.totalGames}</p>
+              <p><strong>{t('record')}:</strong> {playerStats.wins}W - {playerStats.losses}L - {playerStats.draws}D</p>
               
               <div style={{ marginTop: '10px' }}>
                 <Link to="/profile">
-                  <button className="btn-primary">View Full Profile</button>
+                  <button className="btn-primary">{t('viewProfile')}</button>
                 </Link>
               </div>
             </div>
@@ -256,15 +258,15 @@ const Dashboard = () => {
         
         {/* Recent Games Section */}
         <div className="card dashboard-card slide-up" style={{ animationDelay: '0.1s' }}>
-          <h2>Recent Games</h2>
+          <h2>{t('recentGames')}</h2>
           {recentGames.length > 0 ? (
             <table>
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Opponent</th>
-                  <th>Result</th>
-                  <th>ELO Change</th>
+                  <th>{t('date')}</th>
+                  <th>{t('opponent')}</th>
+                  <th>{t('result')}</th>
+                  <th>{t('eloChange')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -289,7 +291,7 @@ const Dashboard = () => {
               </tbody>
             </table>
           ) : (
-            <p>No games played yet.</p>
+            <p>{t('noGamesYet')}</p>
           )}
           
           <div style={{ marginTop: '10px' }}>
@@ -303,7 +305,7 @@ const Dashboard = () => {
       {/* Detailed Statistics Section */}
       {playerStats && playerStats.totalGames > 0 && (
         <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s' }}>
-          <h2>Detailed Statistics</h2>
+          <h2>{t('detailedStatistics')}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
             {/* Most Played Opponent */}
             <div className="stat-card staggered-item">
@@ -350,42 +352,42 @@ const Dashboard = () => {
       {/* ELO Rating History Chart */}
       <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.3s' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2>ELO Rating History</h2>
+          <h2>{t('eloHistory')}</h2>
           <div style={{ display: 'flex', gap: '8px' }}>
             <button 
               className={`btn-sm ${chartTimeRange === 'all' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setChartTimeRange('all')}
               style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
-              All Time
+              {t('allTime')}
             </button>
             <button 
               className={`btn-sm ${chartTimeRange === 'year' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setChartTimeRange('year')}
               style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
-              1 Year
+              {t('oneYear')}
             </button>
             <button 
               className={`btn-sm ${chartTimeRange === 'sixMonths' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setChartTimeRange('sixMonths')}
               style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
-              6 Months
+              {t('sixMonths')}
             </button>
             <button 
               className={`btn-sm ${chartTimeRange === 'threeMonths' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setChartTimeRange('threeMonths')}
               style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
-              3 Months
+              {t('threeMonths')}
             </button>
             <button 
               className={`btn-sm ${chartTimeRange === 'month' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setChartTimeRange('month')}
               style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
-              1 Month
+              {t('oneMonth')}
             </button>
           </div>
         </div>
@@ -434,18 +436,18 @@ const Dashboard = () => {
         ) : (
           <p style={{ margin: '40px 0', textAlign: 'center' }}>
             {allGames.length === 0 
-              ? 'No games played yet to build ELO history chart.'
-              : 'No games found in the selected time range.'}
+              ? t('noGamesForChart')
+              : t('noGamesInTimeRange')}
           </p>
         )}
       </div>
       
       {/* Club Rankings Preview */}
       <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.4s' }}>
-        <h2>Club Rankings</h2>
-        <p>View the current rankings of all club members and see where you stand.</p>
+        <h2>{t('clubRankings')}</h2>
+        <p>{t('rankingsDescription')}</p>
         <Link to="/rankings">
-          <button className="btn-secondary chess-piece-hover">View Rankings</button>
+          <button className="btn-secondary chess-piece-hover">{t('viewRankings')}</button>
         </Link>
       </div>
     </div>
