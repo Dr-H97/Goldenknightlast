@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { useWebSocket } from '../context/WebSocketContext';
 
 
 const Admin = () => {
@@ -50,6 +52,8 @@ const Admin = () => {
 
 // Player Management Component
 const PlayerManagement = () => {
+  const { t } = useLanguage();
+  const { addMessageListener } = useWebSocket();
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -76,6 +80,22 @@ const PlayerManagement = () => {
   useEffect(() => {
     fetchPlayers();
   }, []);
+  
+  // Set up WebSocket listener for real-time updates
+  useEffect(() => {
+    // Listen for WebSocket messages
+    const removeListener = addMessageListener((message) => {
+      if (message.type === 'player_update' || message.type === 'player') {
+        console.log('WebSocket: Player update received', message);
+        fetchPlayers();
+      }
+    });
+    
+    return () => {
+      // Clean up the listener when component unmounts
+      removeListener();
+    };
+  }, [addMessageListener]);
   
   const fetchPlayers = async () => {
     try {
@@ -475,6 +495,8 @@ const PlayerManagement = () => {
 
 // Game Management Component
 const GameManagement = () => {
+  const { t } = useLanguage();
+  const { addMessageListener } = useWebSocket();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -517,6 +539,22 @@ const GameManagement = () => {
   useEffect(() => {
     fetchGames();
   }, [filters]);
+  
+  // Set up WebSocket listener for real-time updates
+  useEffect(() => {
+    // Listen for WebSocket messages
+    const removeListener = addMessageListener((message) => {
+      if (message.type === 'game_update' || message.type === 'game') {
+        console.log('WebSocket: Game update received', message);
+        fetchGames();
+      }
+    });
+    
+    return () => {
+      // Clean up the listener when component unmounts
+      removeListener();
+    };
+  }, [addMessageListener]);
   
   const fetchGames = async () => {
     try {

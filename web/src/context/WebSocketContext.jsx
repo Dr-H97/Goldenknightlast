@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import {
   initWebSocket,
   closeWebSocket,
-  addMessageListener,
+  addMessageListener as wsAddMessageListener,
   isWebSocketConnected,
   sendMessage,
   SOCKET_STATUS
@@ -32,7 +32,7 @@ export const WebSocketProvider = ({ children }) => {
     initWebSocket(handleStatusChange);
 
     // Add message listener
-    const removeListener = addMessageListener(handleMessage);
+    const removeListener = wsAddMessageListener(handleMessage);
 
     // Clean up on unmount
     return () => {
@@ -65,7 +65,8 @@ export const WebSocketProvider = ({ children }) => {
         isConnected: isWebSocketConnected(),
         messages,
         send,
-        reconnect
+        reconnect,
+        addMessageListener: wsAddMessageListener  // Expose the addMessageListener function
       }}
     >
       {children}
