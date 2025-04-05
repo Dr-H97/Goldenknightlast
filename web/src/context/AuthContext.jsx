@@ -35,9 +35,15 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify({ name, pin }),
+        credentials: 'same-origin'
       });
+      
+      if (!response.ok) {
+        throw new Error(`Login failed with status: ${response.status}`);
+      }
 
       const data = await response.json();
 
@@ -68,9 +74,16 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify({ playerId, pin }),
+        credentials: 'same-origin'
       });
+      
+      if (!response.ok) {
+        console.error(`PIN verification failed with status: ${response.status}`);
+        return false;
+      }
 
       const data = await response.json();
       return data.success;

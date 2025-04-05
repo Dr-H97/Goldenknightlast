@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import LanguageToggle from '../components/LanguageToggle';
+import ThemeToggle from '../components/ThemeToggle';
 
 const Login = () => {
   const [name, setName] = useState('');
@@ -12,6 +14,7 @@ const Login = () => {
   
   const { login } = useAuth();
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   
   const handleSubmit = async (e) => {
@@ -31,9 +34,11 @@ const Login = () => {
     setLoading(true);
     
     try {
+      // Make sure URL includes http:// or https:// and uses proper JSON content type
       const user = await login(name, pin);
       navigate('/dashboard');
     } catch (error) {
+      console.error("Login error:", error);
       setError(error.message || t('incorrectPin'));
     } finally {
       setLoading(false);
@@ -41,14 +46,18 @@ const Login = () => {
   };
   
   return (
-    <div className="container" style={{ maxWidth: '400px', margin: '0 auto', paddingTop: '50px' }}>
-      <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h2 style={{ textAlign: 'center', margin: 0 }}>{t('loginTitle')}</h2>
-          <LanguageToggle large={true} showText={true} />
-        </div>
+    <div className="login-container" style={{ 
+      maxWidth: '400px', 
+      margin: '0 auto', 
+      paddingTop: '50px',
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: 'calc(100vh - 100px)',
+    }}>
+      <div className="card" style={{ marginBottom: '20px', flex: '1' }}>
+        <h2 style={{ textAlign: 'center', margin: '0 0 20px 0' }}>{t('loginTitle')}</h2>
         
-        {error && <div className="error">{error}</div>}
+        {error && <div className="error" style={{ marginBottom: '15px' }}>{error}</div>}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -86,6 +95,26 @@ const Login = () => {
             {loading ? t('loading') : t('loginButton')}
           </button>
         </form>
+      </div>
+      
+      {/* Settings at the bottom */}
+      <div className="settings-container" style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        padding: '10px', 
+        marginBottom: '20px', 
+        gap: '20px',
+        flexWrap: 'wrap', 
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span>{t('language')}</span>
+          <LanguageToggle large={true} showText={true} />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span>{t('theme')}</span>
+          <ThemeToggle large={true} showText={true} />
+        </div>
       </div>
     </div>
   );
