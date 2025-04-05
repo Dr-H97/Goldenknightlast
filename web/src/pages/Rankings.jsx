@@ -42,14 +42,10 @@ const Rankings = () => {
   
   const handleSort = (field) => {
     if (sortBy === field) {
-      // If already sorting by this field, toggle the order, but always keep ELO in descending order
-      if (field === 'currentElo' || field === 'performance') {
-        setOrder('desc'); // Keep ratings sorting in descending (high to low) for rankings
-      } else {
-        setOrder(order === 'asc' ? 'desc' : 'asc');
-      }
+      // If already sorting by this field, toggle the order
+      setOrder(order === 'asc' ? 'desc' : 'asc');
     } else {
-      // If sorting by a new field, set it and default to descending for ELO, ascending for names
+      // If sorting by a new field, set it and default to descending for ELO/performance, ascending for names
       setSortBy(field);
       setOrder(field === 'name' ? 'asc' : 'desc');
     }
