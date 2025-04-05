@@ -363,10 +363,10 @@
   width: 100%;
   height: 100%;
   background: repeating-conic-gradient(
-    var(--light-square, #eae0c8) 0% 25%,
-    var(--dark-square, #b58863) 0% 50%,
-    var(--light-square, #eae0c8) 0% 75%,
-    var(--dark-square, #b58863) 0% 100%
+    var(--light-square, #ede6d1) 0% 25%,
+    var(--dark-square, #b07b55) 0% 50%,
+    var(--light-square, #ede6d1) 0% 75%,
+    var(--dark-square, #b07b55) 0% 100%
   ) 50% / 25% 25%;
   animation: board-reveal 1s forwards ease-in-out;
   z-index: 10;

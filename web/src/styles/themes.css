@@ -1,50 +1,58 @@
 /* Chess-themed Color Variables - Professional Design */
 :root {
-  /* Light Theme (Default) */
+  /* Light Theme (Default) - Updated with new palette */
   --background-light: #ffffff; /* Pure white for clean visibility */
-  --text-light: #1e1e1e; /* Near-black for high contrast */
+  --text-light: #1a1a1a; /* Near-black for high contrast */
   --text-secondary-light: #4a4a4a; /* Dark gray for labels */
-  --primary-light: #b58863; /* Light wood brown for buttons, active nav */
-  --secondary-light: #eae0c8; /* Chessboard beige for highlights */
-  --board-light: #eae0c8; /* Light square - cream */
-  --board-dark: #b58863; /* Dark square - wood brown */
+  --primary-light: #b07b55; /* Light wood brown for buttons, active nav */
+  --secondary-light: #ede6d1; /* Chessboard beige for highlights */
+  --surface-light: #f9f9f9; /* Surface color for backgrounds */
+  --board-light: #ede6d1; /* Light square - cream */
+  --board-dark: #b07b55; /* Dark square - wood brown */
   --white-piece: #ffffff;
   --black-piece: #333333;
-  --card-bg-light: #f5f5f5; /* Soft neutral gray for surface/cards */
-  --card-bg-alt-light: #fcfcf9; /* Table row alternate */
-  --header-bg-light: #f0f0f0;
+  --card-bg-light: #fbfbf8; /* Card background */
+  --card-bg-alt-light: #f4f1eb; /* Table row alternate */
+  --header-bg-light: #f9f9f9;
   --border-light: #dcdcdc; /* Borders/dividers */
-  --success-light: #4caf50;
-  --warning-light: #ff9800;
-  --error-light: #f44336;
-  --nav-active-light: #b58863;
+  --success-light: #28a745; /* Success messages */
+  --warning-light: #ffc107; /* Warning messages */
+  --error-light: #dc3545; /* Error messages */
+  --info-light: #17a2b8; /* Information messages */
+  --nav-default-light: #bbbbbb; /* Default navigation */
+  --nav-active-light: #b07b55; /* Active navigation */
   --modal-overlay-light: rgba(0, 0, 0, 0.3);
-  --reset-btn-bg-light: #b58863;
+  --reset-btn-bg-light: #999999;
   --reset-btn-text-light: #ffffff;
-  --reset-btn-border-light: #b58863;
+  --reset-btn-border-light: #999999;
+  --chart-grid-light: #e0e0e0; /* Chart grid lines */
   
-  /* Dark Theme */
-  --background-dark: #1e1e1e; /* Deep neutral black */
-  --text-dark: #f0f0f0; /* Bright white for clarity */
+  /* Dark Theme - Updated with new palette */
+  --background-dark: #1c1c1c; /* Deep neutral black */
+  --text-dark: #f5f5f5; /* Bright white for clarity */
   --text-secondary-dark: #c0c0c0; /* Secondary text color */
-  --primary-dark: #6a4e42; /* Classic brown wood tone */
-  --secondary-dark: #bca177; /* Elegant caramel/beige for highlights */
-  --board-dark-theme: #6a4e42; /* Dark square - adjusted to match primary */
-  --board-light-theme: #bca177; /* Light square - adjusted to match highlight */
-  --white-piece-dark: #f0f0f0;
+  --primary-dark: #7a5a45; /* Classic brown wood tone */
+  --secondary-dark: #c5a87a; /* Elegant caramel/beige for highlights */
+  --surface-dark: #292929; /* Surface color for backgrounds */
+  --board-dark-theme: #7a5a45; /* Dark square - adjusted to match primary */
+  --board-light-theme: #c5a87a; /* Light square - adjusted to match highlight */
+  --white-piece-dark: #f5f5f5;
   --black-piece-dark: #222222;
-  --card-bg-dark: #2a2a2a; /* Elevated containers */
-  --card-bg-alt-dark: #242424; /* Table row alternate */
-  --header-bg-dark: #2a2a2a;
-  --border-dark: #3a3a3a; /* Borders/dividers */
-  --success-dark: #66bb6a;
-  --warning-dark: #ffa726;
-  --error-dark: #ef5350;
-  --nav-active-dark: #bca177; /* Nav active highlighting */
+  --card-bg-dark: #2e2e2e; /* Elevated containers */
+  --card-bg-alt-dark: #252525; /* Table row alternate */
+  --header-bg-dark: #292929;
+  --border-dark: #444444; /* Borders/dividers */
+  --success-dark: #28a745; /* Success messages */
+  --warning-dark: #ffc107; /* Warning messages */
+  --error-dark: #dc3545; /* Error messages */
+  --info-dark: #17a2b8; /* Information messages */
+  --nav-default-dark: #bbbbbb; /* Default navigation */
+  --nav-active-dark: #c5a87a; /* Nav active highlighting */
   --modal-overlay-dark: rgba(0, 0, 0, 0.6);
-  --reset-btn-bg-dark: #6a4e42;
-  --reset-btn-text-dark: #ffffff;
-  --reset-btn-border-dark: #bca177;
+  --reset-btn-bg-dark: #999999;
+  --reset-btn-text-dark: #f5f5f5;
+  --reset-btn-border-dark: #999999;
+  --chart-grid-dark: #444444; /* Chart grid lines */
 }
 
 /* Light Theme (Default) */
