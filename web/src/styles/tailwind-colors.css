@@ -1,0 +1,183 @@
+/* Tailwind Color Palette for Chess Club App */
+
+:root {
+  /* Light Theme Colors */
+  --tw-light-background: #ffffff;
+  --tw-light-primary: #b07b55;
+  --tw-light-secondary: #ede6d1;
+  --tw-light-surface: #f9f9f9;
+  --tw-light-text: #1a1a1a;
+  --tw-light-card: #fbfbf8;
+  --tw-light-table-alt: #f4f1eb;
+  --tw-light-border: #dcdcdc;
+  
+  /* Dark Theme Colors */
+  --tw-dark-background: #1c1c1c;
+  --tw-dark-primary: #7a5a45;
+  --tw-dark-secondary: #c5a87a;
+  --tw-dark-surface: #292929;
+  --tw-dark-text: #f5f5f5;
+  --tw-dark-card: #2e2e2e;
+  --tw-dark-table-alt: #252525;
+  --tw-dark-border: #444444;
+  
+  /* Component Colors */
+  --tw-nav-default: #bbbbbb;
+  --tw-danger: #dc3545;
+  --tw-reset: #999999;
+  --tw-success: #28a745;
+  --tw-error: #dc3545;
+  --tw-warning: #ffc107;
+  --tw-info: #17a2b8;
+  
+  /* Chess Board Colors */
+  --tw-board-white: #ede6d1;
+  --tw-board-black: #b07b55;
+  
+  /* Chart Colors */
+  --tw-chart-grid-light: #e0e0e0;
+  --tw-chart-grid-dark: #444444;
+  
+  /* Border Radius */
+  --tw-rounded-2xl: 1rem;
+  
+  /* Box Shadow */
+  --tw-shadow-subtle: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Light Theme Variables */
+:root[data-theme="light"] {
+  --background: var(--tw-light-background);
+  --primary: var(--tw-light-primary);
+  --secondary: var(--tw-light-secondary);
+  --surface: var(--tw-light-surface);
+  --text: var(--tw-light-text);
+  --text-secondary: #4a4a4a;
+  --card-bg: var(--tw-light-card);
+  --card-bg-alt: var(--tw-light-table-alt);
+  --border: var(--tw-light-border);
+  --hover: var(--tw-light-surface);
+  
+  /* Status Colors */
+  --success: var(--tw-success);
+  --error: var(--tw-error);
+  --warning: var(--tw-warning);
+  --info: var(--tw-info);
+  
+  /* Chess Board */
+  --board-light-square: var(--tw-board-white);
+  --board-dark-square: var(--tw-board-black);
+  
+  /* Navigation */
+  --nav-default: var(--tw-nav-default);
+  --nav-active: var(--tw-light-primary);
+  
+  /* Chart Colors */
+  --chart-grid: var(--tw-chart-grid-light);
+  
+  /* Button Colors */
+  --reset-btn-bg: var(--tw-reset);
+  --reset-btn-text: white;
+  --reset-btn-border: var(--tw-reset);
+  
+  /* Overlay */
+  --modal-overlay: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Theme Variables */
+:root[data-theme="dark"] {
+  --background: var(--tw-dark-background);
+  --primary: var(--tw-dark-primary);
+  --secondary: var(--tw-dark-secondary);
+  --surface: var(--tw-dark-surface);
+  --text: var(--tw-dark-text);
+  --text-secondary: #c0c0c0;
+  --card-bg: var(--tw-dark-card);
+  --card-bg-alt: var(--tw-dark-table-alt);
+  --border: var(--tw-dark-border);
+  --hover: #333333;
+  
+  /* Status Colors */
+  --success: var(--tw-success);
+  --error: var(--tw-error);
+  --warning: var(--tw-warning);
+  --info: var(--tw-info);
+  
+  /* Chess Board */
+  --board-light-square: var(--tw-board-white);
+  --board-dark-square: var(--tw-dark-primary);
+  
+  /* Navigation */
+  --nav-default: var(--tw-nav-default);
+  --nav-active: var(--tw-dark-secondary);
+  
+  /* Chart Colors */
+  --chart-grid: var(--tw-chart-grid-dark);
+  
+  /* Button Colors */
+  --reset-btn-bg: var(--tw-reset);
+  --reset-btn-text: white;
+  --reset-btn-border: var(--tw-reset);
+  
+  /* Overlay */
+  --modal-overlay: rgba(0, 0, 0, 0.6);
+}
+
+/* Basic UI Component Styling */
+body {
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--tw-rounded-2xl);
+  box-shadow: var(--tw-shadow-subtle);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-danger {
+  background-color: var(--tw-danger);
+  color: white;
+}
+
+/* Table styling */
+table th {
+  background-color: var(--card-bg-alt);
+}
+
+table tr:nth-child(even) {
+  background-color: var(--card-bg);
+}
+
+table tr:nth-child(odd) {
+  background-color: var(--card-bg-alt);
+}
+
+/* Form controls */
+.form-control {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 0.5rem;
+}
+
+/* Chess board squares */
+.chess-square-light {
+  background-color: var(--board-light-square);
+}
+
+.chess-square-dark {
+  background-color: var(--board-dark-square);
+}
