@@ -40,8 +40,11 @@ const translations = {
     recentGames: 'Recent Games',
     noRecentGames: 'No recent games found',
     keyStats: 'Key Statistics',
+    allGames: 'Games',
+    viewAllGames: 'View All Games',
+    gamesDescription: 'Browse all games played in the club. Filter games by time period or by player.',
     
-    // Rankings
+    // Rankings & Games
     playerRankings: 'Player Rankings',
     rank: 'Rank',
     player: 'Player',
@@ -52,6 +55,15 @@ const translations = {
     allTime: 'All time',
     thisMonth: 'This month',
     thisWeek: 'This week',
+    filterOptions: 'Filter Options',
+    timeRange: 'Time Period',
+    lastDay: 'Last Day',
+    lastWeek: 'Last Week',
+    lastMonth: 'Last Month',
+    lastYear: 'Last Year',
+    allPlayers: 'All Players',
+    noGamesFound: 'No games found with the selected filters.',
+    reset: 'Reset',
     
     // Submit Game
     submitGameTitle: 'Submit New Game',
@@ -156,8 +168,11 @@ const translations = {
     recentGames: 'Parties Récentes',
     noRecentGames: 'Aucune partie récente trouvée',
     keyStats: 'Statistiques Clés',
+    allGames: 'Parties',
+    viewAllGames: 'Voir Toutes les Parties',
+    gamesDescription: 'Parcourir toutes les parties jouées dans le club. Filtrer les parties par période ou par joueur.',
     
-    // Rankings
+    // Rankings & Games
     playerRankings: 'Classement des Joueurs',
     rank: 'Rang',
     player: 'Joueur',
@@ -168,6 +183,15 @@ const translations = {
     allTime: 'Tout',
     thisMonth: 'Ce mois',
     thisWeek: 'Cette semaine',
+    filterOptions: 'Options de Filtrage',
+    timeRange: 'Période',
+    lastDay: 'Dernier Jour',
+    lastWeek: 'Dernière Semaine',
+    lastMonth: 'Dernier Mois',
+    lastYear: 'Dernière Année',
+    allPlayers: 'Tous les Joueurs',
+    noGamesFound: 'Aucune partie trouvée avec les filtres sélectionnés.',
+    reset: 'Réinitialiser',
     
     // Submit Game
     submitGameTitle: 'Soumettre une Nouvelle Partie',

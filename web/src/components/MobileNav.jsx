@@ -33,6 +33,14 @@ const MobileNav = () => {
       </Link>
       
       <Link 
+        to="/games" 
+        className={`mobile-nav-item ${location.pathname === '/games' ? 'active' : ''}`}
+      >
+        <div className="mobile-nav-icon">🎮</div>
+        <span>{t('allGames') || 'Games'}</span>
+      </Link>
+      
+      <Link 
         to="/submit-game" 
         className={`mobile-nav-item ${location.pathname === '/submit-game' ? 'active' : ''}`}
       >

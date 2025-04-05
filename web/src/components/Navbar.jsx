@@ -36,6 +36,7 @@ const Navbar = () => {
       }}>
         <Link to="/dashboard">{t('dashboard')}</Link>
         <Link to="/rankings">{t('rankings')}</Link>
+        <Link to="/games">{t('allGames') || 'Games'}</Link>
         <Link to="/submit-game">{t('submitGame')}</Link>
         <Link to="/profile">{t('profile')}</Link>
         {isAdmin && <Link to="/admin">{t('adminNav')}</Link>}

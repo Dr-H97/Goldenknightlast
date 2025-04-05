@@ -15,6 +15,7 @@ import Dashboard from './pages/Dashboard';
 import Rankings from './pages/Rankings';
 import Profile from './pages/Profile';
 import SubmitGame from './pages/SubmitGame';
+import Games from './pages/Games';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 
@@ -84,6 +85,15 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SubmitGame />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              <Route 
+                path="/games" 
+                element={
+                  <ProtectedRoute>
+                    <Games />
                   </ProtectedRoute>
                 } 
               />

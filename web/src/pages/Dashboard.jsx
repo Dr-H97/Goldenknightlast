@@ -442,12 +442,12 @@ const Dashboard = () => {
         )}
       </div>
       
-      {/* Club Rankings Preview */}
+      {/* View All Games Button */}
       <div className="card dashboard-card slide-up" style={{ marginTop: '20px', animationDelay: '0.4s' }}>
-        <h2>{t('clubRankings')}</h2>
-        <p>{t('rankingsDescription')}</p>
-        <Link to="/rankings">
-          <button className="btn-secondary chess-piece-hover">{t('viewRankings')}</button>
+        <h2>{t('allGames')}</h2>
+        <p>{t('gamesDescription') || 'Browse all games played in the club. Filter games by time period or by player.'}</p>
+        <Link to="/games">
+          <button className="btn-secondary chess-piece-hover">{t('viewAllGames') || 'View All Games'}</button>
         </Link>
       </div>
     </div>
