@@ -28,20 +28,20 @@
   --chart-grid-light: #e0e0e0; /* Chart grid lines */
   
   /* Dark Theme - Updated with new palette */
-  --background-dark: #1c1c1c; /* Deep neutral black */
-  --text-dark: #f5f5f5; /* Bright white for clarity */
-  --text-secondary-dark: #c0c0c0; /* Secondary text color */
-  --primary-dark: #7a5a45; /* Classic brown wood tone */
-  --secondary-dark: #c5a87a; /* Elegant caramel/beige for highlights */
-  --surface-dark: #292929; /* Surface color for backgrounds */
-  --board-dark-theme: #7a5a45; /* Dark square - adjusted to match primary */
-  --board-light-theme: #c5a87a; /* Light square - adjusted to match highlight */
-  --white-piece-dark: #f5f5f5;
+  --background-dark: #1e1e1e; /* Updated deep neutral black */
+  --text-dark: #f0f0f0; /* Updated bright white for clarity */
+  --text-secondary-dark: #aaaaaa; /* Updated secondary text color */
+  --primary-dark: #6a4e42; /* Updated wood brown for buttons, dividers */
+  --secondary-dark: #c9a96a; /* Updated highlight color for players, headers */
+  --surface-dark: #2a2a2a; /* Updated surface color for card backgrounds */
+  --board-dark-theme: #6a4e42; /* Dark square - adjusted to match primary */
+  --board-light-theme: #c9a96a; /* Light square - adjusted to match highlight */
+  --white-piece-dark: #f0f0f0;
   --black-piece-dark: #222222;
-  --card-bg-dark: #2e2e2e; /* Elevated containers */
+  --card-bg-dark: #2a2a2a; /* Updated elevated containers */
   --card-bg-alt-dark: #252525; /* Table row alternate */
-  --header-bg-dark: #292929;
-  --border-dark: #444444; /* Borders/dividers */
+  --header-bg-dark: #2a2a2a;
+  --border-dark: #3a3a3a; /* Updated borders/dividers */
   --success-dark: #28a745; /* Success messages */
   --warning-dark: #ffc107; /* Warning messages */
   --error-dark: #dc3545; /* Error messages */
