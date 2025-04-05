@@ -16,6 +16,7 @@ import {
   Legend
 } from 'chart.js';
 import '../styles/animations.css';
+import '../styles/dashboard.css';
 
 // Register Chart.js components
 ChartJS.register(
@@ -306,36 +307,38 @@ const Dashboard = () => {
         <div className="card slide-up" style={{ animationDelay: '0.1s' }}>
           <h2>{t('Recent Games')}</h2>
           {recentGames.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>{t('Date')}</th>
-                  <th>{t('Opponent')}</th>
-                  <th>{t('Result')}</th>
-                  <th>{t('ELO Change')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentGames.map((game, index) => (
-                  <tr key={game.id} className="staggered-item">
-                    <td>{formatDate(game.date)}</td>
-                    <td className="highlight">{renderOpponent(game)}</td>
-                    <td>{renderPlayerResult(game)}</td>
-                    <td style={{ 
-                      color: (game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) > 0 
-                        ? '#51cf66' 
-                        : (game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) < 0 
-                          ? '#ff6b6b' 
-                          : 'inherit'
-                    }}>
-                      {/* Correctly prefix + sign when positive */}
-                      {(game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) > 0 ? '+' : ''}
-                      {game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange}
-                    </td>
+            <div className="dashboard-table-container">
+              <table className="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>{t('Date')}</th>
+                    <th>{t('Opponent')}</th>
+                    <th>{t('Result')}</th>
+                    <th>{t('ELO Change')}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recentGames.map((game, index) => (
+                    <tr key={game.id} className="staggered-item">
+                      <td>{formatDate(game.date)}</td>
+                      <td className="highlight">{renderOpponent(game)}</td>
+                      <td>{renderPlayerResult(game)}</td>
+                      <td style={{ 
+                        color: (game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) > 0 
+                          ? '#51cf66' 
+                          : (game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) < 0 
+                            ? '#ff6b6b' 
+                            : 'inherit'
+                      }}>
+                        {/* Correctly prefix + sign when positive */}
+                        {(game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) > 0 ? '+' : ''}
+                        {game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <p className="text-secondary">{t('noGamesYet')}</p>
           )}
