@@ -8,7 +8,6 @@ import kingIcon from '../assets/chess-king.svg';
 import queenIcon from '../assets/chess-queen.svg';
 import knightIcon from '../assets/chess-knight.svg';
 import plusCircleIcon from '../assets/plus-circle.svg';
-import ThemeToggle from '../components/ThemeToggle';
 
 const getInitials = (name) => {
   return name
@@ -146,7 +145,6 @@ const Rankings = () => {
           <img src={logo} alt="Chess Club Logo" className="leaderboard-logo-icon" />
           <h1 className="leaderboard-title">Club Rankings</h1>
         </div>
-        <ThemeToggle large showText />
       </div>
       
       <div className="leaderboard-filters slide-up">

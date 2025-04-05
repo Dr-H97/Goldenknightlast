@@ -79,13 +79,8 @@
   transition: background-color 0.2s ease;
 }
 
-/* Theme-specific hover styles for sortable headers */
-:root[data-theme="dark"] .leaderboard-table th.sortable:hover {
-  background-color: rgba(201, 169, 106, 0.15);
-}
-
-:root[data-theme="light"] .leaderboard-table th.sortable:hover {
-  background-color: rgba(181, 136, 99, 0.15);
+.leaderboard-table th.sortable:hover {
+  background-color: rgba(201, 169, 106, 0.1);
 }
 
 .leaderboard-table td {
@@ -99,16 +94,11 @@
   border-bottom: none;
 }
 
-/* Theme-specific hover styles for rows */
-:root[data-theme="dark"] .leaderboard-table tr:hover td {
-  background-color: rgba(201, 169, 106, 0.08);
+.leaderboard-table tr:hover td {
+  background-color: rgba(201, 169, 106, 0.05);
 }
 
-:root[data-theme="light"] .leaderboard-table tr:hover td {
-  background-color: rgba(181, 136, 99, 0.08);
-}
-
-/* Top 3 Styling with theme-specific coloring */
+/* Top 3 Styling */
 .rank-1, .rank-2, .rank-3 {
   position: relative;
   font-weight: 600;
@@ -118,28 +108,16 @@
   padding: 1.25rem 1rem;
 }
 
-:root[data-theme="dark"] .rank-1 {
+.rank-1 {
   background-color: rgba(201, 169, 106, 0.2) !important;
 }
 
-:root[data-theme="light"] .rank-1 {
-  background-color: rgba(181, 136, 99, 0.15) !important;
-}
-
-:root[data-theme="dark"] .rank-2 {
+.rank-2 {
   background-color: rgba(201, 169, 106, 0.1) !important;
 }
 
-:root[data-theme="light"] .rank-2 {
-  background-color: rgba(181, 136, 99, 0.1) !important;
-}
-
-:root[data-theme="dark"] .rank-3 {
+.rank-3 {
   background-color: rgba(201, 169, 106, 0.05) !important;
-}
-
-:root[data-theme="light"] .rank-3 {
-  background-color: rgba(181, 136, 99, 0.05) !important;
 }
 
 .rank-badge {
@@ -218,7 +196,6 @@
   color: var(--text-secondary);
 }
 
-/* Theme-specific rating cell styling */
 .rating-cell {
   font-weight: 600;
   font-size: 1.1rem;
@@ -227,10 +204,6 @@
 
 .rank-1 .rating-cell {
   color: #b8860b;
-}
-
-:root[data-theme="light"] .rank-1 .rating-cell {
-  color: #9e7039;
 }
 
 .filter-controls {
@@ -307,21 +280,12 @@
   transition: transform 0.2s ease;
 }
 
-/* Theme-specific win percentage bar styling */
 .win-percentage-bar {
   height: 0.5rem;
-  background-color: var(--card-border);
+  background-color: rgba(201, 169, 106, 0.2);
   border-radius: 1rem;
   overflow: hidden;
   margin-top: 0.25rem;
-}
-
-:root[data-theme="dark"] .win-percentage-bar {
-  background-color: rgba(201, 169, 106, 0.2);
-}
-
-:root[data-theme="light"] .win-percentage-bar {
-  background-color: rgba(181, 136, 99, 0.15);
 }
 
 .win-percentage-progress {
@@ -368,41 +332,5 @@
   .player-avatar {
     width: 2rem;
     height: 2rem;
-  }
-}
-
-/* Theme toggle on leaderboard */
-.leaderboard-header .theme-toggle {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: var(--background);
-  border-radius: 1rem;
-  border: 1px solid var(--card-border);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: var(--text-primary);
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.leaderboard-header .theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.leaderboard-header .theme-toggle svg {
-  margin-right: 0.5rem;
-  color: var(--primary-accent);
-}
-
-.leaderboard-header .theme-text {
-  font-size: 0.9rem;
-}
-
-@media (max-width: 768px) {
-  .leaderboard-header .theme-toggle {
-    margin-top: 0.5rem;
-    align-self: flex-end;
   }
 }

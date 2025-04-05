@@ -229,8 +229,6 @@ em, i {
   margin-top: 1rem;
   border-radius: 0.5rem;
   padding: 1rem;
-  background-color: var(--surface);
-  border: 1px solid var(--card-border);
 }
 
 /* Section dividers */
@@ -258,55 +256,6 @@ em, i {
   border-radius: 0.75rem;
   padding: 1rem;
   border-left: 3px solid var(--primary-accent);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Game Button Styles */
-.game-btn {
-  background-color: #4a6fa5; /* Blue-ish color for game buttons */
-  color: #ffffff;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.75rem;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.game-btn:hover {
-  background-color: #3e5d8c;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.game-btn:active {
-  transform: translateY(0);
-}
-
-/* Admin Button Styles */
-.admin-btn {
-  background-color: #d45f5f; /* Red-ish color for admin buttons */
-  color: #ffffff;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.75rem;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.admin-btn:hover {
-  background-color: #b84d4d;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.admin-btn:active {
-  transform: translateY(0);
 }
 
 /* Mobile Navigation */
@@ -388,104 +337,4 @@ em, i {
   font-size: 1rem;
   margin-bottom: 0.75rem;
   font-weight: 600;
-}
-
-/* Chess-specific animations */
-.chess-piece-hover {
-  position: relative;
-  overflow: hidden;
-}
-
-.chess-piece-hover::before {
-  content: "";
-  position: absolute;
-  width: 1.5rem;
-  height: 1.5rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M19 22H5v-2h14v2zM16 8.4c0 1.454-.889 2.7-2.4 3.6 1.511.9 2.4 2.146 2.4 3.6V17h-5v-1.5a1.5 1.5 0 01-3 0V17H3v-1.4c0-1.454.889-2.7 2.4-3.6-1.511-.9-2.4-2.146-2.4-3.6V7h5v1.5a1.5 1.5 0 013 0V7h5v1.4z' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  transform-origin: center;
-}
-
-.chess-piece-hover:hover::before {
-  opacity: 0.8;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.chess-piece-hover:active::before {
-  transform: translate(-50%, -50%) scale(0.8);
-  opacity: 1;
-}
-
-/* Loading animation */
-.loading-knight {
-  width: 60px;
-  height: 60px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='60' height='60'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M19 22H5v-2h14v2zM16 8.4c0 1.454-.889 2.7-2.4 3.6 1.511.9 2.4 2.146 2.4 3.6V17h-5v-1.5a1.5 1.5 0 01-3 0V17H3v-1.4c0-1.454.889-2.7 2.4-3.6-1.511-.9-2.4-2.146-2.4-3.6V7h5v1.5a1.5 1.5 0 013 0V7h5v1.4z' fill='%23c9a96a'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  animation: knight-bounce 1.5s infinite;
-}
-
-@keyframes knight-bounce {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-10px) scale(1.1);
-  }
-}
-
-/* Form elements */
-input, select, textarea {
-  background-color: var(--surface);
-  color: var(--text-primary);
-  border: 1px solid var(--card-border);
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  width: 100%;
-  transition: all 0.3s ease;
-}
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--primary-accent);
-  box-shadow: 0 0 0 2px rgba(201, 169, 106, 0.3);
-}
-
-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c9a96a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 30px;
-}
-
-/* Form Labels */
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-/* Form layout */
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-/* Ensure table text is visible in both themes */
-:root[data-theme="light"] table th,
-:root[data-theme="light"] table td {
-  color: var(--text-primary);
-}
-
-:root[data-theme="dark"] table th,
-:root[data-theme="dark"] table td {
-  color: var(--text-primary);
 }
