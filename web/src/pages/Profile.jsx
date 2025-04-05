@@ -211,7 +211,7 @@ const Profile = () => {
           <h2>{t('playerInfo')}</h2>
           
           <p><strong>{t('name')}:</strong> {currentUser.name}</p>
-          <p><strong>{t('currentElo')}:</strong> {currentUser.currentElo}</p>
+          <p><strong>{t('currentElo')}:</strong> {currentUser.currentElo || currentUser.initialElo}</p>
           <p><strong>{t('accountType')}:</strong> {currentUser.isAdmin ? t('admin') : t('player')}</p>
           
           {/* Theme Toggle */}

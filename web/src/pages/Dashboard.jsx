@@ -179,7 +179,7 @@ const Dashboard = () => {
           // Set player statistics
           setPlayerStats({
             totalGames: sortedGames.length,
-            currentElo: currentUser.currentElo,
+            currentElo: currentUser.currentElo || currentUser.initialElo,
             wins: sortedGames.filter(game => 
               (game.whitePlayerId === currentUser.id && game.result === '1-0') || 
               (game.blackPlayerId === currentUser.id && game.result === '0-1')

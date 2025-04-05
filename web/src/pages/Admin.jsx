@@ -421,49 +421,47 @@ const PlayerManagement = () => {
       
       {/* Player List */}
       <div className="card">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Current ELO</th>
-              <th>Admin</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {players.map(player => (
-              <tr key={player.id}>
-                <td>{player.id}</td>
-                <td>{player.name}</td>
-                <td>{player.currentElo}</td>
-                <td>{player.isAdmin ? 'Yes' : 'No'}</td>
-                <td>
-                  <div style={{ display: 'flex', gap: '5px' }}>
-                    <button 
-                      onClick={() => handleEditPlayer(player)}
-                      className="btn-primary"
-                      style={{ padding: '5px 10px' }}
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      onClick={() => handleDeletePlayer(player.id, player.name)}
-                      className="btn-danger"
-                      style={{ padding: '5px 10px' }}
-                    >
-                      Delete
-                    </button>
+        <div className="player-management-list">
+          {players.map(player => (
+            <div key={player.id} className="player-card" style={{ 
+              marginBottom: '15px', 
+              padding: '15px', 
+              backgroundColor: 'var(--card-bg-alt)',
+              borderRadius: '10px',
+              border: '1px solid var(--border)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <div>
+                  <h3 style={{ margin: '0 0 5px 0' }}>{player.name}</h3>
+                  <div style={{ display: 'flex', gap: '15px' }}>
+                    <p style={{ margin: '0' }}><strong>ELO:</strong> {player.currentElo || player.initialElo}</p>
+                    <p style={{ margin: '0' }}><strong>Role:</strong> {player.isAdmin ? 'Admin' : 'Player'}</p>
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        
-        {players.length === 0 && (
-          <p>No players found.</p>
-        )}
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    onClick={() => handleEditPlayer(player)}
+                    className="btn-primary"
+                    style={{ padding: '8px 15px' }}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDeletePlayer(player.id, player.name)}
+                    className="btn-danger"
+                    style={{ padding: '8px 15px' }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {players.length === 0 && (
+            <p style={{ textAlign: 'center', padding: '20px' }}>No players found.</p>
+          )}
+        </div>
       </div>
     </div>
   );
