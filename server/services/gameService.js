@@ -6,13 +6,85 @@ const { calculateNewRatings } = require('../utils/eloCalculator');
 /**
  * Get all games with optional filters and sorting
  */
-const getAllGames = async (sortBy = 'date', order = 'desc', verified = null) => {
+const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dateRange = null, specificDate = null, fromDate = null, toDate = null, playerId = null) => {
   try {
     // Build filtering conditions
     const conditions = [];
     
     if (verified !== null) {
       conditions.push(eq(games.verified, verified));
+    }
+    
+    // Add date range filtering - last week, last month, or specific date
+    if (dateRange) {
+      const today = new Date();
+      let startDate;
+      
+      if (dateRange === 'week') {
+        // Last 7 days
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 7);
+        conditions.push(games.date >= startDate);
+      } else if (dateRange === 'month') {
+        // Last 30 days
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 30);
+        conditions.push(games.date >= startDate);
+      } else if (dateRange === 'year') {
+        // Last 365 days
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 365);
+        conditions.push(games.date >= startDate);
+      }
+    }
+    
+    // Add specific date filtering
+    if (specificDate) {
+      try {
+        const date = new Date(specificDate);
+        // Set to beginning of the day
+        date.setHours(0, 0, 0, 0);
+        
+        // Create end date (end of the same day)
+        const endDate = new Date(date);
+        endDate.setHours(23, 59, 59, 999);
+        
+        // Between start of day and end of day
+        conditions.push(games.date >= date);
+        conditions.push(games.date <= endDate);
+      } catch (e) {
+        console.error('Invalid date format for specificDate:', e);
+      }
+    }
+    
+    // Add from date filtering
+    if (fromDate) {
+      try {
+        const date = new Date(fromDate);
+        conditions.push(games.date >= date);
+      } catch (e) {
+        console.error('Invalid date format for fromDate:', e);
+      }
+    }
+    
+    // Add to date filtering
+    if (toDate) {
+      try {
+        const date = new Date(toDate);
+        conditions.push(games.date <= date);
+      } catch (e) {
+        console.error('Invalid date format for toDate:', e);
+      }
+    }
+    
+    // Add player filtering
+    if (playerId) {
+      conditions.push(
+        or(
+          eq(games.whitePlayerId, playerId),
+          eq(games.blackPlayerId, playerId)
+        )
+      );
     }
     
     // Build query with filtering

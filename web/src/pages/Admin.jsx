@@ -475,7 +475,13 @@ const GameManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [filter, setFilter] = useState('all'); // all, recent
+  const [filters, setFilters] = useState({
+    dateRange: '',      // 'week', 'month', 'year'
+    specificDate: '',   // For exact date selection
+    playerFilter: ''    // For filtering by player ID
+  });
+  const [players, setPlayers] = useState([]);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
   
   // For editing games
   const [editingGameId, setEditingGameId] = useState(null);
@@ -485,21 +491,49 @@ const GameManagement = () => {
     date: ''
   });
   
-  // Fetch games
+  // Fetch players for the player filter dropdown
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch('/api/players');
+        const data = await response.json();
+        
+        if (data.success) {
+          setPlayers(data.players);
+        }
+      } catch (error) {
+        console.error('Error fetching players:', error);
+      }
+    };
+    
+    fetchPlayers();
+  }, []);
+  
+  // Fetch games when filters change
   useEffect(() => {
     fetchGames();
-  }, [filter]);
+  }, [filters]);
   
   const fetchGames = async () => {
     try {
       setLoading(true);
       
+      // Base URL with sorting
       let url = '/api/games?sortBy=date&order=desc';
-      if (filter === 'recent') {
-        // Get games from the last 7 days
-        const oneWeekAgo = new Date();
-        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-        url += `&fromDate=${oneWeekAgo.toISOString()}`;
+      
+      // Add date range filter
+      if (filters.dateRange) {
+        url += `&dateRange=${filters.dateRange}`;
+      }
+      
+      // Add specific date filter
+      if (filters.specificDate) {
+        url += `&specificDate=${filters.specificDate}`;
+      }
+      
+      // Add player filter
+      if (filters.playerFilter) {
+        url += `&playerId=${filters.playerFilter}`;
       }
       
       const response = await fetch(url);
@@ -516,6 +550,40 @@ const GameManagement = () => {
     } finally {
       setLoading(false);
     }
+  };
+  
+  // Handle filter changes
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Clear other date filters if one is being set
+    if (name === 'dateRange') {
+      setFilters(prev => ({
+        ...prev,
+        dateRange: value,
+        specificDate: '' // Clear specific date when selecting a range
+      }));
+    } else if (name === 'specificDate') {
+      setFilters(prev => ({
+        ...prev,
+        specificDate: value,
+        dateRange: '' // Clear date range when selecting a specific date
+      }));
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+  
+  // Reset all filters
+  const resetFilters = () => {
+    setFilters({
+      dateRange: '',
+      specificDate: '',
+      playerFilter: ''
+    });
   };
   
   // Verify game
@@ -641,21 +709,85 @@ const GameManagement = () => {
         
         <div style={{ display: 'flex', gap: '10px' }}>
           <button 
-            className={`btn-secondary ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => setFilter('all')}
-            style={{ backgroundColor: filter === 'all' ? '#646cff' : '#868e96' }}
+            className="btn-secondary"
+            onClick={() => setShowFilterPanel(!showFilterPanel)}
+            style={{ backgroundColor: '#646cff' }}
           >
-            All Games
+            {showFilterPanel ? 'Hide Filters' : 'Show Filters'}
           </button>
-          <button 
-            className={`btn-secondary ${filter === 'recent' ? 'active' : ''}`}
-            onClick={() => setFilter('recent')}
-            style={{ backgroundColor: filter === 'recent' ? '#646cff' : '#868e96' }}
-          >
-            Recent Games
-          </button>
+          
+          {(filters.dateRange || filters.specificDate || filters.playerFilter) && (
+            <button 
+              className="btn-secondary"
+              onClick={resetFilters}
+              style={{ backgroundColor: '#868e96' }}
+            >
+              Clear Filters
+            </button>
+          )}
         </div>
       </div>
+      
+      {/* Filter Panel */}
+      {showFilterPanel && (
+        <div className="card" style={{ marginBottom: '20px', padding: '15px' }}>
+          <h3>Filter Games</h3>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginBottom: '15px' }}>
+            {/* Date Range Filter */}
+            <div style={{ minWidth: '200px' }}>
+              <h4>Time Period</h4>
+              <select
+                name="dateRange"
+                value={filters.dateRange}
+                onChange={handleFilterChange}
+                className="form-control"
+              >
+                <option value="">All Time</option>
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+                <option value="year">Last Year</option>
+              </select>
+            </div>
+            
+            {/* Specific Date Filter */}
+            <div style={{ minWidth: '200px' }}>
+              <h4>Specific Date</h4>
+              <input
+                type="date"
+                name="specificDate"
+                value={filters.specificDate}
+                onChange={handleFilterChange}
+                className="form-control"
+              />
+            </div>
+            
+            {/* Player Filter */}
+            <div style={{ minWidth: '200px' }}>
+              <h4>Player</h4>
+              <select
+                name="playerFilter"
+                value={filters.playerFilter}
+                onChange={handleFilterChange}
+                className="form-control"
+              >
+                <option value="">All Players</option>
+                {players.map(player => (
+                  <option key={player.id} value={player.id}>
+                    {player.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <button className="btn-primary" onClick={resetFilters}>
+              Reset All Filters
+            </button>
+          </div>
+        </div>
+      )}
       
       {error && <div className="error">{error}</div>}
       {success && <div className="success">{success}</div>}

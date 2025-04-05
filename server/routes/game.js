@@ -13,7 +13,16 @@ const {
 // Get all games with optional filters
 router.get('/', async (req, res) => {
   try {
-    const { sortBy, order, verified, playerId } = req.query;
+    const { 
+      sortBy, 
+      order, 
+      verified, 
+      playerId, 
+      dateRange, 
+      specificDate,
+      fromDate,
+      toDate
+    } = req.query;
     
     let games;
     if (playerId) {
@@ -24,11 +33,16 @@ router.get('/', async (req, res) => {
         order
       );
     } else {
-      // Otherwise get all games
+      // Otherwise get all games with all filters
       games = await getAllGames(
         sortBy,
         order,
-        verified !== undefined ? verified === 'true' : null
+        verified !== undefined ? verified === 'true' : null,
+        dateRange,
+        specificDate,
+        fromDate,
+        toDate,
+        playerId ? parseInt(playerId) : null
       );
     }
     
