@@ -40,9 +40,15 @@ const Dashboard = () => {
   const [eloChartData, setEloChartData] = useState(null);
   const [chartTimeRange, setChartTimeRange] = useState('all'); // all, month, threeMonths, sixMonths, year
   
-  // Build ELO history data for chart
-  const buildEloHistoryData = (games, timeRange) => {
-    if (!games || games.length === 0) return null;
+  // Function to format the date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
+  
+  // Build ELO history data for chart - using the formatDate function defined earlier
+  const buildEloHistoryData = useCallback((games, timeRange) => {
+    if (!games || games.length === 0 || !currentUser) return null;
     
     // Sort games by date (ascending)
     let sortedGames = [...games].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -106,7 +112,7 @@ const Dashboard = () => {
         }
       ]
     };
-  };
+  }, [currentUser]);
   
   // Update chart data when time range changes
   useEffect(() => {
@@ -118,12 +124,6 @@ const Dashboard = () => {
   // This useEffect was replaced by the combination of fetchDashboardData as a useCallback
   // and the WebSocket listener effect above. The initial data fetch is now done
   // in a separate useEffect that depends on the fetchDashboardData callback.
-  
-  // Function to format the date
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  };
   
   // Function to render game result from player's perspective
   const renderPlayerResult = (game) => {
@@ -237,7 +237,7 @@ const Dashboard = () => {
       setError(`Failed to load dashboard data: ${error.message || 'Unknown error'}. Please try again later.`);
       setLoading(false);
     }
-  }, [currentUser, chartTimeRange, buildEloHistoryData]);
+  }, [currentUser, chartTimeRange]);
   
   // Set up WebSocket listener for real-time updates
   useEffect(() => {
