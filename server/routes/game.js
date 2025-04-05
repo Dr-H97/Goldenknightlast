@@ -64,9 +64,15 @@ router.get('/', async (req, res) => {
       );
     }
     
+    // Remove verified field from each game object before sending to client
+    const gamesWithoutVerified = games.map(game => {
+      const { verified: _verified, ...gameData } = game;
+      return gameData;
+    });
+    
     res.json({
       success: true,
-      games
+      games: gamesWithoutVerified
     });
   } catch (error) {
     console.error('Error getting games:', error);
@@ -89,9 +95,12 @@ router.get('/:id', async (req, res) => {
       });
     }
     
+    // Remove the verified field from the response for non-admin users
+    const { verified: _verified, ...gameData } = game;
+    
     res.json({
       success: true,
-      game
+      game: gameData
     });
   } catch (error) {
     console.error('Error getting game:', error);
@@ -105,7 +114,7 @@ router.get('/:id', async (req, res) => {
 // Create new game
 router.post('/', async (req, res) => {
   try {
-    const { whitePlayerId, blackPlayerId, result, date, verified } = req.body;
+    const { whitePlayerId, blackPlayerId, result, date } = req.body;
     
     if (!whitePlayerId || !blackPlayerId || !result) {
       return res.status(400).json({
@@ -140,15 +149,18 @@ router.post('/', async (req, res) => {
     
     const newGame = await createGame(gameData);
     
+    // Remove the verified field from the response for public view
+    const { verified: _verified, ...cleanGameData } = newGame;
+    
     // Broadcast the new game to all connected clients
     broadcastGameUpdate({
       action: 'create',
-      game: newGame
+      game: cleanGameData
     });
     
     res.status(201).json({
       success: true,
-      game: newGame
+      game: cleanGameData
     });
   } catch (error) {
     console.error('Error creating game:', error);
@@ -173,15 +185,18 @@ router.put('/:id/verify', async (req, res) => {
       });
     }
     
+    // Remove the verified field from the response for public view
+    const { verified: _verified, ...cleanGameData } = updatedGame;
+    
     // Broadcast the verified game to all connected clients
     broadcastGameUpdate({
       action: 'update',
-      game: updatedGame
+      game: cleanGameData
     });
     
     res.json({
       success: true,
-      game: updatedGame
+      game: cleanGameData
     });
   } catch (error) {
     console.error('Error verifying game:', error);
@@ -196,12 +211,12 @@ router.put('/:id/verify', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const gameId = parseInt(req.params.id);
-    const { result, verified, date } = req.body;
+    const { result, verified: verificationStatus, date } = req.body;
     
     // Prepare update data
     const updateData = {};
     if (result !== undefined) updateData.result = result;
-    if (verified !== undefined) updateData.verified = verified;
+    if (verificationStatus !== undefined) updateData.verified = verificationStatus;
     if (date !== undefined) updateData.date = date;
     
     const updatedGame = await updateGame(gameId, updateData);
@@ -213,15 +228,18 @@ router.put('/:id', async (req, res) => {
       });
     }
     
+    // Remove the verified field from the response for public view
+    const { verified: _verified, ...cleanGameData } = updatedGame;
+    
     // Broadcast the updated game to all connected clients
     broadcastGameUpdate({
       action: 'update',
-      game: updatedGame
+      game: cleanGameData
     });
     
     res.json({
       success: true,
-      game: updatedGame,
+      game: cleanGameData,
       message: 'Game updated successfully'
     });
   } catch (error) {

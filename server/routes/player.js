@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
     
     // Remove sensitive data from response
     const filteredPlayers = players.map(player => {
-      const { pin, ...playerData } = player;
+      const { pin, isAdmin, ...playerData } = player;
       return playerData;
     });
     
@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
     }
     
     // Remove sensitive data from response
-    const { pin, ...playerData } = player;
+    const { pin, isAdmin, ...playerData } = player;
     
     res.json({
       success: true,
@@ -83,7 +83,7 @@ router.get('/:id', async (req, res) => {
 // Create new player
 router.post('/', async (req, res) => {
   try {
-    const { name, pin, isAdmin, initialElo, currentElo } = req.body;
+    const { name, pin, isAdmin: adminFlag, initialElo, currentElo } = req.body;
     
     if (!name || !pin) {
       return res.status(400).json({
@@ -99,15 +99,15 @@ router.post('/', async (req, res) => {
     const playerData = {
       name,
       pin: hashedPin,
-      isAdmin: isAdmin || false,
+      isAdmin: adminFlag || false,
       initialElo: initialElo || 1200,
       currentElo: currentElo || initialElo || 1200
     };
     
     const newPlayer = await createPlayer(playerData);
     
-    // Remove PIN from response
-    const { pin: _, ...newPlayerData } = newPlayer;
+    // Remove sensitive data from response
+    const { pin: _, isAdmin: _admin, ...newPlayerData } = newPlayer;
     
     // Broadcast the new player to all connected clients
     broadcastPlayerUpdate({
@@ -132,7 +132,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const playerId = parseInt(req.params.id);
-    const { name, pin, isAdmin, currentElo } = req.body;
+    const { name, pin, isAdmin: adminFlag, currentElo } = req.body;
     
     // Get current player
     const currentPlayer = await getPlayerById(playerId);
@@ -148,7 +148,7 @@ router.put('/:id', async (req, res) => {
     const updateData = {};
     
     if (name) updateData.name = name;
-    if (isAdmin !== undefined) updateData.isAdmin = isAdmin;
+    if (adminFlag !== undefined) updateData.isAdmin = adminFlag;
     if (currentElo) updateData.currentElo = currentElo;
     
     // If PIN is being updated, hash it
@@ -159,8 +159,8 @@ router.put('/:id', async (req, res) => {
     
     const updatedPlayer = await updatePlayer(playerId, updateData);
     
-    // Remove PIN from response
-    const { pin: _, ...updatedPlayerData } = updatedPlayer;
+    // Remove sensitive data from response
+    const { pin: _, isAdmin: _admin, ...updatedPlayerData } = updatedPlayer;
     
     // Broadcast the updated player to all connected clients
     broadcastPlayerUpdate({
