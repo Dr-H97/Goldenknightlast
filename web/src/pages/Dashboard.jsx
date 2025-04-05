@@ -281,12 +281,12 @@ const Dashboard = () => {
   
   return (
     <div className="container">
-      <h1 className="fade-in">{t('welcomeBack')}, <span className="player-name">{currentUser.name}</span>!</h1>
+      <h1 className="fade-in">{t('welcomeBack')}, <span className="highlight">{currentUser.name}</span>!</h1>
       
-      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+      <div className="dashboard-grid">
         {/* Player Stats Section */}
-        <div className="card dashboard-card slide-up rounded-xl shadow-md px-4 py-3 bg-surface">
-          <h2 className="font-bold text-capitalize">{t('Statistics')}</h2>
+        <div className="card slide-up">
+          <h2>{t('Statistics')}</h2>
           {playerStats && (
             <div>
               <p><strong>{t('currentElo')}:</strong> {playerStats.currentElo}</p>
@@ -295,7 +295,7 @@ const Dashboard = () => {
               
               <div style={{ marginTop: '1rem' }}>
                 <Link to="/profile">
-                  <button className="btn-primary font-bold">{t('viewProfile')}</button>
+                  <button className="button">{t('viewProfile')}</button>
                 </Link>
               </div>
             </div>
@@ -303,8 +303,8 @@ const Dashboard = () => {
         </div>
         
         {/* Recent Games Section */}
-        <div className="card dashboard-card slide-up rounded-xl shadow-md px-4 py-3 bg-surface" style={{ animationDelay: '0.1s' }}>
-          <h2 className="font-bold text-capitalize">{t('Recent Games')}</h2>
+        <div className="card slide-up" style={{ animationDelay: '0.1s' }}>
+          <h2>{t('Recent Games')}</h2>
           {recentGames.length > 0 ? (
             <table>
               <thead>
@@ -319,7 +319,7 @@ const Dashboard = () => {
                 {recentGames.map((game, index) => (
                   <tr key={game.id} className="staggered-item">
                     <td>{formatDate(game.date)}</td>
-                    <td className="player-name">{renderOpponent(game)}</td>
+                    <td className="highlight">{renderOpponent(game)}</td>
                     <td>{renderPlayerResult(game)}</td>
                     <td style={{ 
                       color: (game.whitePlayerId === currentUser.id ? game.whiteEloChange : game.blackEloChange) > 0 
@@ -342,7 +342,7 @@ const Dashboard = () => {
           
           <div style={{ marginTop: '1rem' }}>
             <Link to="/submit-game">
-              <button className="btn-primary font-bold chess-piece-hover">{t('Submit New Game')}</button>
+              <button className="button chess-piece-hover">{t('Submit New Game')}</button>
             </Link>
           </div>
         </div>
@@ -352,16 +352,16 @@ const Dashboard = () => {
       
       {/* Detailed Statistics Section */}
       {playerStats && playerStats.totalGames > 0 && (
-        <div className="card dashboard-card slide-up rounded-xl shadow-md px-4 py-3 bg-surface mb-5" style={{ animationDelay: '0.2s' }}>
-          <h2 className="font-bold text-capitalize">{t('Detailed Statistics')}</h2>
+        <div className="card slide-up" style={{ animationDelay: '0.2s' }}>
+          <h2>{t('Detailed Statistics')}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
             {/* Most Played Opponent */}
             <div className="stat-card staggered-item">
-              <h3 className="font-bold">Most Played Opponent</h3>
+              <h3>Most Played Opponent</h3>
               {playerStats.mostPlayedOpponent ? (
                 <div>
                   <p className="stat-highlight">{playerStats.mostPlayedOpponent}</p>
-                  <p className="text-sm text-secondary">Played {playerStats.gamesWithMostPlayed} games</p>
+                  <p className="text-secondary">Played {playerStats.gamesWithMostPlayed} games</p>
                 </div>
               ) : (
                 <p className="text-secondary">No games played yet</p>
@@ -370,11 +370,11 @@ const Dashboard = () => {
             
             {/* Win Rate with White */}
             <div className="stat-card staggered-item">
-              <h3 className="font-bold">Win Rate with White</h3>
+              <h3>Win Rate with White</h3>
               {playerStats.gamesAsWhite > 0 ? (
                 <div>
                   <p className="stat-highlight">{playerStats.winRateAsWhite}%</p>
-                  <p className="text-sm text-secondary">From {playerStats.gamesAsWhite} games</p>
+                  <p className="text-secondary">From {playerStats.gamesAsWhite} games</p>
                 </div>
               ) : (
                 <p className="text-secondary">No games played as White</p>
@@ -383,11 +383,11 @@ const Dashboard = () => {
             
             {/* Win Rate with Black */}
             <div className="stat-card staggered-item">
-              <h3 className="font-bold">Win Rate with Black</h3>
+              <h3>Win Rate with Black</h3>
               {playerStats.gamesAsBlack > 0 ? (
                 <div>
                   <p className="stat-highlight">{playerStats.winRateAsBlack}%</p>
-                  <p className="text-sm text-secondary">From {playerStats.gamesAsBlack} games</p>
+                  <p className="text-secondary">From {playerStats.gamesAsBlack} games</p>
                 </div>
               ) : (
                 <p className="text-secondary">No games played as Black</p>
@@ -398,42 +398,37 @@ const Dashboard = () => {
       )}
       
       {/* ELO Rating History Chart */}
-      <div className="card dashboard-card slide-up rounded-xl shadow-md px-4 py-3 bg-surface mb-5" style={{ animationDelay: '0.3s' }}>
+      <div className="card slide-up" style={{ animationDelay: '0.3s' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 className="font-bold text-capitalize">{t('ELO History')}</h2>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <h2>{t('ELO History')}</h2>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <button 
-              className={`btn-sm ${chartTimeRange === 'all' ? 'btn-primary' : 'btn-secondary'}`}
+              className={`btn-sm ${chartTimeRange === 'all' ? 'button' : 'button-neutral'}`}
               onClick={() => setChartTimeRange('all')}
-              style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
               {t('All Time')}
             </button>
             <button 
-              className={`btn-sm ${chartTimeRange === 'year' ? 'btn-primary' : 'btn-secondary'}`}
+              className={`btn-sm ${chartTimeRange === 'year' ? 'button' : 'button-neutral'}`}
               onClick={() => setChartTimeRange('year')}
-              style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
               {t('One Year')}
             </button>
             <button 
-              className={`btn-sm ${chartTimeRange === 'sixMonths' ? 'btn-primary' : 'btn-secondary'}`}
+              className={`btn-sm ${chartTimeRange === 'sixMonths' ? 'button' : 'button-neutral'}`}
               onClick={() => setChartTimeRange('sixMonths')}
-              style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
               {t('Six Months')}
             </button>
             <button 
-              className={`btn-sm ${chartTimeRange === 'threeMonths' ? 'btn-primary' : 'btn-secondary'}`}
+              className={`btn-sm ${chartTimeRange === 'threeMonths' ? 'button' : 'button-neutral'}`}
               onClick={() => setChartTimeRange('threeMonths')}
-              style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
               {t('Three Months')}
             </button>
             <button 
-              className={`btn-sm ${chartTimeRange === 'month' ? 'btn-primary' : 'btn-secondary'}`}
+              className={`btn-sm ${chartTimeRange === 'month' ? 'button' : 'button-neutral'}`}
               onClick={() => setChartTimeRange('month')}
-              style={{ padding: '4px 8px', fontSize: '0.8rem' }}
             >
               {t('One Month')}
             </button>
@@ -507,11 +502,11 @@ const Dashboard = () => {
       </div>
       
       {/* View All Games Button */}
-      <div className="card dashboard-card slide-up rounded-xl shadow-md px-4 py-3 bg-surface mb-5" style={{ animationDelay: '0.4s' }}>
-        <h2 className="font-bold text-capitalize">{t('All Games')}</h2>
+      <div className="card slide-up" style={{ animationDelay: '0.4s' }}>
+        <h2>{t('All Games')}</h2>
         <p className="text-secondary">{t('gamesDescription') || 'Browse all games played in the club. Filter games by time period or by player.'}</p>
         <Link to="/games">
-          <button className="btn-secondary font-bold chess-piece-hover">{t('View All Games')}</button>
+          <button className="button-neutral chess-piece-hover">{t('View All Games')}</button>
         </Link>
       </div>
     </div>

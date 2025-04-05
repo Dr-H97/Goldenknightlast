@@ -1,64 +1,151 @@
-/* Chess Club Theme - Custom styling based on the new specs */
+/* Chess Club Theme - Updated Styles */
 
 :root {
-  /* Dark Theme Colors */
   --background: #1e1e1e;
   --surface: #2a2a2a;
-  --primary: #6a4e42;
-  --highlight: #c9a96a;
+  --primary-accent: #c9a96a; /* modern golden-sand tone */
+  --primary-accent-hover: #d6b26d;
   --text-primary: #f0f0f0;
   --text-secondary: #aaaaaa;
-  --border: #3a3a3a;
+  --card-border: #3a3a3a;
+  --neutral-button-bg: #3a3a3a;
+  --neutral-button-hover: #4a4a4a;
   --chart-line: #d6b26d;
-  
-  /* Button hover colors */
-  --primary-hover: #7d5a4d;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  text-transform: capitalize;
+body {
+  background-color: var(--background);
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
+/* Card layout */
+.card {
+  background-color: var(--surface);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--card-border);
+}
+
+/* Headings */
+.card h2,
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+/* Buttons: gold variant */
+.button, 
+.btn-primary {
+  background-color: var(--primary-accent);
+  color: var(--background);
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover,
+.btn-primary:hover {
+  background-color: var(--primary-accent-hover);
+}
+
+/* Optional: neutral version of button instead of gold */
+.button-neutral,
+.btn-secondary {
+  background-color: var(--neutral-button-bg);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-neutral:hover,
+.btn-secondary:hover {
+  background-color: var(--neutral-button-hover);
+}
+
+/* Time filter small buttons */
+.btn-sm {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 0.5rem;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th,
+table td {
+  padding: 0.6rem;
+  text-align: left;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--card-border);
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #242424;
+}
+
+/* Highlights like player names */
+.highlight,
+.player-name,
+.stat-highlight {
+  color: var(--primary-accent);
+  font-weight: bold;
+}
+
+.stat-highlight {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+/* Secondary text */
 .text-secondary {
   color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
-.player-name {
-  color: var(--highlight);
-  font-weight: 600;
-}
-
-/* Card styling */
-.card {
-  background-color: var(--surface);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Chart container spacing */
+.chart-container {
+  margin-top: 1rem;
+  border-radius: 0.5rem;
   padding: 1rem;
-  margin-bottom: 1.25rem;
 }
 
-/* Button styling */
-.btn-primary {
-  background-color: var(--primary);
-  color: var(--text-primary);
-  font-weight: 600;
-  transition: background-color 0.2s ease;
+/* Section dividers */
+.section-divider {
+  height: 1px;
+  background-color: var(--card-border);
+  margin: 1.5rem 0;
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-hover);
+/* Dashboard grid */
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
 }
 
-/* Stats highlight color */
-.stat-highlight {
-  color: var(--highlight);
-  font-size: 1.5rem;
-  font-weight: 700;
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* Stat cards */
@@ -66,54 +153,11 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--surface);
   border-radius: 0.75rem;
   padding: 1rem;
-  border-left: 3px solid var(--primary);
+  border-left: 3px solid var(--primary-accent);
 }
 
 .stat-card h3 {
   font-size: 1rem;
   margin-bottom: 0.75rem;
-}
-
-/* Dashboard specific styling */
-.dashboard-grid {
-  display: grid;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.dashboard-card {
-  height: 100%;
-}
-
-/* Chart improvements */
-.chart-container {
-  padding: 1rem;
-  background-color: var(--surface);
-  border-radius: 0.75rem;
-}
-
-/* Section separators */
-.section-divider {
-  height: 1px;
-  background-color: var(--border);
-  margin: 1.5rem 0;
-}
-
-/* Responsive improvements */
-@media (max-width: 768px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .chart-container {
-    padding: 0.75rem;
-  }
-  
-  h1 {
-    font-size: 1.5rem;
-  }
-  
-  h2 {
-    font-size: 1.25rem;
-  }
+  font-weight: 600;
 }
