@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Line } from 'react-chartjs-2';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -236,7 +237,12 @@ const Dashboard = () => {
   };
   
   if (loading) {
-    return <div className="container">{t('loading')}</div>;
+    return (
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
+        <div className="loading-spinner"></div>
+        <p style={{ marginTop: '20px' }}>{t('loading')}</p>
+      </div>
+    );
   }
   
   if (error) {

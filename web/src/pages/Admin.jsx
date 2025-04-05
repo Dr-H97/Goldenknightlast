@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
+
 const Admin = () => {
   const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('players'); // players or games
@@ -265,7 +266,12 @@ const PlayerManagement = () => {
   };
   
   if (loading && !players.length) {
-    return <div>Loading players...</div>;
+    return (
+      <div className="card" style={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
+        <div className="loading-spinner"></div>
+        <p style={{ marginTop: '20px' }}>Loading players...</p>
+      </div>
+    );
   }
   
   return (
@@ -697,7 +703,12 @@ const GameManagement = () => {
   };
   
   if (loading && !games.length) {
-    return <div>Loading games...</div>;
+    return (
+      <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '30px' }}>
+        <div className="loading-spinner"></div>
+        <p style={{ marginTop: '20px' }}>Loading games...</p>
+      </div>
+    );
   }
   
   return (

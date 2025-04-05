@@ -8,6 +8,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import MobileNav from './components/MobileNav';
+import PageTransition from './components/PageTransition';
 
 // Pages
 import Login from './pages/Login';
@@ -18,6 +19,9 @@ import SubmitGame from './pages/SubmitGame';
 import Games from './pages/Games';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+
+// Styles for chess-themed transitions
+import './styles/chessLoader.css';
 
 function App() {
   const { currentUser } = useAuth();
@@ -44,7 +48,11 @@ function App() {
               {/* Public routes */}
               <Route 
                 path="/login" 
-                element={currentUser ? <Navigate to="/dashboard" /> : <Login />} 
+                element={currentUser ? <Navigate to="/dashboard" /> : 
+                  <PageTransition loaderType="simple">
+                    <Login />
+                  </PageTransition>
+                } 
               />
               
               {/* Protected routes */}
@@ -57,7 +65,9 @@ function App() {
                 path="/dashboard" 
                 element={
                   <ProtectedRoute>
-                    <Dashboard />
+                    <PageTransition loaderType="simple">
+                      <Dashboard />
+                    </PageTransition>
                   </ProtectedRoute>
                 } 
               />
@@ -66,7 +76,9 @@ function App() {
                 path="/rankings" 
                 element={
                   <ProtectedRoute>
-                    <Rankings />
+                    <PageTransition loaderType="chess">
+                      <Rankings />
+                    </PageTransition>
                   </ProtectedRoute>
                 } 
               />
@@ -75,7 +87,9 @@ function App() {
                 path="/profile" 
                 element={
                   <ProtectedRoute>
-                    <Profile />
+                    <PageTransition loaderType="knight">
+                      <Profile />
+                    </PageTransition>
                   </ProtectedRoute>
                 } 
               />
@@ -84,7 +98,9 @@ function App() {
                 path="/submit-game" 
                 element={
                   <ProtectedRoute>
-                    <SubmitGame />
+                    <PageTransition loaderType="chess">
+                      <SubmitGame />
+                    </PageTransition>
                   </ProtectedRoute>
                 } 
               />
@@ -93,7 +109,9 @@ function App() {
                 path="/games" 
                 element={
                   <ProtectedRoute>
-                    <Games />
+                    <PageTransition loaderType="simple">
+                      <Games />
+                    </PageTransition>
                   </ProtectedRoute>
                 } 
               />
@@ -102,7 +120,9 @@ function App() {
                 path="/admin" 
                 element={
                   <ProtectedRoute requireAdmin={true}>
-                    <Admin />
+                    <PageTransition loaderType="knight">
+                      <Admin />
+                    </PageTransition>
                   </ProtectedRoute>
                 } 
               />

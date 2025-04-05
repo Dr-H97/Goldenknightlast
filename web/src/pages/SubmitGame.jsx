@@ -8,6 +8,7 @@ const SubmitGame = () => {
   
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
@@ -91,20 +92,24 @@ const SubmitGame = () => {
     // Reset messages
     setError('');
     setSuccess('');
+    setSubmitting(true);
     
     // Validate form data
     if (!formData.whitePlayerId || !formData.blackPlayerId || !formData.result) {
       setError('Please fill in all required fields');
+      setSubmitting(false);
       return;
     }
     
     if (formData.whitePlayerId === formData.blackPlayerId) {
       setError('White and Black players cannot be the same');
+      setSubmitting(false);
       return;
     }
     
     if (!formData.whitePlayerPin || !formData.blackPlayerPin) {
       setError('Please enter PINs for both players to confirm the game submission');
+      setSubmitting(false);
       return;
     }
     
@@ -115,11 +120,13 @@ const SubmitGame = () => {
       
       if (!whitePlayerVerified) {
         setError('Invalid PIN for White player');
+        setSubmitting(false);
         return;
       }
       
       if (!blackPlayerVerified) {
         setError('Invalid PIN for Black player');
+        setSubmitting(false);
         return;
       }
       
@@ -166,11 +173,18 @@ const SubmitGame = () => {
     } catch (error) {
       console.error('Error submitting game:', error);
       setError('An error occurred while submitting the game');
+    } finally {
+      setSubmitting(false);
     }
   };
   
   if (loading) {
-    return <div className="container">Loading...</div>;
+    return (
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
+        <div className="loading-spinner"></div>
+        <p style={{ marginTop: '20px' }}>Loading players...</p>
+      </div>
+    );
   }
   
   return (
@@ -301,8 +315,9 @@ const SubmitGame = () => {
             type="submit" 
             className="btn-primary"
             style={{ width: '100%', marginTop: '10px' }}
+            disabled={submitting}
           >
-            Submit Game
+            {submitting ? 'Submitting...' : 'Submit Game'}
           </button>
         </form>
       </div>

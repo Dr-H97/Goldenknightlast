@@ -1,0 +1,656 @@
+/* Chess Loader Styles */
+.chess-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.chess-loader {
+  perspective: 1000px;
+}
+
+.chess-loader-small {
+  --square-size: 15px;
+}
+
+.chess-loader-medium {
+  --square-size: 25px;
+}
+
+.chess-loader-large {
+  --square-size: 35px;
+}
+
+.chessboard {
+  display: grid;
+  grid-template-columns: repeat(8, var(--square-size));
+  grid-template-rows: repeat(8, var(--square-size));
+  transform-style: preserve-3d;
+  animation: rotate-board 8s infinite ease-in-out;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--secondary);
+}
+
+@keyframes rotate-board {
+  0% {
+    transform: rotateX(45deg) rotateZ(0deg);
+  }
+  25% {
+    transform: rotateX(45deg) rotateZ(90deg);
+  }
+  50% {
+    transform: rotateX(45deg) rotateZ(180deg);
+  }
+  75% {
+    transform: rotateX(45deg) rotateZ(270deg);
+  }
+  100% {
+    transform: rotateX(45deg) rotateZ(360deg);
+  }
+}
+
+.square {
+  width: var(--square-size);
+  height: var(--square-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.light {
+  background-color: var(--light-square, #eae0c8);
+}
+
+.dark {
+  background-color: var(--dark-square, #b58863);
+}
+
+/* Chess pieces */
+.piece {
+  width: 80%;
+  height: 80%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  animation: piece-hover 2s infinite ease-in-out;
+}
+
+@keyframes piece-hover {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.1);
+  }
+}
+
+/* Simple pieces using Unicode characters */
+.piece::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--square-size) * 0.7);
+  font-weight: bold;
+}
+
+.pawn.white::before { content: '♙'; color: #fff; }
+.knight.white::before { content: '♘'; color: #fff; }
+.bishop.white::before { content: '♗'; color: #fff; }
+.rook.white::before { content: '♖'; color: #fff; }
+.queen.white::before { content: '♕'; color: #fff; }
+.king.white::before { content: '♔'; color: #fff; }
+
+.pawn.black::before { content: '♟'; color: #222; }
+.knight.black::before { content: '♞'; color: #222; }
+.bishop.black::before { content: '♝'; color: #222; }
+.rook.black::before { content: '♜'; color: #222; }
+.queen.black::before { content: '♛'; color: #222; }
+.king.black::before { content: '♚'; color: #222; }
+
+.chess-loader-text {
+  margin-top: 15px;
+  font-weight: bold;
+  color: var(--text);
+  animation: text-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes text-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Simple Chess Loader (just pieces in a row) */
+.chess-simple-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.chess-simple-loader {
+  position: relative;
+}
+
+.chess-simple-loader-small {
+  --piece-size: 20px;
+}
+
+.chess-simple-loader-medium {
+  --piece-size: 30px;
+}
+
+.chess-simple-loader-large {
+  --piece-size: 40px;
+}
+
+.piece-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--piece-size);
+}
+
+.chess-simple-loader .piece {
+  width: var(--piece-size);
+  height: var(--piece-size);
+  margin: 0 5px;
+  position: relative;
+  animation: piece-bounce 1.8s infinite ease-in-out;
+}
+
+.chess-simple-loader .piece::before {
+  color: var(--primary);
+  font-size: var(--piece-size);
+}
+
+.chess-simple-loader .piece:nth-child(1) { animation-delay: 0s; }
+.chess-simple-loader .piece:nth-child(2) { animation-delay: 0.3s; }
+.chess-simple-loader .piece:nth-child(3) { animation-delay: 0.6s; }
+.chess-simple-loader .piece:nth-child(4) { animation-delay: 0.9s; }
+.chess-simple-loader .piece:nth-child(5) { animation-delay: 1.2s; }
+.chess-simple-loader .piece:nth-child(6) { animation-delay: 1.5s; }
+
+.chess-simple-loader .pawn::before { content: '♙'; }
+.chess-simple-loader .knight::before { content: '♘'; }
+.chess-simple-loader .bishop::before { content: '♗'; }
+.chess-simple-loader .rook::before { content: '♖'; }
+.chess-simple-loader .queen::before { content: '♕'; }
+.chess-simple-loader .king::before { content: '♔'; }
+
+@keyframes piece-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Knight Move Loader */
+.knight-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.knight-loader {
+  position: relative;
+}
+
+.knight-loader-small {
+  --knight-size: 30px;
+  --board-size: 90px;
+}
+
+.knight-loader-medium {
+  --knight-size: 40px;
+  --board-size: 120px;
+}
+
+.knight-loader-large {
+  --knight-size: 50px;
+  --board-size: 150px;
+}
+
+.knight-loader {
+  width: var(--board-size);
+  height: var(--board-size);
+  position: relative;
+  background-image: linear-gradient(45deg, var(--dark-square, #b58863) 25%, transparent 25%),
+                    linear-gradient(-45deg, var(--dark-square, #b58863) 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, var(--dark-square, #b58863) 75%),
+                    linear-gradient(-45deg, transparent 75%, var(--dark-square, #b58863) 75%);
+  background-size: calc(var(--board-size)/4) calc(var(--board-size)/4);
+  background-position: 0 0, 0 calc(var(--board-size)/8), calc(var(--board-size)/8) calc(-1 * var(--board-size)/8), calc(-1 * var(--board-size)/8) 0;
+  background-color: var(--light-square, #eae0c8);
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.knight-piece {
+  width: var(--knight-size);
+  height: var(--knight-size);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: knight-move 6s infinite ease-in-out;
+  z-index: 1;
+}
+
+.knight-piece::before {
+  content: '♘';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--knight-size);
+  color: var(--primary);
+  font-weight: bold;
+}
+
+@keyframes knight-move {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  15% {
+    top: 25%;
+    left: 50%;
+    transform: scale(1.1);
+  }
+  30% {
+    top: 75%;
+    left: 25%;
+    transform: scale(1);
+  }
+  45% {
+    top: 50%;
+    left: 75%;
+    transform: scale(1.1);
+  }
+  60% {
+    top: 75%;
+    left: 50%;
+    transform: scale(1);
+  }
+  75% {
+    top: 25%;
+    left: 75%;
+    transform: scale(1.1);
+  }
+  90% {
+    top: 50%;
+    left: 25%;
+    transform: scale(1);
+  }
+  100% {
+    top: 0;
+    left: 0;
+    transform: scale(1.1);
+  }
+}
+
+/* Page transition animations */
+.page-transition-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Chess piece fade-in animation */
+.chess-piece-fade-in {
+  animation: chess-piece-fade 0.8s ease-in-out;
+}
+
+@keyframes chess-piece-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chess board reveal animation */
+.chess-board-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.chess-board-reveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(
+    var(--light-square, #eae0c8) 0% 25%,
+    var(--dark-square, #b58863) 0% 50%,
+    var(--light-square, #eae0c8) 0% 75%,
+    var(--dark-square, #b58863) 0% 100%
+  ) 50% / 25% 25%;
+  animation: board-reveal 1s forwards ease-in-out;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@keyframes board-reveal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Card flip animation for chess theme */
+.chess-card-flip {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+}
+
+.chess-card-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.chess-card-flip:hover .chess-card-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.chess-card-flip-front, .chess-card-flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.chess-card-flip-front {
+  background-color: var(--card-bg);
+}
+
+.chess-card-flip-back {
+  background-color: var(--card-bg-alt);
+  transform: rotateY(180deg);
+}
+
+/* Chess piece hover effect */
+.chess-piece-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.chess-piece-hover::before {
+  content: '♞';
+  position: absolute;
+  bottom: -30px;
+  right: -20px;
+  font-size: 50px;
+  color: var(--primary);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.chess-piece-hover:hover::before {
+  bottom: -15px;
+  opacity: 0.2;
+}
+
+/* ChessBoardLoader - A simpler version */
+.chess-board-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.chess-board-loader {
+  perspective: 800px;
+}
+
+.chess-board-loader-small {
+  --mini-square-size: 20px;
+}
+
+.chess-board-loader-medium {
+  --mini-square-size: 30px;
+}
+
+.chess-board-loader-large {
+  --mini-square-size: 40px;
+}
+
+.mini-board {
+  display: grid;
+  grid-template-columns: repeat(4, var(--mini-square-size));
+  grid-template-rows: repeat(4, var(--mini-square-size));
+  transform-style: preserve-3d;
+  animation: mini-rotate-board 6s infinite ease-in-out;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 2px solid var(--secondary);
+}
+
+@keyframes mini-rotate-board {
+  0%, 100% {
+    transform: rotateX(30deg) rotateZ(0deg);
+  }
+  25% {
+    transform: rotateX(30deg) rotateZ(90deg);
+  }
+  50% {
+    transform: rotateX(30deg) rotateZ(180deg);
+  }
+  75% {
+    transform: rotateX(30deg) rotateZ(270deg);
+  }
+}
+
+.mini-square {
+  width: var(--mini-square-size);
+  height: var(--mini-square-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mini-square.light {
+  background-color: var(--light-square, #eae0c8);
+}
+
+.mini-square.dark {
+  background-color: var(--dark-square, #b58863);
+}
+
+.mini-piece {
+  width: 70%;
+  height: 70%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  animation: mini-piece-hover 1.5s infinite ease-in-out;
+}
+
+@keyframes mini-piece-hover {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.15);
+  }
+}
+
+.mini-piece::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--mini-square-size) * 0.6);
+  font-weight: bold;
+}
+
+.mini-piece.pawn.white::before { content: '♙'; color: #fff; }
+.mini-piece.knight.white::before { content: '♘'; color: #fff; }
+.mini-piece.bishop.white::before { content: '♗'; color: #fff; }
+.mini-piece.rook.white::before { content: '♖'; color: #fff; }
+.mini-piece.queen.white::before { content: '♕'; color: #fff; }
+.mini-piece.king.white::before { content: '♔'; color: #fff; }
+
+.mini-piece.pawn.black::before { content: '♟'; color: #222; }
+.mini-piece.knight.black::before { content: '♞'; color: #222; }
+.mini-piece.bishop.black::before { content: '♝'; color: #222; }
+.mini-piece.rook.black::before { content: '♜'; color: #222; }
+.mini-piece.queen.black::before { content: '♛'; color: #222; }
+.mini-piece.king.black::before { content: '♚'; color: #222; }
+
+/* ChessMinimalLoader - Single chess piece for inline use */
+.chess-minimal-loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chess-minimal-loader-small {
+  --minimal-size: 20px;
+}
+
+.chess-minimal-loader-medium {
+  --minimal-size: 30px;
+}
+
+.chess-minimal-loader-large {
+  --minimal-size: 40px;
+}
+
+.minimal-piece {
+  width: var(--minimal-size);
+  height: var(--minimal-size);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.minimal-piece::before {
+  position: absolute;
+  font-size: var(--minimal-size);
+  color: var(--primary);
+}
+
+.minimal-piece.pawn::before {
+  content: '♙';
+}
+
+.minimal-piece.knight::before {
+  content: '♘';
+}
+
+.minimal-piece.bishop::before {
+  content: '♗';
+}
+
+.minimal-piece.rook::before {
+  content: '♖';
+}
+
+.minimal-piece.queen::before {
+  content: '♕';
+}
+
+.minimal-piece.king::before {
+  content: '♔';
+}
+
+.minimal-piece.spin {
+  animation: minimal-spin 1.5s infinite linear;
+}
+
+.minimal-piece.pulse {
+  animation: minimal-pulse 1.5s infinite ease-in-out;
+}
+
+.minimal-piece.bounce {
+  animation: minimal-bounce 1s infinite ease-in-out;
+}
+
+@keyframes minimal-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes minimal-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+@keyframes minimal-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}

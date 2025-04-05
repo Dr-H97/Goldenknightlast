@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/animations.css';
 
+
 const Rankings = () => {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +68,12 @@ const Rankings = () => {
   };
   
   if (loading) {
-    return <div className="container">Loading rankings...</div>;
+    return (
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
+        <div className="loading-spinner"></div>
+        <p style={{ marginTop: '20px' }}>Loading rankings...</p>
+      </div>
+    );
   }
   
   if (error) {
