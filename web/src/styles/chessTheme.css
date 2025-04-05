@@ -1,12 +1,13 @@
 /* Chess Club Theme - Updated Styles */
 
-:root {
+/* Dark Theme Variables (Default) */
+:root[data-theme="dark"] {
   --background: #1e1e1e;
   --surface: #2a2a2a;
   --primary-accent: #c9a96a; /* modern golden-sand tone */
   --primary-accent-hover: #d6b26d;
-  --text-primary: #f0f0f0;
-  --text-secondary: #aaaaaa;
+  --text-primary: #f5f5f5; /* Brighter white for better contrast */
+  --text-secondary: #cccccc; /* Lightened secondary text */
   --card-border: #3a3a3a;
   --neutral-button-bg: #3a3a3a;
   --neutral-button-hover: #4a4a4a;
@@ -15,6 +16,32 @@
   --nav-bg: #1e1e1e;
   --nav-border: #3a3a3a;
   --nav-active: #c9a96a;
+  --font-weight-heading: 600;
+  --font-weight-normal: 400;
+  --table-row-alt: #242424;
+  --table-header-bg: #333333;
+}
+
+/* Light Theme Variables */
+:root[data-theme="light"] {
+  --background: #f8f8f8;
+  --surface: #ffffff;
+  --primary-accent: #b58863; /* Chess brown */
+  --primary-accent-hover: #9e7655;
+  --text-primary: #1a1a1a; /* Dark text for contrast */
+  --text-secondary: #555555; /* Darkened secondary text */
+  --card-border: #dddddd;
+  --neutral-button-bg: #e0e0e0;
+  --neutral-button-hover: #d0d0d0;
+  --chart-line: #b58863;
+  --card-bg: #ffffff;
+  --nav-bg: #ffffff;
+  --nav-border: #eeeeee;
+  --nav-active: #b58863;
+  --font-weight-heading: 600;
+  --font-weight-normal: 400;
+  --table-row-alt: #f5f5f5;
+  --table-header-bg: #f0f0f0;
 }
 
 body {
@@ -23,44 +50,78 @@ body {
   font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
+  line-height: 1.5;
+  font-weight: var(--font-weight-normal);
 }
 
 /* Card layout */
 .card {
   background-color: var(--surface);
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 1.25rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border: 1px solid var(--card-border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Headings */
-.card h2,
+h1 {
+  font-size: 1.8rem;
+  font-weight: var(--font-weight-heading);
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+h2, .card h2,
 .section-title {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-heading);
   margin-bottom: 0.75rem;
   color: var(--text-primary);
   text-transform: capitalize;
+  letter-spacing: 0.01em;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-heading);
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
 }
 
 /* Buttons: gold variant */
 .button, 
 .btn-primary {
   background-color: var(--primary-accent);
-  color: var(--background);
-  padding: 0.6rem 1rem;
+  color: #ffffff; /* Always white text on primary button for max contrast */
+  padding: 0.7rem 1.2rem;
   border-radius: 0.75rem;
   border: none;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .button:hover,
 .btn-primary:hover {
   background-color: var(--primary-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button:active,
+.btn-primary:active {
+  transform: translateY(0);
 }
 
 /* Optional: neutral version of button instead of gold */
@@ -69,16 +130,25 @@ body {
   background-color: var(--neutral-button-bg);
   color: var(--text-primary);
   border: none;
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1.2rem;
   border-radius: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .button-neutral:hover,
 .btn-secondary:hover {
   background-color: var(--neutral-button-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button-neutral:active,
+.btn-secondary:active {
+  transform: translateY(0);
 }
 
 /* Time filter small buttons */
@@ -103,8 +173,15 @@ table td {
   border-bottom: 1px solid var(--card-border);
 }
 
+table th {
+  background-color: var(--table-header-bg);
+  font-weight: var(--font-weight-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
 table tbody tr:nth-child(odd) {
-  background-color: #242424;
+  background-color: var(--table-row-alt);
 }
 
 /* Highlights like player names */
@@ -113,17 +190,38 @@ table tbody tr:nth-child(odd) {
 .stat-highlight {
   color: var(--primary-accent);
   font-weight: bold;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .stat-highlight {
   font-size: 1.5rem;
   margin: 0.5rem 0;
+  letter-spacing: 0.02em;
+}
+
+/* Enhanced highlight with underline on hover */
+.highlight:hover,
+.player-name:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--primary-accent);
+  text-decoration-thickness: 2px;
 }
 
 /* Secondary text */
 .text-secondary {
   color: var(--text-secondary);
   font-size: 0.875rem;
+}
+
+/* Strong and emphasis */
+strong, b {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+em, i {
+  font-style: italic;
+  color: var(--text-primary);
 }
 
 /* Chart container spacing */
