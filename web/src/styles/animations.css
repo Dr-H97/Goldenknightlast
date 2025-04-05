@@ -124,6 +124,13 @@
   animation: chessPieceHover 0.5s ease-in-out;
 }
 
+/* Make sure chess piece animations don't overlap with text */
+.chess-piece-hover::after,
+.chess-piece-hover::before {
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+
 /* Dashboard card effects */
 .dashboard-card {
   transition: all 0.3s ease;

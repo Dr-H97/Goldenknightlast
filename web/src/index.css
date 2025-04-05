@@ -269,14 +269,17 @@ tr:hover {
   position: absolute;
   opacity: 0;
   top: 50%;
-  left: 110%;
-  transform: translate(-50%, -50%);
+  right: -20px;
+  transform: translateY(-50%);
   transition: all 0.3s ease;
   font-size: 1.2em;
+  pointer-events: none;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .chess-piece-hover:hover::after {
-  left: 85%;
+  right: 10px;
   opacity: 0.5;
 }
 
