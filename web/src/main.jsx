@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/mobile-fixes.css';
 import App from './App.jsx';
 import './index.css';
 import './styles/tailwind-colors.css';
