@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageToggle from '../components/LanguageToggle';
 
 const Login = () => {
   const [name, setName] = useState('');
@@ -9,18 +11,19 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!name.trim()) {
-      setError('Please enter your name');
+      setError(t('allFieldsRequired'));
       return;
     }
     
     if (!pin.trim()) {
-      setError('Please enter your PIN');
+      setError(t('allFieldsRequired'));
       return;
     }
     
@@ -31,7 +34,7 @@ const Login = () => {
       const user = await login(name, pin);
       navigate('/dashboard');
     } catch (error) {
-      setError(error.message || 'Invalid name or PIN');
+      setError(error.message || t('incorrectPin'));
     } finally {
       setLoading(false);
     }
@@ -40,33 +43,36 @@ const Login = () => {
   return (
     <div className="container" style={{ maxWidth: '400px', margin: '0 auto', paddingTop: '50px' }}>
       <div className="card">
-        <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Chess Club Login</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h2 style={{ textAlign: 'center', margin: 0 }}>{t('loginTitle')}</h2>
+          <LanguageToggle large={true} showText={true} />
+        </div>
         
         {error && <div className="error">{error}</div>}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{t('playerName')}</label>
             <input
               type="text"
               id="name"
               className="form-control"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your name"
+              placeholder={t('playerName')}
               required
             />
           </div>
           
           <div className="form-group">
-            <label htmlFor="pin">PIN</label>
+            <label htmlFor="pin">{t('pin')}</label>
             <input
               type="password"
               id="pin"
               className="form-control"
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              placeholder="Enter your PIN"
+              placeholder={t('enterPin')}
               required
             />
           </div>
@@ -77,7 +83,7 @@ const Login = () => {
             style={{ width: '100%', marginTop: '10px' }}
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? t('loading') : t('loginButton')}
           </button>
         </form>
       </div>
