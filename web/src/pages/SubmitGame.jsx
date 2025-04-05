@@ -181,7 +181,7 @@ const SubmitGame = () => {
   if (loading) {
     return (
       <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
-        <div className="loading-spinner"></div>
+        <div className="loading-knight"></div>
         <p style={{ marginTop: '20px' }}>Loading players...</p>
       </div>
     );
@@ -192,7 +192,7 @@ const SubmitGame = () => {
       <h1>Submit Game Result</h1>
       
       {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
+      {success && <div className="success success-checkmate">{success}</div>}
       
       <div className="card">
         <form onSubmit={handleSubmit}>
@@ -201,7 +201,7 @@ const SubmitGame = () => {
             <select
               id="whitePlayerId"
               name="whitePlayerId"
-              className="form-control"
+              className="form-control form-control-animate"
               value={formData.whitePlayerId}
               onChange={handleInputChange}
               required
@@ -223,7 +223,7 @@ const SubmitGame = () => {
             <select
               id="blackPlayerId"
               name="blackPlayerId"
-              className="form-control"
+              className="form-control form-control-animate"
               value={formData.blackPlayerId}
               onChange={handleInputChange}
               required
@@ -248,7 +248,7 @@ const SubmitGame = () => {
             <select
               id="result"
               name="result"
-              className="form-control"
+              className="form-control form-control-animate"
               value={formData.result}
               onChange={handleInputChange}
               required
@@ -266,7 +266,7 @@ const SubmitGame = () => {
               type="date"
               id="date"
               name="date"
-              className="form-control"
+              className="form-control form-control-animate"
               value={formData.date}
               onChange={handleInputChange}
               max={new Date().toISOString().split('T')[0]}
@@ -287,7 +287,7 @@ const SubmitGame = () => {
               type="password"
               id="whitePlayerPin"
               name="whitePlayerPin"
-              className="form-control"
+              className="form-control form-control-animate"
               value={formData.whitePlayerPin}
               onChange={handleInputChange}
               required
@@ -303,7 +303,7 @@ const SubmitGame = () => {
               type="password"
               id="blackPlayerPin"
               name="blackPlayerPin"
-              className="form-control"
+              className="form-control form-control-animate"
               value={formData.blackPlayerPin}
               onChange={handleInputChange}
               required
@@ -313,7 +313,7 @@ const SubmitGame = () => {
           
           <button 
             type="submit" 
-            className="btn-primary"
+            className="btn-primary submit-game-btn btn-animate-queen"
             style={{ width: '100%', marginTop: '10px' }}
             disabled={submitting}
           >

@@ -1,0 +1,462 @@
+/* Chess-themed Micro-animations */
+
+/* 
+ * These animations mimic chess piece movements and add subtle
+ * interactivity to elements like buttons, cards, and navigation.
+ */
+
+/* Base classes for animation targets */
+.chess-animated {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Button animations */
+
+/* Pawn - Simple forward movement (for standard buttons) */
+.btn-animate-pawn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-animate-pawn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-animate-pawn:active {
+  transform: translateY(0);
+}
+
+.btn-animate-pawn::after {
+  content: '♙';
+  position: absolute;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.2);
+  bottom: -10px;
+  right: -10px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-animate-pawn:hover::after {
+  opacity: 0.5;
+  bottom: -5px;
+  right: -5px;
+}
+
+/* Knight - L-shaped movement (for navigation or special action buttons) */
+.btn-animate-knight {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-animate-knight:hover {
+  transform: translate3d(2px, -4px, 0);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-animate-knight:active {
+  transform: translate3d(0, 0, 0);
+}
+
+.btn-animate-knight::after {
+  content: '♘';
+  position: absolute;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.2);
+  bottom: -10px;
+  right: -10px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  pointer-events: none;
+}
+
+.btn-animate-knight:hover::after {
+  opacity: 0.5;
+  transform: translate3d(-5px, -5px, 0) rotate(-15deg);
+}
+
+/* Bishop - Diagonal movement (for alternative action buttons) */
+.btn-animate-bishop {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-animate-bishop:hover {
+  transform: translate3d(3px, -3px, 0);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-animate-bishop:active {
+  transform: translate3d(0, 0, 0);
+}
+
+.btn-animate-bishop::after {
+  content: '♗';
+  position: absolute;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.2);
+  bottom: -10px;
+  right: -10px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-animate-bishop:hover::after {
+  opacity: 0.5;
+  bottom: 0;
+  right: 5px;
+}
+
+/* Rook - Straight movement (for form submission buttons) */
+.btn-animate-rook {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-animate-rook:hover {
+  transform: translateX(4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-animate-rook:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-animate-rook:active {
+  transform: translateX(0);
+}
+
+.btn-animate-rook::after {
+  content: '♖';
+  position: absolute;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.2);
+  bottom: -10px;
+  left: -10px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-animate-rook:hover::after {
+  opacity: 0.5;
+  bottom: 0;
+  left: 5px;
+}
+
+/* Queen - Powerful movement in all directions (for primary actions) */
+.btn-animate-queen {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-animate-queen:hover {
+  transform: translate3d(0, -5px, 0);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-animate-queen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-animate-queen:hover::before {
+  opacity: 1;
+}
+
+.btn-animate-queen:active {
+  transform: scale(0.97);
+}
+
+.btn-animate-queen::after {
+  content: '♕';
+  position: absolute;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.2);
+  bottom: -15px;
+  right: -15px;
+  opacity: 0;
+  transition: all 0.4s ease;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+.btn-animate-queen:hover::after {
+  opacity: 0.5;
+  bottom: -2px;
+  right: -2px;
+  transform: scale(1);
+}
+
+/* King - Protected movement (for admin/destructive actions) */
+.btn-animate-king {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-animate-king:hover {
+  transform: scale(1.05);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+}
+
+.btn-animate-king::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  transition: all 0.3s ease;
+}
+
+.btn-animate-king:hover::before {
+  border-color: rgba(var(--primary-rgb, 176, 123, 85), 0.5);
+  inset: -3px;
+}
+
+.btn-animate-king:active {
+  transform: scale(0.98);
+}
+
+.btn-animate-king::after {
+  content: '♔';
+  position: absolute;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.2);
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%) scale(0.5);
+  pointer-events: none;
+}
+
+.btn-animate-king:hover::after {
+  opacity: 0.5;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Card animations */
+
+/* Card Rise (like a pawn promotion) */
+.card-rise {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-rise:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Capture (for removable items) */
+.card-capture {
+  transition: all 0.3s ease;
+}
+
+.card-capture.removing {
+  transform: scale(0.9) rotate(3deg);
+  opacity: 0.6;
+}
+
+/* Contextual animations */
+
+/* Submit game animation (two pieces meeting) */
+.submit-game-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-game-btn::before,
+.submit-game-btn::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.submit-game-btn::before {
+  content: '♙';
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.submit-game-btn::after {
+  content: '♟';
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.submit-game-btn:hover::before {
+  opacity: 1;
+  left: calc(50% - 15px);
+}
+
+.submit-game-btn:hover::after {
+  opacity: 1;
+  right: calc(50% - 15px);
+}
+
+/* Navigation animations */
+
+/* Active menu item (castling motion) */
+.nav-item {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  height: 3px;
+  background-color: var(--primary);
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active:hover::before {
+  left: 0;
+  right: 0;
+}
+
+/* Table Row Animations */
+
+.table-row-animate {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.table-row-animate:hover {
+  transform: translateX(5px);
+  background-color: rgba(var(--primary-rgb, 176, 123, 85), 0.05);
+}
+
+/* Input field focus animations */
+
+.form-control-animate {
+  transition: all 0.3s ease;
+  border: 2px solid var(--border);
+}
+
+.form-control-animate:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 176, 123, 85), 0.2);
+  transform: translateY(-2px);
+}
+
+/* Loading indicators with chess theme */
+
+@keyframes knight-move {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(10px, -20px); }
+  50% { transform: translate(20px, 0); }
+  75% { transform: translate(10px, 20px); }
+  100% { transform: translate(0, 0); }
+}
+
+.loading-knight {
+  display: inline-block;
+  position: relative;
+  font-size: 24px;
+  animation: knight-move 2s infinite ease-in-out;
+}
+
+.loading-knight::before {
+  content: '♘';
+  color: var(--primary);
+}
+
+/* For success animations */
+@keyframes checkmate-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-checkmate {
+  display: inline-block;
+  position: relative;
+  animation: checkmate-pulse 1.5s 2;
+}
+
+.success-checkmate::before {
+  content: '♔';
+  color: var(--success);
+  font-size: 24px;
+  display: inline-block;
+}
+
+/* Tooltip animations */
+.chess-tooltip {
+  position: relative;
+}
+
+.chess-tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  padding: 8px 12px;
+  background-color: var(--card-bg);
+  color: var(--text);
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+
+.chess-tooltip:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Chess piece appearing animation for new elements */
+@keyframes piece-appear {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.piece-appear {
+  animation: piece-appear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Utility for applying to dark theme */
+:root[data-theme="dark"] .btn-animate-pawn::after,
+:root[data-theme="dark"] .btn-animate-knight::after,
+:root[data-theme="dark"] .btn-animate-bishop::after,
+:root[data-theme="dark"] .btn-animate-rook::after,
+:root[data-theme="dark"] .btn-animate-queen::after,
+:root[data-theme="dark"] .btn-animate-king::after {
+  color: rgba(0, 0, 0, 0.2);
+}

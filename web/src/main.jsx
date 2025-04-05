@@ -4,6 +4,7 @@ import App from './App.jsx';
 import './index.css';
 import './styles/tailwind-colors.css';
 import './styles/themes.css';
+import './styles/chess-animations.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { WebSocketProvider } from './context/WebSocketContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
