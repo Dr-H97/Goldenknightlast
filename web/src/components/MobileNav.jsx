@@ -81,16 +81,6 @@ const MobileNav = () => {
         </Link>
         
         <Link 
-          to="/games" 
-          className={`mobile-nav-item ${location.pathname === '/games' ? 'active' : ''}`}
-        >
-          <div className="mobile-nav-icon">
-            <GamesIcon active={location.pathname === '/games'} />
-          </div>
-          <span>{t('allGames') || 'Games'}</span>
-        </Link>
-        
-        <Link 
           to="/submit-game" 
           className={`mobile-nav-item ${location.pathname === '/submit-game' ? 'active' : ''}`}
         >
@@ -98,6 +88,16 @@ const MobileNav = () => {
             <SubmitGameIcon active={location.pathname === '/submit-game'} />
           </div>
           <span>{t('submitGame')}</span>
+        </Link>
+        
+        <Link 
+          to="/games" 
+          className={`mobile-nav-item ${location.pathname === '/games' ? 'active' : ''}`}
+        >
+          <div className="mobile-nav-icon">
+            <GamesIcon active={location.pathname === '/games'} />
+          </div>
+          <span>{t('allGames') || 'Games'}</span>
         </Link>
         
         {currentUser?.isAdmin && (
