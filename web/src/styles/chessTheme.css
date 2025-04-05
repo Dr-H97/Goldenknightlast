@@ -11,6 +11,10 @@
   --neutral-button-bg: #3a3a3a;
   --neutral-button-hover: #4a4a4a;
   --chart-line: #d6b26d;
+  --card-bg: #2a2a2a;
+  --nav-bg: #1e1e1e;
+  --nav-border: #3a3a3a;
+  --nav-active: #c9a96a;
 }
 
 body {
@@ -154,6 +158,81 @@ table tbody tr:nth-child(odd) {
   border-radius: 0.75rem;
   padding: 1rem;
   border-left: 3px solid var(--primary-accent);
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  background-color: var(--nav-bg);
+  border-top: 1px solid var(--nav-border);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.mobile-nav-container {
+  display: flex;
+  justify-content: space-around;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.mobile-nav-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  min-width: 64px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav-item.active {
+  color: var(--nav-active);
+}
+
+.mobile-nav-icon {
+  margin-bottom: 4px;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  /* Main content padding to accommodate fixed bottom nav */
+  main, .container {
+    padding-bottom: 80px;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Make tables scrollable on mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+  }
+  
+  /* Adjust time period filter buttons on mobile */
+  .btn-sm {
+    padding: 6px;
+    font-size: 0.75rem;
+    margin: 2px;
+  }
 }
 
 .stat-card h3 {
