@@ -52,7 +52,17 @@ const Rankings = () => {
       const data = await response.json();
       
       if (data.success) {
-        setPlayers(data.players);
+        console.log('Players from API:', data.players);
+        // Make sure we always sort by rating (higher first)
+        const sortedPlayers = [...data.players].sort((a, b) => {
+          if (sortBy === 'performance') {
+            return (b.performanceRating || b.currentElo) - (a.performanceRating || a.currentElo);
+          } else {
+            return b.currentElo - a.currentElo;
+          }
+        });
+        console.log('Players after sorting:', sortedPlayers);
+        setPlayers(sortedPlayers);
       } else {
         setError(data.message || 'Failed to load players');
       }
