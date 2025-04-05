@@ -116,7 +116,17 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch player's games
-        const gamesResponse = await fetch(`/api/games?playerId=${currentUser.id}&sortBy=date&order=asc`);
+        const gamesResponse = await fetch(`/api/games?playerId=${currentUser.id}&sortBy=date&order=asc`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
+          }
+        });
+        
+        if (!gamesResponse.ok) {
+          throw new Error(`HTTP error! Status: ${gamesResponse.status}`);
+        }
+        
         const gamesData = await gamesResponse.json();
         
         if (gamesData.success) {

@@ -17,11 +17,23 @@ const Games = () => {
     // Fetch players for the filter dropdown
     const fetchPlayers = async () => {
       try {
-        const response = await fetch('/api/players');
+        const response = await fetch('/api/players', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
         if (data.success) {
           setPlayers(data.players);
+        } else {
+          throw new Error(data.message || 'Failed to load players');
         }
       } catch (error) {
         console.error('Error fetching players:', error);
@@ -54,13 +66,24 @@ const Games = () => {
         params.append('playerId', selectedPlayer);
       }
       
-      const response = await fetch(`/api/games?${params.toString()}`);
+      const response = await fetch(`/api/games?${params.toString()}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data.success) {
         setGames(data.games);
+        setError(''); // Clear any previous errors
       } else {
-        setError(data.message || 'Failed to load games');
+        throw new Error(data.message || 'Failed to load games');
       }
     } catch (error) {
       console.error('Error fetching games:', error);
