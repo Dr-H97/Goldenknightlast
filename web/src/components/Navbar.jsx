@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+import WebSocketStatus from './WebSocketStatus';
 
 // SVG Icons for the navbar
 const ChessLogo = () => (
@@ -110,6 +111,8 @@ const Navbar = () => {
               <div className="app-navbar-user">
                 <span>{currentUser.name}</span>
               </div>
+              
+              <WebSocketStatus className="app-navbar-ws-status" />
               
               <button 
                 className="app-btn-secondary app-btn-sm"

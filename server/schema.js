@@ -1,4 +1,5 @@
 const { pgTable, serial, text, integer, boolean, varchar, timestamp, pgEnum } = require('drizzle-orm/pg-core');
+const { relations } = require('drizzle-orm');
 
 // Players table
 const players = pgTable('players', {
@@ -26,6 +27,25 @@ const games = pgTable('games', {
   verified: boolean('verified').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
+
+// Define relations
+const playersRelations = relations(players, ({ many }) => ({
+  gamesAsWhite: many(games, { relationName: 'whitePlayer' }),
+  gamesAsBlack: many(games, { relationName: 'blackPlayer' })
+}));
+
+const gamesRelations = relations(games, ({ one }) => ({
+  whitePlayer: one(players, {
+    fields: [games.whitePlayerId],
+    references: [players.id],
+    relationName: 'whitePlayer'
+  }),
+  blackPlayer: one(players, {
+    fields: [games.blackPlayerId],
+    references: [players.id],
+    relationName: 'blackPlayer'
+  })
+}));
 
 // Type definitions for TypeScript (will be ignored in JavaScript)
 /**
@@ -63,5 +83,7 @@ const games = pgTable('games', {
 module.exports = {
   players,
   games,
-  gameResultEnum
+  gameResultEnum,
+  playersRelations,
+  gamesRelations
 };
