@@ -3,7 +3,7 @@ import { useWebSocket } from '../context/WebSocketContext';
 import { Link } from 'react-router-dom';
 import '../styles/animations.css';
 import '../styles/leaderboard.css';
-import '../styles/horizontal-tables.css'; // Use horizontal tables for Rankings page
+import '../styles/responsive-tables.css';
 import logo from '../assets/logo.svg';
 import kingIcon from '../assets/chess-king.svg';
 import queenIcon from '../assets/chess-queen.svg';
@@ -187,14 +187,9 @@ const Rankings = () => {
         </div>
       </div>
       
-      <div className="leaderboard-table-container slide-up horizontal-table-container">
+      <div className="leaderboard-table-container slide-up mobile-responsive-table">
         <div className="total-players">
           <span>Total Players: {players.length}</span>
-        </div>
-        
-        {/* Add a hint for mobile users that the table can be scrolled horizontally */}
-        <div className="scroll-hint">
-          Swipe left/right to see more
         </div>
         
         <table className="leaderboard-table">
