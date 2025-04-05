@@ -110,12 +110,18 @@ button:focus-visible {
 }
 
 .card {
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
   background-color: var(--surface-dark);
   border-radius: var(--border-radius);
   padding: 1.2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin: 1rem 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .card:active {
@@ -282,10 +288,20 @@ tr:hover {
   
   .container {
     padding: 0.75rem;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   
   h1 {
     font-size: 1.5em;
+  }
+  
+  .card {
+    padding: 0.8rem;
+    margin: 0.75rem 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   table {
@@ -293,12 +309,17 @@ tr:hover {
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.9rem;
   }
   
-  /* Ensure buttons don't overflow on small screens */
+  /* Ensure buttons do not overflow on small screens */
   button, .btn-primary, .btn-secondary {
     white-space: normal;
     text-align: center;
+    font-size: 0.95rem;
+    padding: 0.7em 1.2em;
   }
   
   /* Better touch targets on mobile */
@@ -314,42 +335,6 @@ tr:hover {
   }
 }
 
-/* Theme toggle styling */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-  color: var(--text);
-  background: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.theme-toggle:hover {
-  transform: none;
-  box-shadow: none;
-  background: none;
-}
-
-.theme-toggle-with-text .theme-text {
-  font-size: 0.9rem;
-  margin-left: 5px;
-}
-
-/* Language toggle styling */
-.language-toggle {
-  padding: 0;
-  background: none;
-  box-shadow: none;
-}
-
-.language-toggle:hover {
-  transform: none;
-  box-shadow: none;
-  background: none;
-}
 
 /* Custom statistics cards */
 .stat-card {
@@ -397,6 +382,9 @@ tr:hover {
     background-color: #f9f9f9;
   }
   .card {
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
@@ -431,6 +419,9 @@ tr:hover {
 }
 
 [data-theme="dark"] .card {
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
   background-color: #1a1a1a;
 }
 
@@ -465,6 +456,9 @@ tr:hover {
 }
 
 [data-theme="light"] .card {
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
   background-color: #f9f9f9;
 }
 
@@ -497,6 +491,48 @@ tr:hover {
   
   h1, h2, h3 {
     word-break: break-word;
+    max-width: 100%;
+    font-size: 1.3em;
+  }
+  
+  .container {
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .card {
+    padding: 0.7rem;
+    margin: 0.5rem 0;
+    width: calc(100% - 10px);
+    max-width: calc(100% - 10px);
+    box-sizing: border-box;
+  }
+  
+  /* Fix for filter buttons and small spaces */
+  .btn-sm {
+    padding: 5px 8px !important;
+    font-size: 0.7rem !important;
+    min-width: auto !important;
+  }
+  
+  /* Ensure filter rows get wrapped properly */
+  div[style*="display: flex"] {
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+  }
+  
+  /* Make table cells smaller on very small screens */
+  td, th {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+}
+  
+  h1, h2, h3 {
+    word-break: break-word;
   }
   
   .container {
@@ -516,7 +552,6 @@ tr:hover {
     gap: 5px;
     justify-content: center;
   }
-}
 
 /* Fix overflow issues in tables and scrollable areas */
 .table-responsive {

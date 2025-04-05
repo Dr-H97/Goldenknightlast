@@ -28,10 +28,8 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
         ? query.orderBy(players.id)
         : query.orderBy(players.id, { direction: 'desc' });
     } else {
-      // Default to sorting by currentElo
-      query = sortDirection === 'asc'
-        ? query.orderBy(players.currentElo)
-        : query.orderBy(players.currentElo, { direction: 'desc' });
+      // Default to sorting by currentElo - always highest first
+      query = query.orderBy(players.currentElo, { direction: 'desc' });
     }
     
     const allPlayers = await query;
@@ -127,10 +125,8 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
         return { ...player, performanceRating };
       });
       
-      // Sort by performance rating
-      return playerPerformance.sort((a, b) => 
-        sortDirection === 'asc' ? a.performanceRating - b.performanceRating : b.performanceRating - a.performanceRating
-      );
+      // Sort by performance rating (always highest first)
+      return playerPerformance.sort((a, b) => b.performanceRating - a.performanceRating);
     }
     
     return allPlayers;

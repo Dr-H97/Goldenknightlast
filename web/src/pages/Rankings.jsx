@@ -9,12 +9,6 @@ const Rankings = () => {
   const [order, setOrder] = useState('desc'); // Always default to descending for rankings
   const [timeFilter, setTimeFilter] = useState('all'); // Default to all time
   
-  // Rank badges display
-  const rankBadges = {
-    1: '🏆', // Trophy for 1st place
-    2: '🥈', // Silver medal for 2nd place
-    3: '🥉', // Bronze medal for 3rd place
-  };
   
   useEffect(() => {
     fetchPlayers();
@@ -163,11 +157,6 @@ const Rankings = () => {
                   }}
                 >
                   <td style={{ fontWeight: index < 3 ? 'bold' : 'normal' }}>
-                    {rankBadges[index + 1] && (
-                      <span style={{ marginRight: '5px', fontSize: '1.2rem' }}>
-                        {rankBadges[index + 1]}
-                      </span>
-                    )}
                     {index + 1}
                   </td>
                   <td>{player.name}</td>
