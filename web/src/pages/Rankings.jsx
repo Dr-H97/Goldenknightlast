@@ -1,7 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { Link } from 'react-router-dom';
 import '../styles/animations.css';
+import '../styles/leaderboard.css';
+import logo from '../assets/logo.svg';
+import kingIcon from '../assets/chess-king.svg';
+import queenIcon from '../assets/chess-queen.svg';
+import knightIcon from '../assets/chess-knight.svg';
+import plusCircleIcon from '../assets/plus-circle.svg';
 
+const getInitials = (name) => {
+  return name
+    .split(' ')
+    .map(part => part.charAt(0))
+    .join('')
+    .toUpperCase();
+};
+
+const getRankClass = (index) => {
+  if (index === 0) return 'rank-1';
+  if (index === 1) return 'rank-2';
+  if (index === 2) return 'rank-3';
+  return '';
+};
+
+const getRankBadge = (index) => {
+  if (index === 0) return (
+    <>
+      <span className="crown-icon">👑</span>
+      <span className="rank-badge">1</span>
+    </>
+  );
+  if (index === 1) return <span className="rank-badge">2</span>;
+  if (index === 2) return <span className="rank-badge">3</span>;
+  return <span>{index + 1}</span>;
+};
 
 const Rankings = () => {
   const { addMessageListener } = useWebSocket();
@@ -11,7 +44,6 @@ const Rankings = () => {
   const [sortBy, setSortBy] = useState('currentElo');
   const [order, setOrder] = useState('desc'); // Always default to descending for rankings
   const [timeFilter, setTimeFilter] = useState('all'); // Default to all time
-  
   
   const fetchPlayers = useCallback(async () => {
     try {
@@ -72,8 +104,8 @@ const Rankings = () => {
   };
   
   const getSortIcon = (field) => {
-    if (sortBy !== field) return '↕️';
-    return order === 'asc' ? '↑' : '↓';
+    if (sortBy !== field) return <span className="sort-icon">↕️</span>;
+    return <span className="sort-icon">{order === 'asc' ? '↑' : '↓'}</span>;
   };
   
   const handleTimeFilterChange = (value) => {
@@ -85,7 +117,7 @@ const Rankings = () => {
   
   if (loading) {
     return (
-      <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
+      <div className="leaderboard-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
         <div className="loading-knight"></div>
         <p style={{ marginTop: '20px' }}>Loading rankings...</p>
       </div>
@@ -93,110 +125,134 @@ const Rankings = () => {
   }
   
   if (error) {
-    return <div className="container error">{error}</div>;
+    return <div className="leaderboard-container error">{error}</div>;
   }
   
   return (
-    <div className="container">
-      <h1 className="fade-in">Club Rankings</h1>
+    <div className="leaderboard-container">
+      <div className="leaderboard-header fade-in">
+        <div className="leaderboard-logo">
+          <img src={logo} alt="Chess Club Logo" className="leaderboard-logo-icon" />
+          <h1 className="leaderboard-title">Club Rankings</h1>
+        </div>
+      </div>
       
-      <div className="card slide-up" style={{ marginBottom: '20px' }}>
-        <h3>Ranking Options</h3>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-            <div>
-              <label htmlFor="rankingType">Ranking Type: </label>
-              <select 
-                id="rankingType" 
-                className="form-control"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                style={{ minWidth: '180px' }}
-              >
-                <option value="currentElo">ELO Rating</option>
-                <option value="performance">Performance Rating</option>
-              </select>
-            </div>
-            
-            <div>
-              <label htmlFor="timeRange">Time Period: </label>
-              <select 
-                id="timeRange" 
-                className="form-control"
-                value={timeFilter}
-                onChange={(e) => handleTimeFilterChange(e.target.value)}
-                style={{ minWidth: '180px' }}
-              >
-                <option value="all">All Time</option>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
-            </div>
+      <div className="leaderboard-filters slide-up">
+        <div className="filter-controls">
+          <div className="filter-item">
+            <label className="filter-label" htmlFor="rankingType">Ranking Type</label>
+            <select 
+              id="rankingType" 
+              className="filter-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="currentElo">ELO Rating</option>
+              <option value="performance">Performance Rating</option>
+            </select>
+          </div>
+          
+          <div className="filter-item">
+            <label className="filter-label" htmlFor="timeRange">Time Period</label>
+            <select 
+              id="timeRange" 
+              className="filter-select"
+              value={timeFilter}
+              onChange={(e) => handleTimeFilterChange(e.target.value)}
+            >
+              <option value="all">All Time</option>
+              <option value="week">Last Week</option>
+              <option value="month">Last Month</option>
+              <option value="year">Last Year</option>
+            </select>
           </div>
           
           <button 
             onClick={resetFilters}
-            className="btn-reset chess-piece-hover"
+            className="btn-primary filter-button chess-piece-hover"
           >
-            Reset
+            Reset Filters
           </button>
         </div>
       </div>
       
-      <div className="card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s' }}>
-        <div style={{ textAlign: 'right', marginBottom: '10px' }}>
-          <small>Total Players: {players.length}</small>
+      <div className="leaderboard-table-container slide-up">
+        <div className="total-players">
+          <span>Total Players: {players.length}</span>
         </div>
         
-        <div className="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th style={{ width: '15%' }}>Rank</th>
-                <th 
-                  onClick={() => handleSort('name')}
-                  style={{ cursor: 'pointer', width: '50%' }}
-                >
-                  Name {getSortIcon('name')}
-                </th>
-                <th 
-                  onClick={() => handleSort(sortBy === 'performance' ? 'performance' : 'currentElo')}
-                  style={{ cursor: 'pointer', width: '35%' }}
-                >
-                  {sortBy === 'performance' ? 'Performance' : 'ELO'} Rating {getSortIcon(sortBy)}
-                </th>
+        <table className="leaderboard-table">
+          <thead>
+            <tr>
+              <th style={{ width: '15%' }}>Rank</th>
+              <th 
+                onClick={() => handleSort('name')}
+                className="sortable"
+                style={{ width: '50%' }}
+              >
+                Player {getSortIcon('name')}
+              </th>
+              <th 
+                onClick={() => handleSort(sortBy === 'performance' ? 'performance' : 'currentElo')}
+                className="sortable"
+                style={{ width: '20%' }}
+              >
+                {sortBy === 'performance' ? 'Performance' : 'ELO'} {getSortIcon(sortBy)}
+              </th>
+              <th style={{ width: '15%' }}>Games</th>
+            </tr>
+          </thead>
+          <tbody>
+            {players.map((player, index) => (
+              <tr 
+                key={player.id} 
+                className={`staggered-item ${getRankClass(index)}`}
+              >
+                <td>
+                  {getRankBadge(index)}
+                </td>
+                <td>
+                  <div className="player-info">
+                    <div className="player-avatar">
+                      {getInitials(player.name)}
+                    </div>
+                    <div className="player-details">
+                      <span className="player-name">{player.name}</span>
+                      <span className="player-stats">
+                        Win rate: {player.winRate ? Math.round(player.winRate * 100) : 0}%
+                      </span>
+                      {player.winRate && (
+                        <div className="win-percentage-bar">
+                          <div 
+                            className="win-percentage-progress" 
+                            style={{ width: `${Math.round(player.winRate * 100)}%` }}
+                          ></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td className="rating-cell">
+                  {sortBy === 'performance' && player.performanceRating 
+                    ? player.performanceRating 
+                    : player.currentElo}
+                </td>
+                <td>
+                  {player.gamesPlayed || 0}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {players.map((player, index) => (
-                <tr 
-                  key={player.id} 
-                  className={`staggered-item ${index < 3 ? 'podium-position' : ''}`} 
-                  style={{ 
-                    backgroundColor: index < 3 ? 'rgba(100, 108, 255, 0.1)' : 'inherit',
-                    transition: 'background-color 0.3s ease'
-                  }}
-                >
-                  <td style={{ fontWeight: index < 3 ? 'bold' : 'normal' }}>
-                    {index + 1}
-                  </td>
-                  <td>{player.name}</td>
-                  <td>
-                    {sortBy === 'performance' && player.performanceRating 
-                      ? player.performanceRating 
-                      : player.currentElo}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
         
         {players.length === 0 && (
           <p className="text-center">No players found for the selected time period.</p>
         )}
       </div>
+      
+      <Link to="/submit-game" className="submit-game-button">
+        <img src={plusCircleIcon} alt="Submit Game" />
+      </Link>
     </div>
   );
 };

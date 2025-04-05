@@ -36,43 +36,85 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
     
     const allPlayers = await query;
     
-    // If we need to calculate performance over time
-    if (timeFilter !== 'all' && sortBy === 'performance') {
-      // We'll need to fetch all games to calculate performance ratings
-      const { games } = require('../schema');
-      const { and, gte } = require('drizzle-orm');
-      
-      // Calculate the date range based on the timeFilter
-      const currentDate = new Date();
-      let filterDate = new Date();
-      
-      switch(timeFilter) {
-        case 'week':
-          filterDate.setDate(currentDate.getDate() - 7);
-          break;
-        case 'month':
-          filterDate.setMonth(currentDate.getMonth() - 1);
-          break;
-        case 'year':
-          filterDate.setFullYear(currentDate.getFullYear() - 1);
-          break;
-        default:
-          // Default to all time - no additional filtering
-          return allPlayers;
-      }
-      
+    // We'll need to fetch all games for both performance and win rate calculations
+    const { games } = require('../schema');
+    const { and, gte } = require('drizzle-orm');
+    
+    // Calculate the date range based on the timeFilter
+    const currentDate = new Date();
+    let filterDate = new Date();
+    let allGames;
+    
+    switch(timeFilter) {
+      case 'week':
+        filterDate.setDate(currentDate.getDate() - 7);
+        break;
+      case 'month':
+        filterDate.setMonth(currentDate.getMonth() - 1);
+        break;
+      case 'year':
+        filterDate.setFullYear(currentDate.getFullYear() - 1);
+        break;
+      default:
+        // All time - get all games
+        allGames = await db.select().from(games);
+        break;
+    }
+    
+    // If we're using a time filter, get games for that period
+    if (timeFilter !== 'all') {
       // Format date for database query
       const formattedDate = filterDate.toISOString().split('T')[0];
       
       // Get all games within the timeframe
-      const recentGames = await db
+      allGames = await db
         .select()
         .from(games)
         .where(gte(games.date, new Date(formattedDate)));
+    }
+    
+    // Enhance players with stats (games played and win rate)
+    const enhancedPlayers = allPlayers.map(player => {
+      // Find all games for this player
+      const playerGames = allGames.filter(game => 
+        game.whitePlayerId === player.id || game.blackPlayerId === player.id
+      );
       
+      // Calculate games played
+      const gamesPlayed = playerGames.length;
+      
+      // Calculate win rate
+      let wins = 0;
+      let draws = 0;
+      
+      playerGames.forEach(game => {
+        if (game.whitePlayerId === player.id) {
+          if (game.result === '1-0') wins += 1;
+          else if (game.result === '1/2-1/2') draws += 0.5;
+        } else {
+          if (game.result === '0-1') wins += 1;
+          else if (game.result === '1/2-1/2') draws += 0.5;
+        }
+      });
+      
+      const winRate = gamesPlayed > 0 ? (wins + draws) / gamesPlayed : 0;
+      
+      // Add stats to player object
+      return { 
+        ...player, 
+        gamesPlayed,
+        winRate,
+        wins,
+        draws,
+        losses: gamesPlayed - wins - draws
+      };
+    });
+    
+    // If we need to calculate performance ratings
+    if (sortBy === 'performance') {
       // Calculate performance ratings for each player
-      const playerPerformance = allPlayers.map(player => {
-        const playerGames = recentGames.filter(game => 
+      const playerPerformance = enhancedPlayers.map(player => {
+        const playerGames = allGames.filter(game => 
           game.whitePlayerId === player.id || game.blackPlayerId === player.id
         );
         
@@ -133,7 +175,7 @@ const getAllPlayers = async (sortBy = 'currentElo', order = 'desc', timeFilter =
         : playerPerformance.sort((a, b) => b.performanceRating - a.performanceRating);
     }
     
-    return allPlayers;
+    return enhancedPlayers;
   } catch (error) {
     console.error('Error in getAllPlayers:', error);
     throw error;
