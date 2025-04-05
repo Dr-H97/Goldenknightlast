@@ -44,7 +44,7 @@ const PageTransition = ({
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <div className="loading-spinner"></div>
+        <div className="loading-knight"></div>
         <p style={{ marginTop: '20px' }}>{loadingText}</p>
       </div>
     );

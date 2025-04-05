@@ -288,7 +288,7 @@ const PlayerManagement = () => {
   if (loading && !players.length) {
     return (
       <div className="card" style={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
-        <div className="loading-spinner"></div>
+        <div className="loading-knight"></div>
         <p style={{ marginTop: '20px' }}>Loading players...</p>
       </div>
     );
@@ -743,7 +743,7 @@ const GameManagement = () => {
   if (loading && !games.length) {
     return (
       <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '30px' }}>
-        <div className="loading-spinner"></div>
+        <div className="loading-knight"></div>
         <p style={{ marginTop: '20px' }}>Loading games...</p>
       </div>
     );

@@ -234,7 +234,7 @@ const Dashboard = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      setError('Failed to load dashboard data. Please try again later.');
+      setError(`Failed to load dashboard data: ${error.message || 'Unknown error'}. Please try again later.`);
       setLoading(false);
     }
   }, [currentUser, chartTimeRange, buildEloHistoryData]);
@@ -269,7 +269,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
-        <div className="loading-spinner"></div>
+        <div className="loading-knight"></div>
         <p style={{ marginTop: '20px' }}>{t('loading')}</p>
       </div>
     );
