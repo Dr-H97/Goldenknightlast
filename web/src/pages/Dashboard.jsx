@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useWebSocket } from '../context/WebSocketContext';
 import { Line } from 'react-chartjs-2';
 
 import {
@@ -30,6 +31,7 @@ ChartJS.register(
 const Dashboard = () => {
   const { currentUser } = useAuth();
   const { t } = useLanguage();
+  const { addMessageListener } = useWebSocket();
   const [recentGames, setRecentGames] = useState([]);
   const [allGames, setAllGames] = useState([]);
   const [playerStats, setPlayerStats] = useState(null);
@@ -113,102 +115,9 @@ const Dashboard = () => {
     }
   }, [chartTimeRange, allGames, currentUser]);
   
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        // Fetch player's games
-        const gamesResponse = await fetch(`/api/games?playerId=${currentUser.id}&sortBy=date&order=asc`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache'
-          }
-        });
-        
-        if (!gamesResponse.ok) {
-          throw new Error(`HTTP error! Status: ${gamesResponse.status}`);
-        }
-        
-        const gamesData = await gamesResponse.json();
-        
-        if (gamesData.success) {
-          // Set all games sorted by date (ascending)
-          const sortedGames = gamesData.games.sort((a, b) => new Date(a.date) - new Date(b.date));
-          setAllGames(sortedGames);
-          
-          // Set recent games (most recent 5 games)
-          setRecentGames(sortedGames.slice(-5).reverse());
-          
-          // Build chart data
-          setEloChartData(buildEloHistoryData(sortedGames, chartTimeRange));
-          
-          // Calculate most played opponent
-          const opponentCounts = {};
-          sortedGames.forEach(game => {
-            const opponentId = game.whitePlayerId === currentUser.id ? game.blackPlayerId : game.whitePlayerId;
-            const opponentName = game.whitePlayerId === currentUser.id ? game.blackPlayer?.name : game.whitePlayer?.name;
-            
-            if (opponentId && opponentName) {
-              const key = `${opponentId}-${opponentName}`;
-              opponentCounts[key] = (opponentCounts[key] || 0) + 1;
-            }
-          });
-          
-          // Find the most played opponent
-          let mostPlayedOpponent = null;
-          let highestCount = 0;
-          
-          Object.entries(opponentCounts).forEach(([key, count]) => {
-            if (count > highestCount) {
-              highestCount = count;
-              mostPlayedOpponent = key.split('-')[1]; // Get the opponent name
-            }
-          });
-          
-          // Calculate win rates with white and black
-          const gamesAsWhite = sortedGames.filter(game => game.whitePlayerId === currentUser.id);
-          const winsAsWhite = gamesAsWhite.filter(game => game.result === '1-0').length;
-          const winRateAsWhite = gamesAsWhite.length > 0 
-            ? Math.round((winsAsWhite / gamesAsWhite.length) * 100) 
-            : 0;
-            
-          const gamesAsBlack = sortedGames.filter(game => game.blackPlayerId === currentUser.id);
-          const winsAsBlack = gamesAsBlack.filter(game => game.result === '0-1').length;
-          const winRateAsBlack = gamesAsBlack.length > 0 
-            ? Math.round((winsAsBlack / gamesAsBlack.length) * 100) 
-            : 0;
-          
-          // Set player statistics
-          setPlayerStats({
-            totalGames: sortedGames.length,
-            currentElo: currentUser.currentElo || currentUser.initialElo,
-            wins: sortedGames.filter(game => 
-              (game.whitePlayerId === currentUser.id && game.result === '1-0') || 
-              (game.blackPlayerId === currentUser.id && game.result === '0-1')
-            ).length,
-            losses: sortedGames.filter(game => 
-              (game.whitePlayerId === currentUser.id && game.result === '0-1') || 
-              (game.blackPlayerId === currentUser.id && game.result === '1-0')
-            ).length,
-            draws: sortedGames.filter(game => game.result === '1/2-1/2').length,
-            mostPlayedOpponent,
-            gamesWithMostPlayed: mostPlayedOpponent ? highestCount : 0,
-            winRateAsWhite,
-            winRateAsBlack,
-            gamesAsWhite: gamesAsWhite.length,
-            gamesAsBlack: gamesAsBlack.length
-          });
-        }
-        
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        setError('Failed to load dashboard data. Please try again later.');
-        setLoading(false);
-      }
-    };
-    
-    fetchDashboardData();
-  }, [currentUser]);
+  // This useEffect was replaced by the combination of fetchDashboardData as a useCallback
+  // and the WebSocket listener effect above. The initial data fetch is now done
+  // in a separate useEffect that depends on the fetchDashboardData callback.
   
   // Function to format the date
   const formatDate = (dateString) => {
@@ -235,6 +144,127 @@ const Dashboard = () => {
   const renderOpponent = (game) => {
     return game.whitePlayerId === currentUser.id ? game.blackPlayer?.name : game.whitePlayer?.name;
   };
+  
+  // Function to fetch dashboard data
+  const fetchDashboardData = useCallback(async () => {
+    try {
+      // Fetch player's games
+      const gamesResponse = await fetch(`/api/games?playerId=${currentUser.id}&sortBy=date&order=asc`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      if (!gamesResponse.ok) {
+        throw new Error(`HTTP error! Status: ${gamesResponse.status}`);
+      }
+      
+      const gamesData = await gamesResponse.json();
+      
+      if (gamesData.success) {
+        // Set all games sorted by date (ascending)
+        const sortedGames = gamesData.games.sort((a, b) => new Date(a.date) - new Date(b.date));
+        setAllGames(sortedGames);
+        
+        // Set recent games (most recent 5 games)
+        setRecentGames(sortedGames.slice(-5).reverse());
+        
+        // Build chart data
+        setEloChartData(buildEloHistoryData(sortedGames, chartTimeRange));
+        
+        // Calculate most played opponent
+        const opponentCounts = {};
+        sortedGames.forEach(game => {
+          const opponentId = game.whitePlayerId === currentUser.id ? game.blackPlayerId : game.whitePlayerId;
+          const opponentName = game.whitePlayerId === currentUser.id ? game.blackPlayer?.name : game.whitePlayer?.name;
+          
+          if (opponentId && opponentName) {
+            const key = `${opponentId}-${opponentName}`;
+            opponentCounts[key] = (opponentCounts[key] || 0) + 1;
+          }
+        });
+        
+        // Find the most played opponent
+        let mostPlayedOpponent = null;
+        let highestCount = 0;
+        
+        Object.entries(opponentCounts).forEach(([key, count]) => {
+          if (count > highestCount) {
+            highestCount = count;
+            mostPlayedOpponent = key.split('-')[1]; // Get the opponent name
+          }
+        });
+        
+        // Calculate win rates with white and black
+        const gamesAsWhite = sortedGames.filter(game => game.whitePlayerId === currentUser.id);
+        const winsAsWhite = gamesAsWhite.filter(game => game.result === '1-0').length;
+        const winRateAsWhite = gamesAsWhite.length > 0 
+          ? Math.round((winsAsWhite / gamesAsWhite.length) * 100) 
+          : 0;
+          
+        const gamesAsBlack = sortedGames.filter(game => game.blackPlayerId === currentUser.id);
+        const winsAsBlack = gamesAsBlack.filter(game => game.result === '0-1').length;
+        const winRateAsBlack = gamesAsBlack.length > 0 
+          ? Math.round((winsAsBlack / gamesAsBlack.length) * 100) 
+          : 0;
+        
+        // Set player statistics
+        setPlayerStats({
+          totalGames: sortedGames.length,
+          currentElo: currentUser.currentElo || currentUser.initialElo,
+          wins: sortedGames.filter(game => 
+            (game.whitePlayerId === currentUser.id && game.result === '1-0') || 
+            (game.blackPlayerId === currentUser.id && game.result === '0-1')
+          ).length,
+          losses: sortedGames.filter(game => 
+            (game.whitePlayerId === currentUser.id && game.result === '0-1') || 
+            (game.blackPlayerId === currentUser.id && game.result === '1-0')
+          ).length,
+          draws: sortedGames.filter(game => game.result === '1/2-1/2').length,
+          mostPlayedOpponent,
+          gamesWithMostPlayed: mostPlayedOpponent ? highestCount : 0,
+          winRateAsWhite,
+          winRateAsBlack,
+          gamesAsWhite: gamesAsWhite.length,
+          gamesAsBlack: gamesAsBlack.length
+        });
+      }
+      
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      setError('Failed to load dashboard data. Please try again later.');
+      setLoading(false);
+    }
+  }, [currentUser, chartTimeRange, buildEloHistoryData]);
+  
+  // Set up WebSocket listener for real-time updates
+  useEffect(() => {
+    // Listen for WebSocket messages
+    const removeListener = addMessageListener((message) => {
+      if (message.type === 'game' && (
+          message.data.whitePlayerId === currentUser.id || 
+          message.data.blackPlayerId === currentUser.id
+        )) {
+        console.log('WebSocket: Game update affecting current user', message);
+        fetchDashboardData();
+      } else if (message.type === 'player' && message.data.id === currentUser.id) {
+        console.log('WebSocket: Player update for current user', message);
+        fetchDashboardData();
+      }
+    });
+    
+    return () => {
+      // Clean up the listener when component unmounts
+      removeListener();
+    };
+  }, [currentUser, addMessageListener, fetchDashboardData]);
+  
+  // Initial data fetch
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
   
   if (loading) {
     return (

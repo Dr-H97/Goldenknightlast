@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { WebSocket } = require('ws');
 const {
   getAllGames,
   getGameById,
@@ -9,6 +10,23 @@ const {
   deleteGame,
   updateGame
 } = require('../services/gameService');
+
+// Function to broadcast game updates via WebSocket
+const broadcastGameUpdate = (data) => {
+  const { server } = require('../index');
+  const wss = server.wss;
+  
+  if (wss) {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({
+          type: 'game_update',
+          data
+        }));
+      }
+    });
+  }
+};
 
 // Get all games with optional filters
 router.get('/', async (req, res) => {
@@ -122,6 +140,12 @@ router.post('/', async (req, res) => {
     
     const newGame = await createGame(gameData);
     
+    // Broadcast the new game to all connected clients
+    broadcastGameUpdate({
+      action: 'create',
+      game: newGame
+    });
+    
     res.status(201).json({
       success: true,
       game: newGame
@@ -148,6 +172,12 @@ router.put('/:id/verify', async (req, res) => {
         message: 'Game not found'
       });
     }
+    
+    // Broadcast the verified game to all connected clients
+    broadcastGameUpdate({
+      action: 'update',
+      game: updatedGame
+    });
     
     res.json({
       success: true,
@@ -183,6 +213,12 @@ router.put('/:id', async (req, res) => {
       });
     }
     
+    // Broadcast the updated game to all connected clients
+    broadcastGameUpdate({
+      action: 'update',
+      game: updatedGame
+    });
+    
     res.json({
       success: true,
       game: updatedGame,
@@ -210,6 +246,12 @@ router.delete('/:id', async (req, res) => {
         message: 'Game not found'
       });
     }
+    
+    // Broadcast the deleted game to all connected clients
+    broadcastGameUpdate({
+      action: 'delete',
+      gameId
+    });
     
     res.json({
       success: true,

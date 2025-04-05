@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { WebSocket } = require('ws');
 const {
   getAllPlayers,
   getPlayerById,
@@ -8,6 +9,23 @@ const {
   deletePlayer
 } = require('../services/playerService');
 const bcrypt = require('bcrypt');
+
+// Function to broadcast player updates via WebSocket
+const broadcastPlayerUpdate = (data) => {
+  const { server } = require('../index');
+  const wss = server.wss;
+  
+  if (wss) {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({
+          type: 'player_update',
+          data
+        }));
+      }
+    });
+  }
+};
 
 // Get all players
 router.get('/', async (req, res) => {
@@ -91,6 +109,12 @@ router.post('/', async (req, res) => {
     // Remove PIN from response
     const { pin: _, ...newPlayerData } = newPlayer;
     
+    // Broadcast the new player to all connected clients
+    broadcastPlayerUpdate({
+      action: 'create',
+      player: newPlayerData
+    });
+    
     res.status(201).json({
       success: true,
       player: newPlayerData
@@ -138,6 +162,12 @@ router.put('/:id', async (req, res) => {
     // Remove PIN from response
     const { pin: _, ...updatedPlayerData } = updatedPlayer;
     
+    // Broadcast the updated player to all connected clients
+    broadcastPlayerUpdate({
+      action: 'update',
+      player: updatedPlayerData
+    });
+    
     res.json({
       success: true,
       player: updatedPlayerData
@@ -164,6 +194,12 @@ router.delete('/:id', async (req, res) => {
         message: 'Player not found'
       });
     }
+    
+    // Broadcast the deleted player to all connected clients
+    broadcastPlayerUpdate({
+      action: 'delete',
+      playerId
+    });
     
     res.json({
       success: true,

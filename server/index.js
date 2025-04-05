@@ -21,6 +21,9 @@ const server = http.createServer(app);
 // Create WebSocket server
 const wss = new WebSocketServer({ server, path: '/ws' });
 
+// Attach WebSocket server to the server object for use in other modules
+server.wss = wss;
+
 // WebSocket connections
 wss.on('connection', (ws) => {
   console.log('Client connected to WebSocket');
@@ -149,3 +152,6 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Export server and WebSocket server for use in other modules
+module.exports = { server, wss };

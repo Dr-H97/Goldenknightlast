@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useWebSocket } from '../context/WebSocketContext';
 import '../styles/animations.css';
 
 const Games = () => {
   const { currentUser } = useAuth();
   const { t } = useLanguage();
+  const { addMessageListener } = useWebSocket();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -13,41 +15,34 @@ const Games = () => {
   const [players, setPlayers] = useState([]);
   const [selectedPlayer, setSelectedPlayer] = useState('all');
   
-  useEffect(() => {
-    // Fetch players for the filter dropdown
-    const fetchPlayers = async () => {
-      try {
-        const response = await fetch('/api/players', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+  // Create a reusable fetchPlayers function with useCallback
+  const fetchPlayers = useCallback(async () => {
+    try {
+      const response = await fetch('/api/players', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         }
-        
-        const data = await response.json();
-        
-        if (data.success) {
-          setPlayers(data.players);
-        } else {
-          throw new Error(data.message || 'Failed to load players');
-        }
-      } catch (error) {
-        console.error('Error fetching players:', error);
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
-    
-    fetchPlayers();
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setPlayers(data.players);
+      } else {
+        throw new Error(data.message || 'Failed to load players');
+      }
+    } catch (error) {
+      console.error('Error fetching players:', error);
+    }
   }, []);
   
-  useEffect(() => {
-    fetchGames();
-  }, [timeFilter, selectedPlayer]);
-  
-  const fetchGames = async () => {
+  // Create a reusable fetchGames function with useCallback
+  const fetchGames = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -91,7 +86,38 @@ const Games = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeFilter, selectedPlayer]);
+  
+  // Initial fetch of players
+  useEffect(() => {
+    fetchPlayers();
+  }, [fetchPlayers]);
+  
+  // Initial fetch of games when filters change
+  useEffect(() => {
+    fetchGames();
+  }, [fetchGames]);
+  
+  // WebSocket listener for real-time updates
+  useEffect(() => {
+    // Add WebSocket listener
+    const removeListener = addMessageListener((message) => {
+      if (message.type === 'game') {
+        // Game created, updated, or deleted
+        console.log('WebSocket: Game list update needed due to game change', message);
+        fetchGames();
+      } else if (message.type === 'player') {
+        // Player updated (might need to update the player list for filter)
+        console.log('WebSocket: Player list update needed due to player change', message);
+        fetchPlayers();
+      }
+    });
+    
+    return () => {
+      // Clean up listener when component unmounts
+      removeListener();
+    };
+  }, [addMessageListener, fetchGames, fetchPlayers]);
   
   const handleTimeFilterChange = (e) => {
     setTimeFilter(e.target.value);

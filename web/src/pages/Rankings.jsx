@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useWebSocket } from '../context/WebSocketContext';
 import '../styles/animations.css';
 
 
 const Rankings = () => {
+  const { addMessageListener } = useWebSocket();
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -11,17 +13,7 @@ const Rankings = () => {
   const [timeFilter, setTimeFilter] = useState('all'); // Default to all time
   
   
-  useEffect(() => {
-    fetchPlayers();
-  }, [sortBy, order, timeFilter]);
-  
-  const resetFilters = () => {
-    setTimeFilter('all');
-    setSortBy('currentElo');
-    setOrder('desc');
-  };
-  
-  const fetchPlayers = async () => {
+  const fetchPlayers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/players?sortBy=${sortBy}&order=${order}&timeFilter=${timeFilter}`);
@@ -38,6 +30,34 @@ const Rankings = () => {
     } finally {
       setLoading(false);
     }
+  }, [sortBy, order, timeFilter]);
+  
+  // Initial data load when filters change
+  useEffect(() => {
+    fetchPlayers();
+  }, [fetchPlayers]);
+  
+  // WebSocket listener for real-time updates
+  useEffect(() => {
+    // Add WebSocket listener
+    const removeListener = addMessageListener((message) => {
+      if (message.type === 'player' || message.type === 'game') {
+        // Any player or game change might affect the rankings
+        console.log('WebSocket: Rankings update needed due to', message.type, 'change');
+        fetchPlayers();
+      }
+    });
+    
+    return () => {
+      // Clean up listener when component unmounts
+      removeListener();
+    };
+  }, [addMessageListener, fetchPlayers]);
+  
+  const resetFilters = () => {
+    setTimeFilter('all');
+    setSortBy('currentElo');
+    setOrder('desc');
   };
   
   const handleSort = (field) => {
@@ -117,7 +137,7 @@ const Rankings = () => {
           
           <button 
             onClick={resetFilters}
-            className="btn-secondary chess-piece-hover"
+            className="btn-reset chess-piece-hover"
           >
             Reset
           </button>
