@@ -141,7 +141,7 @@ const startServer = async () => {
     }
     
     // Start listening
-    server.listen(PORT, '0.0.0.0', () => {
+    server.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`WebSocket server running at ws://localhost:${PORT}/ws`);
     });

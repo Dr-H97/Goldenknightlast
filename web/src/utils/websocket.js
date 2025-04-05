@@ -32,8 +32,16 @@ export const initWebSocket = (onStatusChange) => {
   statusChangeCallback?.(SOCKET_STATUS.CONNECTING);
   
   try {
+    // Get the current protocol from the browser
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    
+    // Get server URL - we'll use the current hostname and rely on the proxy
+    const hostname = window.location.hostname;
+    const port = window.location.port;
+    
+    // Connect through the Vite proxy that's configured in vite.config.js
+    // This way we don't need to manually specify port 3000 for backend
+    const wsUrl = `${protocol}//${hostname}${port ? ':' + port : ''}/ws`;
     
     console.log(`Connecting to WebSocket at ${wsUrl}`);
     socket = new WebSocket(wsUrl);

@@ -1,657 +1,186 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useLanguage } from '../context/LanguageContext';
 import { useWebSocket } from '../context/WebSocketContext';
-
+import { applyDataLabels, formatDate } from '../helpers/tableHelpers';
+import '../styles/admin.css';
+import '../styles/responsive-tables.css';
 
 const Admin = () => {
-  const { currentUser } = useAuth();
-  const [activeTab, setActiveTab] = useState('players'); // players or games
-  
-  // Redirect if not admin (though ProtectedRoute should prevent this)
-  if (!currentUser?.isAdmin) {
-    return (
-      <div className="container">
-        <h1>Access Denied</h1>
-        <p>You do not have permission to access this page.</p>
-      </div>
-    );
-  }
-  
-  return (
-    <div className="container">
-      <h1>Admin Panel</h1>
-      
-      {/* Tabs */}
-      <div className="nav-tabs">
-        <button 
-          className={`nav-tab ${activeTab === 'players' ? 'active' : ''}`}
-          onClick={() => setActiveTab('players')}
-        >
-          Player Management
-        </button>
-        <button 
-          className={`nav-tab ${activeTab === 'games' ? 'active' : ''}`}
-          onClick={() => setActiveTab('games')}
-        >
-          Game Management
-        </button>
-      </div>
-      
-      {/* Content */}
-      <div className="tab-content">
-        {activeTab === 'players' ? (
-          <PlayerManagement />
-        ) : (
-          <GameManagement />
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Player Management Component
-const PlayerManagement = () => {
-  const { t } = useLanguage();
+  const { user, isLoggedIn } = useAuth();
   const { addMessageListener } = useWebSocket();
+  const navigate = useNavigate();
+  
+  // Refs for table elements
+  const gamesTableRef = useRef(null);
+  const playersTableRef = useRef(null);
+  
+  const [activeTab, setActiveTab] = useState('games');
+  const [games, setGames] = useState([]);
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState(null);
   
-  const [showAddForm, setShowAddForm] = useState(false);
+  // Game management states
+  const [showAddGameForm, setShowAddGameForm] = useState(false);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [gameFilter, setGameFilter] = useState({
+    playerName: '',
+    dateFrom: '',
+    dateTo: '',
+    result: ''
+  });
+  
+  // Player management states
+  const [showAddPlayerForm, setShowAddPlayerForm] = useState(false);
   const [newPlayer, setNewPlayer] = useState({
     name: '',
     pin: '',
     isAdmin: false,
-    initialElo: 1200
+    initialElo: 1000
   });
   
-  // For editing players
-  const [editingPlayerId, setEditingPlayerId] = useState(null);
-  const [editingPlayer, setEditingPlayer] = useState({
-    name: '',
-    currentElo: 0,
-    isAdmin: false,
-    pin: ''
-  });
+  // Edit states
+  const [editingGame, setEditingGame] = useState(null);
+  const [editingPlayer, setEditingPlayer] = useState(null);
   
-  // Fetch players
+  // Apply data labels when tab changes
   useEffect(() => {
+    if (activeTab === 'games') {
+      setTimeout(() => {
+        applyDataLabels('games-table');
+      }, 300);
+    } else if (activeTab === 'players') {
+      setTimeout(() => {
+        applyDataLabels('players-table');
+      }, 300);
+    }
+  }, [activeTab]);
+  
+  // Apply data labels when data changes
+  useEffect(() => {
+    if (games.length > 0 && activeTab === 'games') {
+      setTimeout(() => {
+        applyDataLabels('games-table');
+      }, 300);
+    }
+  }, [games, activeTab]);
+  
+  useEffect(() => {
+    if (players.length > 0 && activeTab === 'players') {
+      setTimeout(() => {
+        applyDataLabels('players-table');
+      }, 300);
+    }
+  }, [players, activeTab]);
+  
+  // Fetch initial data
+  useEffect(() => {
+    if (!isLoggedIn || !user?.isAdmin) {
+      navigate('/login');
+      return;
+    }
+    
+    fetchGames();
     fetchPlayers();
-  }, []);
-  
-  // Set up WebSocket listener for real-time updates
-  useEffect(() => {
-    // Listen for WebSocket messages
-    const removeListener = addMessageListener((message) => {
-      if (message.type === 'player_update' || message.type === 'player') {
-        console.log('WebSocket: Player update received', message);
+    
+    // Listen for updates from WebSocket
+    const removeGameListener = addMessageListener((data) => {
+      if (data.type === 'game_update') {
+        fetchGames();
+      }
+    });
+    
+    const removePlayerListener = addMessageListener((data) => {
+      if (data.type === 'player_update') {
         fetchPlayers();
       }
     });
     
     return () => {
-      // Clean up the listener when component unmounts
-      removeListener();
+      removeGameListener();
+      removePlayerListener();
     };
-  }, [addMessageListener]);
-  
-  const fetchPlayers = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/players');
-      const data = await response.json();
-      
-      if (data.success) {
-        setPlayers(data.players);
-      } else {
-        setError(data.message || 'Failed to load players');
-      }
-    } catch (error) {
-      console.error('Error fetching players:', error);
-      setError('Failed to load players. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // Handle new player form change
-  const handleNewPlayerChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewPlayer(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-  
-  // Add new player
-  const handleAddPlayer = async (e) => {
-    e.preventDefault();
-    
-    // Reset messages
-    setError('');
-    setSuccess('');
-    
-    // Validate
-    if (!newPlayer.name || !newPlayer.pin) {
-      setError('Name and PIN are required');
-      return;
-    }
-    
-    if (newPlayer.pin.length < 4) {
-      setError('PIN must be at least 4 characters long');
-      return;
-    }
-    
-    try {
-      const response = await fetch('/api/players', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: newPlayer.name,
-          pin: newPlayer.pin,
-          isAdmin: newPlayer.isAdmin,
-          initialElo: parseInt(newPlayer.initialElo) || 1200,
-          currentElo: parseInt(newPlayer.initialElo) || 1200
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setSuccess(`Player "${newPlayer.name}" added successfully`);
-        setNewPlayer({
-          name: '',
-          pin: '',
-          isAdmin: false,
-          initialElo: 1200
-        });
-        setShowAddForm(false);
-        fetchPlayers(); // Refresh player list
-      } else {
-        setError(data.message || 'Failed to add player');
-      }
-    } catch (error) {
-      console.error('Error adding player:', error);
-      setError('An error occurred while adding the player');
-    }
-  };
-  
-  // Start editing a player
-  const handleEditPlayer = (player) => {
-    setEditingPlayerId(player.id);
-    setEditingPlayer({
-      name: player.name,
-      currentElo: player.currentElo,
-      isAdmin: player.isAdmin,
-      pin: '' // We don't receive the hashed PIN from the server
-    });
-  };
-  
-  // Handle edit form changes
-  const handleEditingPlayerChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setEditingPlayer(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-  
-  // Save edited player
-  const handleSavePlayer = async (e) => {
-    e.preventDefault();
-    
-    // Reset messages
-    setError('');
-    setSuccess('');
-    
-    // Validate
-    if (!editingPlayer.name) {
-      setError('Name is required');
-      return;
-    }
-    
-    if (editingPlayer.pin && editingPlayer.pin.length < 4) {
-      setError('PIN must be at least 4 characters long');
-      return;
-    }
-    
-    try {
-      // Build update data (only include fields with values)
-      const updateData = {
-        name: editingPlayer.name,
-        currentElo: parseInt(editingPlayer.currentElo),
-        isAdmin: editingPlayer.isAdmin
-      };
-      
-      // Only include PIN if it was changed
-      if (editingPlayer.pin) {
-        updateData.pin = editingPlayer.pin;
-      }
-      
-      const response = await fetch(`/api/players/${editingPlayerId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateData),
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setSuccess(`Player "${editingPlayer.name}" updated successfully`);
-        setEditingPlayerId(null);
-        fetchPlayers(); // Refresh player list
-      } else {
-        setError(data.message || 'Failed to update player');
-      }
-    } catch (error) {
-      console.error('Error updating player:', error);
-      setError('An error occurred while updating the player');
-    }
-  };
-  
-  // Cancel editing
-  const handleCancelEdit = () => {
-    setEditingPlayerId(null);
-  };
-  
-  // Delete player
-  const handleDeletePlayer = async (playerId, playerName) => {
-    if (!window.confirm(`Are you sure you want to delete ${playerName}? This will also delete all their games.`)) {
-      return;
-    }
-    
-    try {
-      const response = await fetch(`/api/players/${playerId}`, {
-        method: 'DELETE',
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setSuccess(`Player "${playerName}" deleted successfully`);
-        fetchPlayers(); // Refresh player list
-      } else {
-        setError(data.message || 'Failed to delete player');
-      }
-    } catch (error) {
-      console.error('Error deleting player:', error);
-      setError('An error occurred while deleting the player');
-    }
-  };
-  
-  if (loading && !players.length) {
-    return (
-      <div className="card" style={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
-        <div className="loading-knight"></div>
-        <p style={{ marginTop: '20px' }}>Loading players...</p>
-      </div>
-    );
-  }
-  
-  return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2>Player Management</h2>
-        <button 
-          className="btn-admin"
-          onClick={() => setShowAddForm(!showAddForm)}
-        >
-          {showAddForm ? 'Cancel' : 'Add New Player'}
-        </button>
-      </div>
-      
-      {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
-      
-      {/* Add Player Form */}
-      {showAddForm && (
-        <div className="card" style={{ marginBottom: '20px' }}>
-          <h3>Add New Player</h3>
-          
-          <form onSubmit={handleAddPlayer}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="form-control"
-                value={newPlayer.name}
-                onChange={handleNewPlayerChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="pin">PIN</label>
-              <input
-                type="password"
-                id="pin"
-                name="pin"
-                className="form-control"
-                value={newPlayer.pin}
-                onChange={handleNewPlayerChange}
-                minLength={4}
-                required
-              />
-              <small>PIN must be at least 4 characters long</small>
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="initialElo">Initial ELO Rating</label>
-              <input
-                type="number"
-                id="initialElo"
-                name="initialElo"
-                className="form-control"
-                value={newPlayer.initialElo}
-                onChange={handleNewPlayerChange}
-                min="100"
-                max="3000"
-              />
-            </div>
-            
-            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <input
-                type="checkbox"
-                id="isAdmin"
-                name="isAdmin"
-                checked={newPlayer.isAdmin}
-                onChange={handleNewPlayerChange}
-              />
-              <label htmlFor="isAdmin">Admin Access</label>
-            </div>
-            
-            <button type="submit" className="btn-admin">
-              Add Player
-            </button>
-          </form>
-        </div>
-      )}
-      
-      {/* Edit Player Form */}
-      {editingPlayerId && (
-        <div className="card" style={{ marginBottom: '20px' }}>
-          <h3>Edit Player</h3>
-          
-          <form onSubmit={handleSavePlayer}>
-            <div className="form-group">
-              <label htmlFor="editName">Name</label>
-              <input
-                type="text"
-                id="editName"
-                name="name"
-                className="form-control"
-                value={editingPlayer.name}
-                onChange={handleEditingPlayerChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="editCurrentElo">Current ELO Rating</label>
-              <input
-                type="number"
-                id="editCurrentElo"
-                name="currentElo"
-                className="form-control"
-                value={editingPlayer.currentElo}
-                onChange={handleEditingPlayerChange}
-                min="100"
-                max="3000"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="editPin">New PIN (leave blank to keep current)</label>
-              <input
-                type="password"
-                id="editPin"
-                name="pin"
-                className="form-control"
-                value={editingPlayer.pin}
-                onChange={handleEditingPlayerChange}
-                minLength={4}
-              />
-              <small>PIN must be at least 4 characters long if provided</small>
-            </div>
-            
-            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <input
-                type="checkbox"
-                id="editIsAdmin"
-                name="isAdmin"
-                checked={editingPlayer.isAdmin}
-                onChange={handleEditingPlayerChange}
-              />
-              <label htmlFor="editIsAdmin">Admin Access</label>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="submit" className="btn-admin">
-                Save Changes
-              </button>
-              <button type="button" className="btn-admin" onClick={handleCancelEdit}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-      
-      {/* Player List */}
-      <div className="card">
-        <div className="player-management-list">
-          {players.map(player => (
-            <div key={player.id} className="player-card" style={{ 
-              marginBottom: '15px', 
-              padding: '15px', 
-              backgroundColor: 'var(--card-bg-alt)',
-              borderRadius: '10px',
-              border: '1px solid var(--border)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <div>
-                  <h3 style={{ margin: '0 0 5px 0' }}>{player.name}</h3>
-                  <div style={{ display: 'flex', gap: '15px' }}>
-                    <p style={{ margin: '0' }}><strong>ELO:</strong> {player.currentElo || player.initialElo}</p>
-                    <p style={{ margin: '0' }}><strong>Role:</strong> {player.isAdmin ? 'Admin' : 'Player'}</p>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <button 
-                    onClick={() => handleEditPlayer(player)}
-                    className="btn-admin"
-                    style={{ padding: '8px 15px' }}
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDeletePlayer(player.id, player.name)}
-                    className="btn-danger"
-                    style={{ padding: '8px 15px' }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-          
-          {players.length === 0 && (
-            <p style={{ textAlign: 'center', padding: '20px' }}>No players found.</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
 
-// Game Management Component
-const GameManagement = () => {
-  const { t } = useLanguage();
-  const { addMessageListener } = useWebSocket();
-  const [games, setGames] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [filters, setFilters] = useState({
-    dateRange: '',      // 'week', 'month', 'year'
-    specificDate: '',   // For exact date selection
-    playerFilter: ''    // For filtering by player ID
-  });
-  const [players, setPlayers] = useState([]);
-  const [showFilterPanel, setShowFilterPanel] = useState(false);
+    // Apply data-labels to tables for responsive design
+    if (activeTab === 'games') {
+      setTimeout(() => {
+        applyDataLabels('games-table');
+      }, 300);
+    } else if (activeTab === 'players') {
+      setTimeout(() => {
+        applyDataLabels('players-table');
+      }, 300);
+    }
+  }, [isLoggedIn, user, navigate, addMessageListener]);
   
-  // For editing games
-  const [editingGameId, setEditingGameId] = useState(null);
-  const [editingGame, setEditingGame] = useState({
-    result: '1-0',
-    verified: false,
-    date: ''
-  });
-  
-  // Fetch players for the player filter dropdown
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      try {
-        const response = await fetch('/api/players');
-        const data = await response.json();
-        
-        if (data.success) {
-          setPlayers(data.players);
-        }
-      } catch (error) {
-        console.error('Error fetching players:', error);
-      }
-    };
-    
-    fetchPlayers();
-  }, []);
-  
-  // Fetch games when filters change
-  useEffect(() => {
-    fetchGames();
-  }, [filters]);
-  
-  // Set up WebSocket listener for real-time updates
-  useEffect(() => {
-    // Listen for WebSocket messages
-    const removeListener = addMessageListener((message) => {
-      if (message.type === 'game_update' || message.type === 'game') {
-        console.log('WebSocket: Game update received', message);
-        fetchGames();
-      }
-    });
-    
-    return () => {
-      // Clean up the listener when component unmounts
-      removeListener();
-    };
-  }, [addMessageListener]);
-  
+  // Fetch games with optional filtering
   const fetchGames = async () => {
     try {
       setLoading(true);
       
-      // Base URL with sorting
-      let url = '/api/games?sortBy=date&order=desc';
+      let url = '/api/games';
+      const queryParams = [];
       
-      // Add date range filter
-      if (filters.dateRange) {
-        url += `&dateRange=${filters.dateRange}`;
+      if (gameFilter.playerName) {
+        queryParams.push(`playerName=${encodeURIComponent(gameFilter.playerName)}`);
       }
       
-      // Add specific date filter
-      if (filters.specificDate) {
-        url += `&specificDate=${filters.specificDate}`;
+      if (gameFilter.dateFrom) {
+        queryParams.push(`dateFrom=${encodeURIComponent(gameFilter.dateFrom)}`);
       }
       
-      // Add player filter
-      if (filters.playerFilter) {
-        url += `&playerId=${filters.playerFilter}`;
+      if (gameFilter.dateTo) {
+        queryParams.push(`dateTo=${encodeURIComponent(gameFilter.dateTo)}`);
+      }
+      
+      if (gameFilter.result) {
+        queryParams.push(`result=${encodeURIComponent(gameFilter.result)}`);
+      }
+      
+      if (queryParams.length > 0) {
+        url += `?${queryParams.join('&')}`;
       }
       
       const response = await fetch(url);
-      const data = await response.json();
       
-      if (data.success) {
-        setGames(data.games);
-      } else {
-        setError(data.message || 'Failed to load games');
+      if (!response.ok) {
+        throw new Error(`Error fetching games: ${response.statusText}`);
       }
-    } catch (error) {
-      console.error('Error fetching games:', error);
-      setError('Failed to load games. Please try again later.');
+      
+      const data = await response.json();
+      setGames(data);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching games:', err);
     } finally {
       setLoading(false);
     }
   };
   
-  // Handle filter changes
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    
-    // Clear other date filters if one is being set
-    if (name === 'dateRange') {
-      setFilters(prev => ({
-        ...prev,
-        dateRange: value,
-        specificDate: '' // Clear specific date when selecting a range
-      }));
-    } else if (name === 'specificDate') {
-      setFilters(prev => ({
-        ...prev,
-        specificDate: value,
-        dateRange: '' // Clear date range when selecting a specific date
-      }));
-    } else {
-      setFilters(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
-  
-  // Reset all filters
-  const resetFilters = () => {
-    setFilters({
-      dateRange: '',
-      specificDate: '',
-      playerFilter: ''
-    });
-  };
-  
-  // Verify game
-  const handleVerifyGame = async (gameId) => {
+  // Fetch all players
+  const fetchPlayers = async () => {
     try {
-      const response = await fetch(`/api/games/${gameId}/verify`, {
-        method: 'PUT',
-      });
+      setLoading(true);
+      const response = await fetch('/api/players');
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching players: ${response.statusText}`);
+      }
       
       const data = await response.json();
-      
-      if (data.success) {
-        setSuccess('Game verified successfully');
-        fetchGames(); // Refresh game list
-      } else {
-        setError(data.message || 'Failed to verify game');
-      }
-    } catch (error) {
-      console.error('Error verifying game:', error);
-      setError('An error occurred while verifying the game');
+      setPlayers(data);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching players:', err);
+    } finally {
+      setLoading(false);
     }
   };
   
-  // Delete game
+  // Handle game deletion
   const handleDeleteGame = async (gameId) => {
-    if (!window.confirm('Are you sure you want to delete this game?')) {
+    if (!window.confirm('Are you sure you want to delete this game? This will revert any ELO changes.')) {
       return;
     }
     
@@ -660,294 +189,482 @@ const GameManagement = () => {
         method: 'DELETE',
       });
       
-      const data = await response.json();
-      
-      if (data.success) {
-        setSuccess('Game deleted successfully');
-        fetchGames(); // Refresh game list
-      } else {
-        setError(data.message || 'Failed to delete game');
+      if (!response.ok) {
+        throw new Error(`Error deleting game: ${response.statusText}`);
       }
-    } catch (error) {
-      console.error('Error deleting game:', error);
-      setError('An error occurred while deleting the game');
+      
+      // Remove game from state
+      setGames(games.filter(game => game.id !== gameId));
+    } catch (err) {
+      setError(err.message);
+      console.error('Error deleting game:', err);
     }
   };
   
-  // Start editing a game
-  const handleEditGame = (game) => {
-    setEditingGameId(game.id);
-    // Format date to YYYY-MM-DD for input[type=date]
-    const dateObj = new Date(game.date);
-    const formattedDate = dateObj.toISOString().split('T')[0];
-    
-    setEditingGame({
-      result: game.result,
-      verified: game.verified,
-      date: formattedDate
-    });
-  };
-  
-  // Handle editing changes
-  const handleEditingGameChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setEditingGame(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-  
-  // Save edited game
-  const handleSaveGame = async (e) => {
-    e.preventDefault();
-    
-    // Reset messages
-    setError('');
-    setSuccess('');
+  // Handle player deletion
+  const handleDeletePlayer = async (playerId) => {
+    if (!window.confirm('Are you sure you want to delete this player? This will also delete all of their games.')) {
+      return;
+    }
     
     try {
-      const response = await fetch(`/api/games/${editingGameId}`, {
+      const response = await fetch(`/api/players/${playerId}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error deleting player: ${response.statusText}`);
+      }
+      
+      // Remove player from state
+      setPlayers(players.filter(player => player.id !== playerId));
+    } catch (err) {
+      setError(err.message);
+      console.error('Error deleting player:', err);
+    }
+  };
+  
+  // Handle player creation
+  const handleCreatePlayer = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('/api/players', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPlayer),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error creating player: ${response.statusText}`);
+      }
+      
+      const createdPlayer = await response.json();
+      setPlayers([...players, createdPlayer]);
+      setNewPlayer({
+        name: '',
+        pin: '',
+        isAdmin: false,
+        initialElo: 1000
+      });
+      setShowAddPlayerForm(false);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error creating player:', err);
+    }
+  };
+  
+  // Handle player update
+  const handleUpdatePlayer = async (e) => {
+    e.preventDefault();
+    
+    if (!editingPlayer) return;
+    
+    try {
+      const response = await fetch(`/api/players/${editingPlayer.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editingGame),
+        body: JSON.stringify(editingPlayer),
       });
       
-      const data = await response.json();
-      
-      if (data.success) {
-        setSuccess('Game updated successfully');
-        setEditingGameId(null);
-        fetchGames(); // Refresh game list
-      } else {
-        setError(data.message || 'Failed to update game');
+      if (!response.ok) {
+        throw new Error(`Error updating player: ${response.statusText}`);
       }
-    } catch (error) {
-      console.error('Error updating game:', error);
-      setError('An error occurred while updating the game');
+      
+      const updatedPlayer = await response.json();
+      
+      // Update player in state
+      setPlayers(players.map(player => 
+        player.id === updatedPlayer.id ? updatedPlayer : player
+      ));
+      
+      setEditingPlayer(null);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error updating player:', err);
     }
   };
   
-  // Cancel editing
-  const handleCancelEdit = () => {
-    setEditingGameId(null);
+  // Apply filters
+  const applyFilters = () => {
+    fetchGames();
   };
   
-  // Format date
+  // Reset filters
+  const resetFilters = () => {
+    setGameFilter({
+      playerName: '',
+      dateFrom: '',
+      dateTo: '',
+      result: ''
+    });
+    fetchGames();
+  };
+  
+  // Format date for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
   
-  if (loading && !games.length) {
+  // Render Game Management tab
+  const renderGameManagement = () => {
     return (
-      <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '30px' }}>
-        <div className="loading-knight"></div>
-        <p style={{ marginTop: '20px' }}>Loading games...</p>
-      </div>
-    );
-  }
-  
-  return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2>Game Management</h2>
-        
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button 
-            className="btn-admin"
-            onClick={() => setShowFilterPanel(!showFilterPanel)}
-          >
-            {showFilterPanel ? 'Hide Filters' : 'Show Filters'}
-          </button>
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h2>Game Management</h2>
           
-          {(filters.dateRange || filters.specificDate || filters.playerFilter) && (
+          <div style={{ display: 'flex', gap: '10px' }}>
             <button 
               className="btn-admin"
-              onClick={resetFilters}
+              onClick={() => setShowFilterPanel(!showFilterPanel)}
             >
-              Clear Filters
+              {showFilterPanel ? 'Hide Filters' : 'Show Filters'}
             </button>
+            
+            <button 
+              className="btn-admin"
+              onClick={() => navigate('/submit-game')}
+            >
+              Add New Game
+            </button>
+          </div>
+        </div>
+        
+        {showFilterPanel && (
+          <div className="filter-panel card">
+            <h3>Filter Games</h3>
+            <div className="filter-grid">
+              <div className="form-group">
+                <label>Player Name:</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={gameFilter.playerName}
+                  onChange={(e) => setGameFilter({...gameFilter, playerName: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Date From:</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={gameFilter.dateFrom}
+                  onChange={(e) => setGameFilter({...gameFilter, dateFrom: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Date To:</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={gameFilter.dateTo}
+                  onChange={(e) => setGameFilter({...gameFilter, dateTo: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Result:</label>
+                <select 
+                  className="form-control"
+                  value={gameFilter.result}
+                  onChange={(e) => setGameFilter({...gameFilter, result: e.target.value})}
+                >
+                  <option value="">All Results</option>
+                  <option value="1-0">White Win</option>
+                  <option value="0-1">Black Win</option>
+                  <option value="1/2-1/2">Draw</option>
+                </select>
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <button className="btn-primary" onClick={applyFilters}>Apply Filters</button>
+              <button className="btn-secondary" onClick={resetFilters}>Reset</button>
+            </div>
+          </div>
+        )}
+        
+        <div className="responsive-table-container">
+          <table id="games-table" className="responsive-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>White Player</th>
+                <th>Black Player</th>
+                <th>Result</th>
+                <th>White Elo Δ</th>
+                <th>Black Elo Δ</th>
+                <th>Verified</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {games.length > 0 &&
+                games.map((game) => (
+                  <tr key={game.id}>
+                    <td data-label="Date">{formatDate(game.date)}</td>
+                    <td data-label="White Player">{game.white_player_name}</td>
+                    <td data-label="Black Player">{game.black_player_name}</td>
+                    <td data-label="Result">{game.result}</td>
+                    <td data-label="White Elo Δ">
+                      {game.white_elo_change > 0 ? '+' : ''}{game.white_elo_change}
+                    </td>
+                    <td data-label="Black Elo Δ">
+                      {game.black_elo_change > 0 ? '+' : ''}{game.black_elo_change}
+                    </td>
+                    <td data-label="Verified">{game.verified ? 'Yes' : 'No'}</td>
+                    <td data-label="Actions">
+                      <button 
+                        className="btn-sm btn-danger"
+                        onClick={() => handleDeleteGame(game.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          
+          {games.length === 0 && (
+            <p className="text-center">No games found.</p>
           )}
         </div>
       </div>
-      
-      {/* Filter Panel */}
-      {showFilterPanel && (
-        <div className="card" style={{ marginBottom: '20px', padding: '15px' }}>
-          <h3>Filter Games</h3>
+    );
+  };
+  
+  // Render Player Management tab
+  const renderPlayerManagement = () => {
+    return (
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h2>Player Management</h2>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginBottom: '15px' }}>
-            {/* Date Range Filter */}
-            <div style={{ minWidth: '200px' }}>
-              <h4>Time Period</h4>
-              <select
-                name="dateRange"
-                value={filters.dateRange}
-                onChange={handleFilterChange}
-                className="form-control"
-              >
-                <option value="">All Time</option>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
-            </div>
-            
-            {/* Specific Date Filter */}
-            <div style={{ minWidth: '200px' }}>
-              <h4>Specific Date</h4>
-              <input
-                type="date"
-                name="specificDate"
-                value={filters.specificDate}
-                onChange={handleFilterChange}
-                className="form-control"
-              />
-            </div>
-            
-            {/* Player Filter */}
-            <div style={{ minWidth: '200px' }}>
-              <h4>Player</h4>
-              <select
-                name="playerFilter"
-                value={filters.playerFilter}
-                onChange={handleFilterChange}
-                className="form-control"
-              >
-                <option value="">All Players</option>
-                {players.map(player => (
-                  <option key={player.id} value={player.id}>
-                    {player.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          
-          <div>
-            <button className="btn-admin" onClick={resetFilters}>
-              Reset All Filters
-            </button>
-          </div>
+          <button 
+            className="btn-admin"
+            onClick={() => setShowAddPlayerForm(!showAddPlayerForm)}
+          >
+            {showAddPlayerForm ? 'Cancel' : 'Add New Player'}
+          </button>
         </div>
-      )}
-      
-      {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
-      
-      {/* Edit Game Form */}
-      {editingGameId && (
-        <div className="card" style={{ marginBottom: '20px' }}>
-          <h3>Edit Game</h3>
-          
-          <form onSubmit={handleSaveGame}>
-            <div className="form-group">
-              <label htmlFor="editResult">Result</label>
-              <select
-                id="editResult"
-                name="result"
-                className="form-control"
-                value={editingGame.result}
-                onChange={handleEditingGameChange}
-              >
-                <option value="1-0">White Wins (1-0)</option>
-                <option value="0-1">Black Wins (0-1)</option>
-                <option value="1/2-1/2">Draw (1/2-1/2)</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="editDate">Date</label>
-              <input
-                type="date"
-                id="editDate"
-                name="date"
-                className="form-control"
-                value={editingGame.date}
-                onChange={handleEditingGameChange}
-              />
-            </div>
-            
-            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <input
-                type="checkbox"
-                id="editVerified"
-                name="verified"
-                checked={editingGame.verified}
-                onChange={handleEditingGameChange}
-              />
-              <label htmlFor="editVerified">Verified</label>
-            </div>
-            
-            <div className="form-message">
-              <p><strong>Note:</strong> Changing the result of a verified game will recalculate ELO ratings.</p>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="submit" className="btn-admin">
-                Save Changes
-              </button>
-              <button type="button" className="btn-admin" onClick={handleCancelEdit}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-      
-      {/* Game List */}
-      <div className="card">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>White</th>
-              <th>Black</th>
-              <th>Result</th>
-              <th>ELO Changes</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {games.map(game => (
-              <tr key={game.id}>
-                <td>{formatDate(game.date)}</td>
-                <td>{game.whitePlayer?.name || 'Unknown'}</td>
-                <td>{game.blackPlayer?.name || 'Unknown'}</td>
-                <td>{game.result}</td>
-                <td>
-                  {game.whitePlayer?.name}: {game.whiteEloChange > 0 ? '+' : ''}{game.whiteEloChange}<br />
-                  {game.blackPlayer?.name}: {game.blackEloChange > 0 ? '+' : ''}{game.blackEloChange}
-                </td>
-                <td>Verified</td>
-                <td style={{ display: 'flex', gap: '5px' }}>
-                  <button 
-                    onClick={() => handleEditGame(game)}
-                    className="btn-admin"
-                    style={{ padding: '5px 10px' }}
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDeleteGame(game.id)}
-                    className="btn-danger"
-                    style={{ padding: '5px 10px' }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
         
-        {games.length === 0 && (
-          <p>No games found.</p>
+        {showAddPlayerForm && (
+          <div className="card">
+            <h3>Add New Player</h3>
+            <form onSubmit={handleCreatePlayer}>
+              <div className="form-group">
+                <label>Name:</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={newPlayer.name}
+                  onChange={(e) => setNewPlayer({...newPlayer, name: e.target.value})}
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>PIN:</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={newPlayer.pin}
+                  onChange={(e) => setNewPlayer({...newPlayer, pin: e.target.value})}
+                  required
+                  pattern="[0-9]{4}"
+                  title="PIN must be 4 digits"
+                  maxLength={4}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Initial Elo:</label>
+                <input 
+                  type="number" 
+                  className="form-control"
+                  value={newPlayer.initialElo}
+                  onChange={(e) => setNewPlayer({...newPlayer, initialElo: parseInt(e.target.value, 10)})}
+                  required
+                  min={100}
+                  max={3000}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>
+                  <input 
+                    type="checkbox"
+                    checked={newPlayer.isAdmin}
+                    onChange={(e) => setNewPlayer({...newPlayer, isAdmin: e.target.checked})}
+                  />
+                  Administrator
+                </label>
+              </div>
+              
+              <button type="submit" className="btn-primary">Create Player</button>
+            </form>
+          </div>
         )}
+        
+        {editingPlayer && (
+          <div className="card">
+            <h3>Edit Player</h3>
+            <form onSubmit={handleUpdatePlayer}>
+              <div className="form-group">
+                <label>Name:</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={editingPlayer.name}
+                  onChange={(e) => setEditingPlayer({...editingPlayer, name: e.target.value})}
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>PIN:</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={editingPlayer.pin}
+                  onChange={(e) => setEditingPlayer({...editingPlayer, pin: e.target.value})}
+                  required
+                  pattern="[0-9]{4}"
+                  title="PIN must be 4 digits"
+                  maxLength={4}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Current Elo:</label>
+                <input 
+                  type="number" 
+                  className="form-control"
+                  value={editingPlayer.elo}
+                  onChange={(e) => setEditingPlayer({...editingPlayer, elo: parseInt(e.target.value, 10)})}
+                  required
+                  min={100}
+                  max={3000}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>
+                  <input 
+                    type="checkbox"
+                    checked={editingPlayer.is_admin}
+                    onChange={(e) => setEditingPlayer({...editingPlayer, is_admin: e.target.checked})}
+                  />
+                  Administrator
+                </label>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button type="submit" className="btn-primary">Update Player</button>
+                <button type="button" className="btn-secondary" onClick={() => setEditingPlayer(null)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        )}
+        
+        <div className="responsive-table-container">
+          <table id="players-table" className="responsive-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Elo Rating</th>
+                <th>Games Played</th>
+                <th>Admin</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {players.length > 0 &&
+                players.map((player) => (
+                  <tr key={player.id}>
+                    <td data-label="Name">{player.name}</td>
+                    <td data-label="Elo Rating">{player.elo}</td>
+                    <td data-label="Games Played">{player.games_played || 0}</td>
+                    <td data-label="Admin">{player.is_admin ? 'Yes' : 'No'}</td>
+                    <td data-label="Actions">
+                      <div style={{ display: 'flex', gap: '5px', justifyContent: 'flex-end' }}>
+                        <button 
+                          className="btn-sm btn-primary"
+                          onClick={() => setEditingPlayer(player)}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn-sm btn-danger"
+                          onClick={() => handleDeletePlayer(player.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          
+          {players.length === 0 && (
+            <p className="text-center">No players found.</p>
+          )}
+        </div>
       </div>
+    );
+  };
+  
+  return (
+    <div>
+      <div className="admin-header">
+        <h1>Admin Dashboard</h1>
+        
+        <div className="admin-tabs">
+          <button 
+            className={`btn-tab ${activeTab === 'games' ? 'active' : ''}`}
+            onClick={() => setActiveTab('games')}
+          >
+            Game Management
+          </button>
+          <button 
+            className={`btn-tab ${activeTab === 'players' ? 'active' : ''}`}
+            onClick={() => setActiveTab('players')}
+          >
+            Player Management
+          </button>
+        </div>
+      </div>
+      
+      {error && (
+        <div className="error">
+          <p>{error}</p>
+          <button onClick={() => setError(null)}>Dismiss</button>
+        </div>
+      )}
+      
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          {activeTab === 'games' && renderGameManagement()}
+          {activeTab === 'players' && renderPlayerManagement()}
+        </>
+      )}
     </div>
   );
 };

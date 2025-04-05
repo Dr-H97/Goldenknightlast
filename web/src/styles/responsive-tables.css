@@ -1,86 +1,119 @@
-/* Responsive Tables for Mobile View */
+/* Responsive tables style */
+.responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
 
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-primary);
+  background-color: var(--surface);
+}
+
+.responsive-table th {
+  background-color: var(--surface-variant);
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.responsive-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.responsive-table tr:last-child td {
+  border-bottom: none;
+}
+
+.responsive-table tr:hover {
+  background-color: var(--hover-color);
+}
+
+/* Special cell types */
+.responsive-table .cell-highlight {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.responsive-table .cell-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.responsive-table .cell-action {
+  text-align: right;
+}
+
+/* Responsive styles - Card layout for mobile */
 @media (max-width: 768px) {
-  /* Convert tables to cards on mobile */
-  .mobile-responsive-table table, 
-  .mobile-responsive-table thead, 
-  .mobile-responsive-table tbody, 
-  .mobile-responsive-table th, 
-  .mobile-responsive-table td, 
-  .mobile-responsive-table tr {
-    display: block;
+  .responsive-table {
+    border: 0;
   }
   
-  .mobile-responsive-table thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  
-  .mobile-responsive-table tr {
-    border: 1px solid var(--card-border);
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    background-color: var(--surface);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .mobile-responsive-table td {
+  .responsive-table thead {
     border: none;
-    border-bottom: 1px solid var(--card-border);
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .responsive-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--surface);
+  }
+  
+  .responsive-table td {
+    display: block;
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
     position: relative;
     padding-left: 50%;
-    text-align: right;
-    min-height: 30px;
   }
   
-  .mobile-responsive-table td:last-child {
-    border-bottom: none;
+  .responsive-table td:last-child {
+    border-bottom: 0;
   }
   
-  .mobile-responsive-table td:before {
+  .responsive-table td::before {
+    content: attr(data-label);
     position: absolute;
-    left: 12px;
+    left: 1rem;
     width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
     text-align: left;
     font-weight: 600;
-    content: attr(data-label);
+    color: var(--text-secondary);
   }
   
-  /* Gaming styling for the cards */
-  .mobile-responsive-table .rank-1,
-  .mobile-responsive-table .rank-2,
-  .mobile-responsive-table .rank-3 {
-    border-left: 4px solid var(--primary-accent);
+  .responsive-table .cell-action {
+    text-align: center;
+    padding: 0.5rem;
   }
   
-  .mobile-responsive-table .rank-1 {
-    border-color: #ffd700;
+  .responsive-table tr.highlighted-row {
+    border-left: 3px solid var(--primary);
   }
-  
-  .mobile-responsive-table .rank-2 {
-    border-color: #c0c0c0;
-  }
-  
-  .mobile-responsive-table .rank-3 {
-    border-color: #cd7f32;
-  }
-  
-  /* For Rankings page */
-  .leaderboard-table-container .mobile-responsive-table td {
-    display: flex;
-    align-items: center;
-    text-align: left;
-    padding-left: 12px;
-  }
-  
-  .leaderboard-table-container .mobile-responsive-table td:before {
-    position: static;
-    width: 45%;
-    margin-right: auto;
-    content: attr(data-label);
-  }
+}
+
+/* Animation for new rows */
+@keyframes highlightNew {
+  from { background-color: var(--primary-transparent); }
+  to { background-color: transparent; }
+}
+
+.responsive-table tr.new-row {
+  animation: highlightNew 1.5s ease-out;
 }

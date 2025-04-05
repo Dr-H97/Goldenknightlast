@@ -312,26 +312,17 @@ tr:hover {
     max-width: 100%;
     box-sizing: border-box;
   }
-  
+  /* Disable horizontal scrolling for tables on mobile */
   table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
     width: 100%;
     max-width: 100%;
     font-size: 0.9rem;
   }
   
-  /* Ensure buttons do not overflow on small screens */
-  button, .btn-primary, .btn-secondary {
-    white-space: normal;
-    text-align: center;
-    font-size: 0.95rem;
-    padding: 0.7em 1.2em;
+  /* Style all tables to be responsive on mobile */
+  table, thead, tbody, th, td, tr {
+    display: block;
   }
-  
-  /* Better touch targets on mobile */
   td, th, button, .form-control {
     padding: 0.8rem;
   }
@@ -341,6 +332,13 @@ tr:hover {
     padding: 6px !important;
     font-size: 0.75rem !important;
     margin: 2px !important;
+  }
+  
+  /* Override the table display for mobile views */
+  .table-responsive table {
+    display: block;
+    width: 100%;
+    font-size: 0.9rem;
   }
 }
 
