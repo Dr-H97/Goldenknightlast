@@ -299,7 +299,7 @@ const PlayerManagement = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Player Management</h2>
         <button 
-          className="btn-primary"
+          className="btn-admin"
           onClick={() => setShowAddForm(!showAddForm)}
         >
           {showAddForm ? 'Cancel' : 'Add New Player'}
@@ -368,7 +368,7 @@ const PlayerManagement = () => {
               <label htmlFor="isAdmin">Admin Access</label>
             </div>
             
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn-admin">
               Add Player
             </button>
           </form>
@@ -434,10 +434,10 @@ const PlayerManagement = () => {
             </div>
             
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-admin">
                 Save Changes
               </button>
-              <button type="button" className="btn-secondary" onClick={handleCancelEdit}>
+              <button type="button" className="btn-admin" onClick={handleCancelEdit}>
                 Cancel
               </button>
             </div>
@@ -467,7 +467,7 @@ const PlayerManagement = () => {
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button 
                     onClick={() => handleEditPlayer(player)}
-                    className="btn-primary"
+                    className="btn-admin"
                     style={{ padding: '8px 15px' }}
                   >
                     Edit
@@ -756,18 +756,16 @@ const GameManagement = () => {
         
         <div style={{ display: 'flex', gap: '10px' }}>
           <button 
-            className="btn-secondary"
+            className="btn-admin"
             onClick={() => setShowFilterPanel(!showFilterPanel)}
-            style={{ backgroundColor: '#646cff' }}
           >
             {showFilterPanel ? 'Hide Filters' : 'Show Filters'}
           </button>
           
           {(filters.dateRange || filters.specificDate || filters.playerFilter) && (
             <button 
-              className="btn-secondary"
+              className="btn-admin"
               onClick={resetFilters}
-              style={{ backgroundColor: '#868e96' }}
             >
               Clear Filters
             </button>
@@ -829,7 +827,7 @@ const GameManagement = () => {
           </div>
           
           <div>
-            <button className="btn-primary" onClick={resetFilters}>
+            <button className="btn-admin" onClick={resetFilters}>
               Reset All Filters
             </button>
           </div>
@@ -888,10 +886,10 @@ const GameManagement = () => {
             </div>
             
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-admin">
                 Save Changes
               </button>
-              <button type="button" className="btn-secondary" onClick={handleCancelEdit}>
+              <button type="button" className="btn-admin" onClick={handleCancelEdit}>
                 Cancel
               </button>
             </div>
@@ -928,7 +926,7 @@ const GameManagement = () => {
                 <td style={{ display: 'flex', gap: '5px' }}>
                   <button 
                     onClick={() => handleEditGame(game)}
-                    className="btn-primary"
+                    className="btn-admin"
                     style={{ padding: '5px 10px' }}
                   >
                     Edit

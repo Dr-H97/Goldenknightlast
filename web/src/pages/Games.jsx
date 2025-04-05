@@ -231,7 +231,7 @@ const Games = () => {
           
           <button 
             onClick={resetFilters}
-            className="btn-secondary chess-piece-hover"
+            className="btn-games chess-piece-hover"
           >
             {t('reset') || 'Reset'}
           </button>
