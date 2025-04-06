@@ -77,48 +77,46 @@ const GamesIcon = ({ active }) => (
 
 const SubmitGameIcon = ({ active }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Background for depth */}
-    <circle cx="12" cy="12" r="10" 
-      fill={active ? "rgba(201, 169, 106, 0.05)" : "rgba(200, 200, 200, 0.05)"} />
-    
-    {/* King chess piece - Crown */}
-    <path d="M12 3L12 6" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.5" 
-      strokeLinecap="round" />
-    
-    <path d="M9.5 4.5H14.5" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.5" 
-      strokeLinecap="round" />
-    
-    {/* King body with more elegant design */}
-    <path d="M9 19c0-2 0.5-3.5 1-4.5C9 13.5 8 12.5 8 11c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.5-1 2.5-2 3.5c0.5 1 1 2.5 1 4.5" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.5" 
-      strokeLinecap="round"
-      fill={active ? "rgba(201, 169, 106, 0.1)" : "transparent"} />
-    
-    {/* Base with shadow effect */}
-    <path d="M7.5 19h9" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.5" 
-      strokeLinecap="round" />
-    
-    <path d="M8 20.5h8" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.5" 
-      strokeLinecap="round" />
-    
-    {/* Elegant plus sign with highlight effect */}
-    <circle cx="18" cy="7" r="4" 
-      fill={active ? "rgba(201, 169, 106, 0.3)" : "rgba(200, 200, 200, 0.15)"} 
+    {/* Elegant chess board base */}
+    <rect x="4" y="15" width="16" height="6" rx="1" 
+      fill={active ? "rgba(201, 169, 106, 0.15)" : "rgba(200, 200, 200, 0.1)"} 
       stroke={active ? "var(--primary)" : "currentColor"} 
       strokeWidth="0.75" />
     
-    <path d="M18 5v4M16 7h4" 
+    {/* Chess knight - classic piece for submission */}
+    <path d="M8 15C8 11 9 9 10 8.5C10 8 10 7 10 6C7 6 6 11 6 13C6 14 7 15 8 15Z" 
+      fill={active ? "var(--primary)" : "currentColor"} 
+      fillOpacity="0.9" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="0.75" />
+      
+    <path d="M9.5 8.5C10 8 11 7.5 12 7.5C15 7.5 16 10 16 13C16 14 15 15 14 15" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.25"
+      strokeLinecap="round" />
+      
+    <path d="M10 6C10 5 10.5 4 12 3C13.5 4 14 5 14 6C14 7.5 13 8.5 12 8.5C11 8.5 10 7.5 10 6Z" 
+      fill={active ? "rgba(201, 169, 106, 0.5)" : "rgba(200, 200, 200, 0.3)"} 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="0.75" />
+      
+    {/* Movement indicators */}
+    <path d="M10 12L14 12" 
       stroke={active ? "var(--primary)" : "currentColor"} 
       strokeWidth="1.5" 
+      strokeLinecap="round"
+      strokeDasharray="1 1" />
+      
+    {/* Chess timer/clock suggestion */}
+    <circle cx="18" cy="6" r="3" 
+      fill={active ? "rgba(201, 169, 106, 0.2)" : "rgba(200, 200, 200, 0.15)"} 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="0.75" />
+      
+    {/* Clock hands */}
+    <path d="M18 4v2h1.5" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="0.75" 
       strokeLinecap="round" />
   </svg>
 );
