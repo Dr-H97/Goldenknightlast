@@ -57,33 +57,33 @@ const Login = () => {
       <div className="card" style={{ marginBottom: '20px', flex: '1' }}>
         <div className="logo-container" style={{ textAlign: 'center', marginBottom: '25px' }}>
           {language === 'fr' ? (
-            // French animated logo
+            // French elegant animated logo
             theme === 'dark' ? (
               <img 
-                src="/images/animated-cavalier-logo-dark.svg" 
+                src="/images/elegant-cavalier-logo-dark.svg" 
                 alt="Le Cavalier d'Or Logo" 
-                style={{ maxWidth: '280px', margin: '0 auto 10px' }}
+                style={{ maxWidth: '320px', margin: '0 auto 10px' }}
               />
             ) : (
               <img 
-                src="/images/animated-cavalier-logo-light.svg" 
+                src="/images/elegant-cavalier-logo-light.svg" 
                 alt="Le Cavalier d'Or Logo" 
-                style={{ maxWidth: '280px', margin: '0 auto 10px' }}
+                style={{ maxWidth: '320px', margin: '0 auto 10px' }}
               />
             )
           ) : (
-            // English animated logo
+            // English elegant animated logo
             theme === 'dark' ? (
               <img 
-                src="/images/animated-knight-logo-dark.svg" 
+                src="/images/elegant-knight-logo-dark.svg" 
                 alt="The Golden Knight Chess Club Logo" 
-                style={{ maxWidth: '280px', margin: '0 auto 10px' }}
+                style={{ maxWidth: '320px', margin: '0 auto 10px' }}
               />
             ) : (
               <img 
-                src="/images/animated-knight-logo-light.svg" 
+                src="/images/elegant-knight-logo-light.svg" 
                 alt="The Golden Knight Chess Club Logo" 
-                style={{ maxWidth: '280px', margin: '0 auto 10px' }}
+                style={{ maxWidth: '320px', margin: '0 auto 10px' }}
               />
             )
           )}
