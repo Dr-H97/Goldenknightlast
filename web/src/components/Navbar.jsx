@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import WebSocketStatus from './WebSocketStatus';
+import '../styles/navbar.css';
 
 // SVG Icons for the navbar
 const ChessLogo = () => (

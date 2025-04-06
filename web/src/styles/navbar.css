@@ -1,0 +1,105 @@
+/* Navbar styling */
+.app-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-navbar-logo h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.app-navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Added proper spacing between links */
+}
+
+.app-navbar-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.25rem 0.5rem; /* Added padding for better click targets */
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.app-navbar-links a:hover {
+  color: var(--nav-active);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.app-navbar-links a.active {
+  color: var(--nav-active);
+  font-weight: 600;
+}
+
+.app-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-navbar-user {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  box-shadow: none;
+}
+
+.theme-toggle:hover {
+  background: none;
+  box-shadow: none;
+}
+
+.app-navbar-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+.app-navbar-menu-toggle:hover {
+  background: none;
+  box-shadow: none;
+}
+
+.app-navbar-ws-status {
+  font-size: 0.75rem;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .app-navbar {
+    display: none; /* Hide on mobile as we use MobileNav instead */
+  }
+}

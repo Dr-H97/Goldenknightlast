@@ -289,7 +289,7 @@ const Rankings = () => {
       </div>
       
       {/* Floating Action Button for Game Submission */}
-      <Link to="/submit" className="leaderboard-fab" title="Submit a game">
+      <Link to="/submit-game" className="leaderboard-fab" title="Submit a game">
         <span style={{ fontSize: '24px' }}>+</span>
       </Link>
     </div>
