@@ -258,21 +258,21 @@ const Games = () => {
         </div>
       </div>
       
-      <div className="card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s' }}>
+      <div className="card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s', marginBottom: '40px' }}>
         <div style={{ textAlign: 'right', marginBottom: '10px' }}>
           <small>{t('totalGames') || 'Total Games'}: {games.length}</small>
         </div>
         
         <div className="table-responsive mobile-responsive-table">
-          <table>
+          <table style={{ tableLayout: 'fixed', width: '100%' }}>
             <thead>
               <tr>
-                <th>{t('date') || 'Date'}</th>
-                <th>{t('white') || 'White'}</th>
-                <th>{t('black') || 'Black'}</th>
-                <th>{t('result') || 'Result'}</th>
+                <th style={{ width: '30%' }}>{t('date') || 'Date'}</th>
+                <th style={{ width: '20%' }}>{t('white') || 'White'}</th>
+                <th style={{ width: '20%' }}>{t('black') || 'Black'}</th>
+                <th style={{ width: '15%' }}>{t('result') || 'Result'}</th>
                 {selectedPlayer !== 'all' && (
-                  <th>{t('eloChange') || 'ELO Change'}</th>
+                  <th style={{ width: '15%' }}>{t('eloChange') || 'ELO Change'}</th>
                 )}
               </tr>
             </thead>

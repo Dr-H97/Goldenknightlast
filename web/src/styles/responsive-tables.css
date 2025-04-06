@@ -1,5 +1,25 @@
 /* Responsive Tables for Mobile View */
 
+/* Desktop table fixes */
+@media (min-width: 769px) {
+  /* Fix for horizontal overflow in Games table */
+  .table-responsive {
+    overflow-x: hidden;
+  }
+
+  /* Ensure games table stays within container bounds */
+  .table-responsive table {
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 20px;
+  }
+  
+  /* Fix the last game being cut off in the Games table */
+  .card {
+    margin-bottom: 40px;
+  }
+}
+
 @media (max-width: 768px) {
   /* Convert tables to cards on mobile */
   .mobile-responsive-table table, 
