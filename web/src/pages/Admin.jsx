@@ -907,7 +907,6 @@ const GameManagement = () => {
               <th>Black</th>
               <th>Result</th>
               <th>ELO Changes</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -922,7 +921,6 @@ const GameManagement = () => {
                   {game.whitePlayer?.name}: {game.whiteEloChange > 0 ? '+' : ''}{game.whiteEloChange}<br />
                   {game.blackPlayer?.name}: {game.blackEloChange > 0 ? '+' : ''}{game.blackEloChange}
                 </td>
-                <td>Verified</td>
                 <td style={{ display: 'flex', gap: '5px' }}>
                   <button 
                     onClick={() => handleEditGame(game)}
