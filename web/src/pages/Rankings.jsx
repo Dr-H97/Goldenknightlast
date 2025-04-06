@@ -5,10 +5,7 @@ import '../styles/animations.css';
 import '../styles/leaderboard.css';
 import '../styles/responsive-tables.css';
 import logo from '../assets/logo.svg';
-import kingIcon from '../assets/chess-king.svg';
-import queenIcon from '../assets/chess-queen.svg';
-import knightIcon from '../assets/chess-knight.svg';
-import plusCircleIcon from '../assets/plus-circle.svg';
+// Chess piece icons removed (unused)
 
 const getInitials = (name) => {
   return name
@@ -261,9 +258,7 @@ const Rankings = () => {
         )}
       </div>
       
-      <Link to="/submit-game" className="submit-game-button">
-        <img src={plusCircleIcon} alt="Submit Game" />
-      </Link>
+      {/* Submit game button removed */}
     </div>
   );
 };
