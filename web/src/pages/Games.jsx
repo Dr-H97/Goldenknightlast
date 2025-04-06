@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import '../styles/animations.css';
 import '../styles/responsive-tables.css';
+import '../styles/gamespage-fix.css';
 
 const Games = () => {
   const { currentUser } = useAuth();
@@ -199,95 +200,111 @@ const Games = () => {
   }
   
   return (
-    <div className="container">
-      <h1 className="fade-in">{t('allGames') || 'All Games'}</h1>
-      
-      <div className="card slide-up" style={{ marginBottom: '20px' }}>
-        <h3>{t('filterOptions') || 'Filter Options'}</h3>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '15px'
-        }}>
+    <div className="container" style={{ paddingBottom: '100px' }}>
+      <div style={{ marginBottom: '100px' }}>
+        <h1 className="fade-in">{t('allGames') || 'All Games'}</h1>
+        
+        <div className="card slide-up" style={{ marginBottom: '20px' }}>
+          <h3>{t('filterOptions') || 'Filter Options'}</h3>
           <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            display: 'flex', 
+            flexDirection: 'column', 
             gap: '15px'
           }}>
-            <div>
-              <label htmlFor="timeRange">{t('timeRange') || 'Time Period'}: </label>
-              <select 
-                id="timeRange" 
-                className="form-control"
-                value={timeFilter}
-                onChange={handleTimeFilterChange}
-                style={{ width: '100%' }}
-              >
-                <option value="all">{t('allTime') || 'All Time'}</option>
-                <option value="last-week">{t('lastWeek') || 'Last Week'}</option>
-                <option value="last-month">{t('lastMonth') || 'Last Month'}</option>
-                <option value="last-year">{t('lastYear') || 'Last Year'}</option>
-              </select>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+              gap: '15px'
+            }}>
+              <div>
+                <label htmlFor="timeRange">{t('timeRange') || 'Time Period'}: </label>
+                <select 
+                  id="timeRange" 
+                  className="form-control"
+                  value={timeFilter}
+                  onChange={handleTimeFilterChange}
+                  style={{ width: '100%' }}
+                >
+                  <option value="all">{t('allTime') || 'All Time'}</option>
+                  <option value="last-week">{t('lastWeek') || 'Last Week'}</option>
+                  <option value="last-month">{t('lastMonth') || 'Last Month'}</option>
+                  <option value="last-year">{t('lastYear') || 'Last Year'}</option>
+                </select>
+              </div>
+              
+              <div>
+                <label htmlFor="playerFilter">{t('player') || 'Player'}: </label>
+                <select 
+                  id="playerFilter" 
+                  className="form-control"
+                  value={selectedPlayer}
+                  onChange={handlePlayerChange}
+                  style={{ width: '100%' }}
+                >
+                  <option value="all">{t('allPlayers') || 'All Players'}</option>
+                  {players.map(player => (
+                    <option key={player.id} value={player.id}>{player.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             
-            <div>
-              <label htmlFor="playerFilter">{t('player') || 'Player'}: </label>
-              <select 
-                id="playerFilter" 
-                className="form-control"
-                value={selectedPlayer}
-                onChange={handlePlayerChange}
-                style={{ width: '100%' }}
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button 
+                onClick={resetFilters}
+                className="btn-games chess-piece-hover"
               >
-                <option value="all">{t('allPlayers') || 'All Players'}</option>
-                {players.map(player => (
-                  <option key={player.id} value={player.id}>{player.name}</option>
-                ))}
-              </select>
+                {t('reset') || 'Reset'}
+              </button>
             </div>
           </div>
-          
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button 
-              onClick={resetFilters}
-              className="btn-games chess-piece-hover"
-            >
-              {t('reset') || 'Reset'}
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      <div className="card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s', marginBottom: '40px' }}>
-        <div style={{ textAlign: 'right', marginBottom: '10px' }}>
-          <small>{t('totalGames') || 'Total Games'}: {games.length}</small>
         </div>
         
-        <div className="table-responsive mobile-responsive-table">
-          <table style={{ tableLayout: 'fixed', width: '100%' }}>
-            <thead>
-              <tr>
-                <th style={{ width: '30%' }}>{t('date') || 'Date'}</th>
-                <th style={{ width: '20%' }}>{t('white') || 'White'}</th>
-                <th style={{ width: '20%' }}>{t('black') || 'Black'}</th>
-                <th style={{ width: '15%' }}>{t('result') || 'Result'}</th>
-                {selectedPlayer !== 'all' && (
-                  <th style={{ width: '15%' }}>{t('eloChange') || 'ELO Change'}</th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {games.map((game) => (
-                <tr key={game.id} className="staggered-item">
-                  <td data-label={t('date') || 'Date'}>{formatDate(game.date)}</td>
-                  <td data-label={t('white') || 'White'}>{getPlayerName(game.whitePlayerId)}</td>
-                  <td data-label={t('black') || 'Black'}>{getPlayerName(game.blackPlayerId)}</td>
-                  <td data-label={t('result') || 'Result'}>{renderPlayerResult(game)}</td>
+        <div className="card slide-up" style={{ marginTop: '20px', animationDelay: '0.2s', marginBottom: '100px' }}>
+          <div style={{ textAlign: 'right', marginBottom: '10px' }}>
+            <small>{t('totalGames') || 'Total Games'}: {games.length}</small>
+          </div>
+          
+          <div className="table-responsive mobile-responsive-table" style={{ overflow: 'visible' }}>
+            <table style={{ tableLayout: 'fixed', width: '100%', marginBottom: '50px' }}>
+              <thead>
+                <tr>
+                  <th style={{ width: '30%' }}>{t('date') || 'Date'}</th>
+                  <th style={{ width: '20%' }}>{t('white') || 'White'}</th>
+                  <th style={{ width: '20%' }}>{t('black') || 'Black'}</th>
+                  <th style={{ width: '15%' }}>{t('result') || 'Result'}</th>
                   {selectedPlayer !== 'all' && (
-                    <td 
-                      data-label={t('eloChange') || 'ELO Change'}
-                      style={{ 
-                        color: (() => {
+                    <th style={{ width: '15%' }}>{t('eloChange') || 'ELO Change'}</th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {games.map((game) => (
+                  <tr key={game.id} className="staggered-item">
+                    <td data-label={t('date') || 'Date'}>{formatDate(game.date)}</td>
+                    <td data-label={t('white') || 'White'}>{getPlayerName(game.whitePlayerId)}</td>
+                    <td data-label={t('black') || 'Black'}>{getPlayerName(game.blackPlayerId)}</td>
+                    <td data-label={t('result') || 'Result'}>{renderPlayerResult(game)}</td>
+                    {selectedPlayer !== 'all' && (
+                      <td 
+                        data-label={t('eloChange') || 'ELO Change'}
+                        style={{ 
+                          color: (() => {
+                            const playerId = parseInt(selectedPlayer);
+                            const eloChange = game.whitePlayerId === playerId 
+                              ? game.whiteEloChange 
+                              : game.blackPlayerId === playerId 
+                                ? game.blackEloChange 
+                                : 0;
+                                
+                            return eloChange > 0 
+                              ? '#51cf66' 
+                              : eloChange < 0 
+                                ? '#ff6b6b' 
+                                : 'inherit';
+                          })()
+                        }}>
+                        {(() => {
                           const playerId = parseInt(selectedPlayer);
                           const eloChange = game.whitePlayerId === playerId 
                             ? game.whiteEloChange 
@@ -295,34 +312,23 @@ const Games = () => {
                               ? game.blackEloChange 
                               : 0;
                               
-                          return eloChange > 0 
-                            ? '#51cf66' 
-                            : eloChange < 0 
-                              ? '#ff6b6b' 
-                              : 'inherit';
-                        })()
-                      }}>
-                      {(() => {
-                        const playerId = parseInt(selectedPlayer);
-                        const eloChange = game.whitePlayerId === playerId 
-                          ? game.whiteEloChange 
-                          : game.blackPlayerId === playerId 
-                            ? game.blackEloChange 
-                            : 0;
-                            
-                        return eloChange > 0 ? `+${eloChange}` : eloChange;
-                      })()}
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                          return eloChange > 0 ? `+${eloChange}` : eloChange;
+                        })()}
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          {games.length === 0 && (
+            <p className="text-center">{t('noGamesFound') || 'No games found with the selected filters.'}</p>
+          )}
         </div>
         
-        {games.length === 0 && (
-          <p className="text-center">{t('noGamesFound') || 'No games found with the selected filters.'}</p>
-        )}
+        {/* Empty div to provide extra scroll space */}
+        <div style={{ height: '100px' }}></div>
       </div>
     </div>
   );
