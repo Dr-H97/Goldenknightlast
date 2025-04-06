@@ -131,6 +131,7 @@ const Games = () => {
   const resetFilters = () => {
     setTimeFilter('all');
     setSelectedPlayer('all');
+    console.log('Filters reset');
   };
   
   // Function to format the date with time
@@ -210,9 +211,9 @@ const Games = () => {
                 style={{ minWidth: '180px' }}
               >
                 <option value="all">{t('allTime') || 'All Time'}</option>
-                <option value="week">{t('lastWeek') || 'Last Week'}</option>
-                <option value="month">{t('lastMonth') || 'Last Month'}</option>
-                <option value="year">{t('lastYear') || 'Last Year'}</option>
+                <option value="last-week">{t('lastWeek') || 'Last Week'}</option>
+                <option value="last-month">{t('lastMonth') || 'Last Month'}</option>
+                <option value="last-year">{t('lastYear') || 'Last Year'}</option>
               </select>
             </div>
             

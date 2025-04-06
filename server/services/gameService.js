@@ -20,20 +20,25 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dat
       const today = new Date();
       let startDate;
       
-      if (dateRange === 'week') {
+      console.log(`Filtering by dateRange: "${dateRange}"`);
+      
+      if (dateRange === 'week' || dateRange === 'last-week') {
         // Last 7 days
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 7);
+        console.log(`Date filter: ${startDate.toISOString()} to now`);
         conditions.push(games.date >= startDate);
-      } else if (dateRange === 'month') {
+      } else if (dateRange === 'month' || dateRange === 'last-month') {
         // Last 30 days
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 30);
+        console.log(`Date filter: ${startDate.toISOString()} to now`);
         conditions.push(games.date >= startDate);
-      } else if (dateRange === 'year') {
+      } else if (dateRange === 'year' || dateRange === 'last-year') {
         // Last 365 days
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 365);
+        console.log(`Date filter: ${startDate.toISOString()} to now`);
         conditions.push(games.date >= startDate);
       }
     }
