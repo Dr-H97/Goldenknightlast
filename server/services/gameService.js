@@ -27,6 +27,23 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dat
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 7);
         console.log(`Date filter: ${startDate.toISOString()} to now`);
+        console.log(`SQL date comparison: games.date >= ${startDate.toISOString()}`);
+        
+        // Debug current date and time for reference
+        console.log(`Current time: ${today.toISOString()}`);
+        
+        // List all games for debugging
+        db.select({
+          id: games.id,
+          date: games.date,
+          whiteId: games.whitePlayerId,
+          blackId: games.blackPlayerId,
+          result: games.result
+        }).from(games).orderBy(desc(games.date)).then(allGames => {
+          console.log('All game dates:');
+          allGames.forEach(g => console.log(`Game ${g.id}: ${g.date.toISOString()}`));
+        });
+        
         conditions.push(games.date >= startDate);
       } else if (dateRange === 'month' || dateRange === 'last-month') {
         // Last 30 days

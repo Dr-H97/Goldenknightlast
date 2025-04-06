@@ -42,6 +42,9 @@ router.get('/', async (req, res) => {
       toDate
     } = req.query;
     
+    console.log('Game route request with query params:', req.query);
+    console.log('Date range filter:', dateRange);
+    
     let games;
     if (playerId) {
       // If playerId is provided, get games for that player
