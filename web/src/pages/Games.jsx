@@ -54,6 +54,8 @@ const Games = () => {
       
       // Add time filter
       if (timeFilter !== 'all') {
+        // Log to debug filter value
+        console.log(`Applying date filter: ${timeFilter}`);
         params.append('dateRange', timeFilter);
       }
       
@@ -62,7 +64,10 @@ const Games = () => {
         params.append('playerId', selectedPlayer);
       }
       
-      const response = await fetch(`/api/games?${params.toString()}`, {
+      const queryString = params.toString();
+      console.log(`Fetching games with query: ${queryString}`);
+      
+      const response = await fetch(`/api/games?${queryString}`, {
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'no-cache'

@@ -1,6 +1,6 @@
 const { db } = require('../db');
 const { games, players } = require('../schema');
-const { eq, and, desc, asc, or } = require('drizzle-orm');
+const { eq, and, desc, asc, or, gte, lte } = require('drizzle-orm');
 const { calculateNewRatings } = require('../utils/eloCalculator');
 
 /**
@@ -27,36 +27,46 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dat
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 7);
         console.log(`Date filter: ${startDate.toISOString()} to now`);
-        console.log(`SQL date comparison: games.date >= ${startDate.toISOString()}`);
-        
-        // Debug current date and time for reference
-        console.log(`Current time: ${today.toISOString()}`);
         
         // List all games for debugging
-        db.select({
+        const allGames = await db.select({
           id: games.id,
           date: games.date,
           whiteId: games.whitePlayerId,
           blackId: games.blackPlayerId,
           result: games.result
-        }).from(games).orderBy(desc(games.date)).then(allGames => {
-          console.log('All game dates:');
-          allGames.forEach(g => console.log(`Game ${g.id}: ${g.date.toISOString()}`));
-        });
+        }).from(games).orderBy(desc(games.date));
         
-        conditions.push(games.date >= startDate);
+        console.log('All game dates:');
+        allGames.forEach(g => console.log(`Game ${g.id}: ${g.date.toISOString()}`));
+        
+        // Test date comparison with a couple of games
+        if (allGames.length > 0) {
+          const firstGame = allGames[0];
+          console.log(`Testing date comparison for Game ${firstGame.id}:`);
+          console.log(`  Game date: ${firstGame.date.toISOString()}`);
+          console.log(`  Filter date: ${startDate.toISOString()}`);
+          console.log(`  firstGame.date >= startDate: ${firstGame.date >= startDate}`);
+          console.log(`  firstGame.date > startDate: ${firstGame.date > startDate}`);
+        }
+        
+        // Add the date condition - Use gte instead of >= for better compatibility with Drizzle
+        console.log(`Using gte() function for date comparison instead of direct >= operator`);
+        conditions.push(gte(games.date, startDate));
       } else if (dateRange === 'month' || dateRange === 'last-month') {
         // Last 30 days
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 30);
         console.log(`Date filter: ${startDate.toISOString()} to now`);
-        conditions.push(games.date >= startDate);
+        // Use gte instead of >=
+        conditions.push(gte(games.date, startDate));
       } else if (dateRange === 'year' || dateRange === 'last-year') {
         // Last 365 days
         startDate = new Date(today);
         startDate.setDate(startDate.getDate() - 365);
         console.log(`Date filter: ${startDate.toISOString()} to now`);
-        conditions.push(games.date >= startDate);
+        // Use gte instead of >=
+        conditions.push(gte(games.date, startDate));
       }
     }
     
@@ -71,9 +81,9 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dat
         const endDate = new Date(date);
         endDate.setHours(23, 59, 59, 999);
         
-        // Between start of day and end of day
-        conditions.push(games.date >= date);
-        conditions.push(games.date <= endDate);
+        // Between start of day and end of day - use gte and lte
+        conditions.push(gte(games.date, date));
+        conditions.push(lte(games.date, endDate));
       } catch (e) {
         console.error('Invalid date format for specificDate:', e);
       }
@@ -83,7 +93,7 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dat
     if (fromDate) {
       try {
         const date = new Date(fromDate);
-        conditions.push(games.date >= date);
+        conditions.push(gte(games.date, date));
       } catch (e) {
         console.error('Invalid date format for fromDate:', e);
       }
@@ -93,7 +103,7 @@ const getAllGames = async (sortBy = 'date', order = 'desc', verified = null, dat
     if (toDate) {
       try {
         const date = new Date(toDate);
-        conditions.push(games.date <= date);
+        conditions.push(lte(games.date, date));
       } catch (e) {
         console.error('Invalid date format for toDate:', e);
       }
