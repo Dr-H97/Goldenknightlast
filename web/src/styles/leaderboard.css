@@ -10,7 +10,7 @@
 .leaderboard-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem 4rem; /* Added bottom padding to ensure content doesn't get cut off */
+  padding: 0 1rem 4rem; /* Added padding to prevent cut-off */
   background-color: #1e1e1e;
   min-height: 100vh;
   overflow-x: hidden; /* Prevent horizontal scrolling */
@@ -58,8 +58,6 @@
 .leaderboard-card-container {
   position: relative;
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem; /* Add extra space at the bottom to account for card transformations */
-  overflow: visible; /* Ensure transformed elements don't get cut off */
 }
 
 /* Card Stack Effect */
@@ -70,16 +68,15 @@
   margin-bottom: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border: 1px solid #3a3a3a;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
   cursor: pointer;
 }
 
 .leaderboard-player-card:hover {
-  transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  z-index: 10; /* Ensure card appears above other cards when hovered */
+  /* No transform to prevent overlap issues */
 }
 
 /* Card Background Shine Animation */
@@ -255,23 +252,7 @@
   color: var(--text-primary);
   border: 2px solid var(--primary-accent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  animation: pulse-subtle 2s infinite ease-in-out;
-}
-
-@keyframes pulse-subtle {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
+  /* Removed the subtle pulse animation that could interact with other effects */
 }
 
 .rank-1 .player-avatar {
@@ -477,13 +458,7 @@
 
 .filter-button:hover {
   background-color: var(--primary-accent-hover);
-  transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.filter-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .total-players {

@@ -16,10 +16,10 @@ const getInitials = (name) => {
 };
 
 const getRankClass = (index) => {
-  if (index === 0) return 'rank-1 champion-card';
+  if (index === 0) return 'rank-1';
   if (index === 1) return 'rank-2';
   if (index === 2) return 'rank-3';
-  return 'card-hover-lift';
+  return '';
 };
 
 const getRankBadge = (index) => {
