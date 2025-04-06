@@ -17,6 +17,7 @@ const SubmitGame = () => {
     blackPlayerId: '',
     result: '',
     date: new Date().toISOString().split('T')[0],
+    time: new Date().toTimeString().split(' ')[0].substring(0, 5), // Current time in HH:MM format
     whitePlayerPin: '',
     blackPlayerPin: ''
   });
@@ -130,8 +131,9 @@ const SubmitGame = () => {
         return;
       }
       
-      // Format the date as a proper date string
-      const formattedDate = new Date(formData.date).toISOString();
+      // Format the date with time as a proper date string
+      const dateWithTime = `${formData.date}T${formData.time}:00`;
+      const formattedDate = new Date(dateWithTime).toISOString();
       
       // Submit the game
       const response = await fetch('/api/games', {
@@ -159,6 +161,7 @@ const SubmitGame = () => {
           blackPlayerId: '',
           result: '',
           date: new Date().toISOString().split('T')[0],
+          time: new Date().toTimeString().split(' ')[0].substring(0, 5), // Reset to current time
           whitePlayerPin: '',
           blackPlayerPin: ''
         });
@@ -270,6 +273,19 @@ const SubmitGame = () => {
               value={formData.date}
               onChange={handleInputChange}
               max={new Date().toISOString().split('T')[0]}
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="time">Time</label>
+            <input
+              type="time"
+              id="time"
+              name="time"
+              className="form-control form-control-animate"
+              value={formData.time}
+              onChange={handleInputChange}
               required
             />
           </div>
