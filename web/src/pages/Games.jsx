@@ -133,10 +133,10 @@ const Games = () => {
     setSelectedPlayer('all');
   };
   
-  // Function to format the date without time
+  // Function to format the date with time
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
   };
   
   // Function to get player name by ID
