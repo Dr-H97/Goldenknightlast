@@ -1,0 +1,67 @@
+<svg width="500" height="600" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="600" fill="#F9F7F0"/>
+  
+  <!-- Stylized Chess Knight with Animation -->
+  <g transform="translate(150, 80) scale(1.3)">
+    <!-- Main Knight Shape with Animation -->
+    <path d="M115 200
+           C100 190, 85 180, 80 165
+           C75 150, 70 135, 75 120
+           C80 105, 90 95, 100 85
+           C110 75, 115 70, 120 60
+           C125 50, 125 45, 120 40
+           C115 35, 105 35, 95 40
+           C90 43, 85 46, 82 50
+           
+           C87 48, 94 47, 98 50
+           C102 53, 103 58, 100 65
+           C97 72, 92 77, 85 80
+           
+           C80 90, 70 100, 65 115
+           C60 130, 60 145, 65 160
+           C70 175, 80 185, 90 190
+           L115 200Z"
+         stroke="#C9A96A" stroke-width="3" fill="none">
+      <animate attributeName="stroke-width" values="3;4;3" dur="2s" repeatCount="indefinite" />
+      <animate attributeName="stroke" values="#C9A96A;#D6B26D;#C9A96A" dur="2s" repeatCount="indefinite" />
+    </path>
+    
+    <!-- Mane Details with Animation -->
+    <path d="M95 45
+             C90 40, 88 35, 90 30
+             C92 25, 97 22, 105 25"
+          stroke="#C9A96A" stroke-width="2.5" fill="none">
+      <animate attributeName="stroke-width" values="2.5;3.5;2.5" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="stroke" values="#C9A96A;#D6B26D;#C9A96A" dur="3s" repeatCount="indefinite" />
+    </path>
+    
+    <path d="M120 60
+             C130 50, 140 45, 150 50
+             C145 60, 135 65, 125 65"
+          stroke="#C9A96A" stroke-width="2.5" fill="none">
+      <animate attributeName="stroke-width" values="2.5;3.5;2.5" dur="2.5s" repeatCount="indefinite" />
+      <animate attributeName="stroke" values="#C9A96A;#D6B26D;#C9A96A" dur="2.5s" repeatCount="indefinite" />
+    </path>
+    
+    <!-- Base Line with Animation -->
+    <line x1="75" y1="200" x2="155" y2="200" stroke="#C9A96A" stroke-width="3">
+      <animate attributeName="stroke-width" values="3;4;3" dur="2s" repeatCount="indefinite" />
+      <animate attributeName="stroke" values="#C9A96A;#D6B26D;#C9A96A" dur="2s" repeatCount="indefinite" />
+    </line>
+    
+    <!-- Eye Detail with Animation -->
+    <path d="M95 75 Q98 73, 100 75" stroke="#C9A96A" stroke-width="1.5" fill="none">
+      <animate attributeName="stroke-width" values="1.5;2.5;1.5" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="stroke" values="#C9A96A;#D6B26D;#C9A96A" dur="3s" repeatCount="indefinite" />
+    </path>
+  </g>
+  
+  <!-- Text "LE" -->
+  <text x="250" y="380" fill="#1A1A1A" font-family="Arial, sans-serif" font-size="40" font-weight="600" text-anchor="middle">LE</text>
+  
+  <!-- Text "CAVALIER D'OR" -->
+  <text x="250" y="440" fill="#1A1A1A" font-family="Arial, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">CAVALIER D'OR</text>
+  
+  <!-- Text "CLUB D'ÉCHECS" -->
+  <text x="250" y="500" fill="#1A1A1A" font-family="Arial, sans-serif" font-size="40" font-weight="600" text-anchor="middle">CLUB D'ÉCHECS</text>
+</svg>

@@ -57,31 +57,31 @@ const Login = () => {
       <div className="card" style={{ marginBottom: '20px', flex: '1' }}>
         <div className="logo-container" style={{ textAlign: 'center', marginBottom: '25px' }}>
           {language === 'fr' ? (
-            // French logo
+            // French animated logo
             theme === 'dark' ? (
               <img 
-                src="/images/cavalier-d-or-logo-dark.svg" 
+                src="/images/animated-cavalier-logo-dark.svg" 
                 alt="Le Cavalier d'Or Logo" 
                 style={{ maxWidth: '280px', margin: '0 auto 10px' }}
               />
             ) : (
               <img 
-                src="/images/cavalier-d-or-logo-light.svg" 
+                src="/images/animated-cavalier-logo-light.svg" 
                 alt="Le Cavalier d'Or Logo" 
                 style={{ maxWidth: '280px', margin: '0 auto 10px' }}
               />
             )
           ) : (
-            // English logo
+            // English animated logo
             theme === 'dark' ? (
               <img 
-                src="/images/golden-knight-logo-dark.svg" 
+                src="/images/animated-knight-logo-dark.svg" 
                 alt="The Golden Knight Chess Club Logo" 
                 style={{ maxWidth: '280px', margin: '0 auto 10px' }}
               />
             ) : (
               <img 
-                src="/images/golden-knight-logo-light.svg" 
+                src="/images/animated-knight-logo-light.svg" 
                 alt="The Golden Knight Chess Club Logo" 
                 style={{ maxWidth: '280px', margin: '0 auto 10px' }}
               />
