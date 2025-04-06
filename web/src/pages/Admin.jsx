@@ -683,7 +683,6 @@ const GameManagement = () => {
     
     setEditingGame({
       result: game.result,
-      verified: game.verified,
       date: formattedDate
     });
   };
@@ -870,19 +869,10 @@ const GameManagement = () => {
               />
             </div>
             
-            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <input
-                type="checkbox"
-                id="editVerified"
-                name="verified"
-                checked={editingGame.verified}
-                onChange={handleEditingGameChange}
-              />
-              <label htmlFor="editVerified">Verified</label>
-            </div>
+            {/* Verification checkbox removed */}
             
             <div className="form-message">
-              <p><strong>Note:</strong> Changing the result of a verified game will recalculate ELO ratings.</p>
+              <p><strong>Note:</strong> Changing the result of a game will recalculate ELO ratings.</p>
             </div>
             
             <div style={{ display: 'flex', gap: '10px' }}>
