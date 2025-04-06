@@ -41,39 +41,85 @@ const RankingsIcon = ({ active }) => (
 
 const GamesIcon = ({ active }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Chess board with pieces */}
-    <path d="M4 4h16v16H4V4z" 
-      fill={active ? "rgba(201, 169, 106, 0.2)" : "rgba(200, 200, 200, 0.1)"} />
+    {/* Chess board base with elegant border */}
+    <rect x="3" y="3" width="18" height="18" rx="2" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5"
+      fill={active ? "rgba(201, 169, 106, 0.1)" : "rgba(200, 200, 200, 0.05)"} />
     
-    {/* Board grid lines */}
-    <path d="M8 4v16M12 4v16M16 4v16M4 8h16M4 12h16M4 16h16" 
-      stroke={active ? "var(--primary)" : "currentColor"} strokeWidth="0.5" />
+    {/* Alternating chess board pattern */}
+    <path d="M5 5h4v4H5zM13 5h4v4h-4zM5 13h4v4H5zM13 13h4v4h-4z" 
+      fill={active ? "rgba(201, 169, 106, 0.25)" : "rgba(200, 200, 200, 0.15)"} />
+    <path d="M9 9h4v4H9zM17 9h2v4h-2zM9 17h4v2H9zM17 17h2v2h-2z" 
+      fill={active ? "rgba(201, 169, 106, 0.25)" : "rgba(200, 200, 200, 0.15)"} />
+      
+    {/* Chess pieces - Knight */}
+    <path d="M6.5 6.5c0 0.5 0.5 1 1 1.25v0.75h1v-0.5h0.5v-1h-1c0-0.25-0.5-0.5-0.5-0.5h-1z" 
+      fill={active ? "var(--primary)" : "currentColor"} stroke="none" />
     
-    {/* Chess piece representations */}
-    <path d="M6 6h4v4H6zM14 6h4v4h-4zM6 14h4v4H6zM14 14h4v4h-4z" 
+    {/* Chess pieces - Bishop */}
+    <path d="M14 6l1 1v1h1v-1l-1-1h-1z" 
+      fill={active ? "var(--primary)" : "currentColor"} stroke="none" />
+      
+    {/* Chess pieces - Rook */}
+    <path d="M6 14v0.5h0.5v0.5h1v-0.5h0.5v-0.5z" 
+      fill={active ? "var(--primary)" : "currentColor"} stroke="none" />
+      
+    {/* Chess pieces - Queen */}
+    <path d="M14.5 14c0 0.5 0.5 1 1 1s1-0.5 1-1h-2z" 
+      fill={active ? "var(--primary)" : "currentColor"} stroke="none" />
+      
+    {/* Chess pieces - Pawn */}
+    <circle cx="11" cy="11" r="0.85" 
       fill={active ? "var(--primary)" : "currentColor"} />
-    
-    <path d="M10 10h4v4h-4z" 
-      fill={active ? "var(--primary)" : "currentColor"} fillOpacity="0.5" />
   </svg>
 );
 
 const SubmitGameIcon = ({ active }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* King chess piece */}
-    <path d="M12 2L12 6M10 4H14" 
-      stroke={active ? "var(--primary)" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" />
+    {/* Background for depth */}
+    <circle cx="12" cy="12" r="10" 
+      fill={active ? "rgba(201, 169, 106, 0.05)" : "rgba(200, 200, 200, 0.05)"} />
     
-    <path d="M8 20C8 17 9 15.5 9 15.5C8 14.5 7 13.5 7 12C7 9.8 9.2 8 12 8C14.8 8 17 9.8 17 12C17 13.5 16 14.5 15 15.5C15 15.5 16 17 16 20" 
-      stroke={active ? "var(--primary)" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" />
+    {/* King chess piece - Crown */}
+    <path d="M12 3L12 6" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5" 
+      strokeLinecap="round" />
     
-    <path d="M7 21.5v-1.5h10v1.5c0 0.28-0.22 0.5-0.5 0.5h-9c-0.28 0-0.5-0.22-0.5-0.5z" 
-      fill={active ? "var(--primary)" : "currentColor"} />
+    <path d="M9.5 4.5H14.5" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5" 
+      strokeLinecap="round" />
     
-    {/* Plus sign for adding */}
-    <circle cx="18" cy="7" r="5" fill={active ? "var(--primary)" : "currentColor"} fillOpacity="0.2" />
-    <path d="M18 4v6M15 7h6" 
-      stroke={active ? "var(--primary)" : "currentColor"} strokeWidth="1.5" strokeLinecap="round" />
+    {/* King body with more elegant design */}
+    <path d="M9 19c0-2 0.5-3.5 1-4.5C9 13.5 8 12.5 8 11c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.5-1 2.5-2 3.5c0.5 1 1 2.5 1 4.5" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5" 
+      strokeLinecap="round"
+      fill={active ? "rgba(201, 169, 106, 0.1)" : "transparent"} />
+    
+    {/* Base with shadow effect */}
+    <path d="M7.5 19h9" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5" 
+      strokeLinecap="round" />
+    
+    <path d="M8 20.5h8" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5" 
+      strokeLinecap="round" />
+    
+    {/* Elegant plus sign with highlight effect */}
+    <circle cx="18" cy="7" r="4" 
+      fill={active ? "rgba(201, 169, 106, 0.3)" : "rgba(200, 200, 200, 0.15)"} 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="0.75" />
+    
+    <path d="M18 5v4M16 7h4" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.5" 
+      strokeLinecap="round" />
   </svg>
 );
 
