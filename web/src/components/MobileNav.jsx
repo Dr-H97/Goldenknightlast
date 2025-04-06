@@ -77,47 +77,35 @@ const GamesIcon = ({ active }) => (
 
 const SubmitGameIcon = ({ active }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Elegant chess board base */}
-    <rect x="4" y="15" width="16" height="6" rx="1" 
-      fill={active ? "rgba(201, 169, 106, 0.15)" : "rgba(200, 200, 200, 0.1)"} 
+    {/* Elegant paper/form background */}
+    <rect x="4" y="4" width="16" height="16" rx="2" 
+      fill={active ? "rgba(201, 169, 106, 0.1)" : "rgba(200, 200, 200, 0.05)"} 
       stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="0.75" />
+      strokeWidth="1.25" />
     
-    {/* Chess knight - classic piece for submission */}
-    <path d="M8 15C8 11 9 9 10 8.5C10 8 10 7 10 6C7 6 6 11 6 13C6 14 7 15 8 15Z" 
+    {/* Document lines - stylish form design */}
+    <path d="M8 9h8M8 13h8M8 17h5" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1.25" 
+      strokeLinecap="round" 
+      strokeOpacity="0.8" />
+    
+    {/* Stylish check mark / submit symbol */}
+    <circle cx="17" cy="17" r="3" 
       fill={active ? "var(--primary)" : "currentColor"} 
-      fillOpacity="0.9" 
+      fillOpacity="0.3" />
+    
+    <path d="M15.5 17L16.5 18L18.5 16" 
       stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="0.75" />
-      
-    <path d="M9.5 8.5C10 8 11 7.5 12 7.5C15 7.5 16 10 16 13C16 14 15 15 14 15" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.25"
-      strokeLinecap="round" />
-      
-    <path d="M10 6C10 5 10.5 4 12 3C13.5 4 14 5 14 6C14 7.5 13 8.5 12 8.5C11 8.5 10 7.5 10 6Z" 
-      fill={active ? "rgba(201, 169, 106, 0.5)" : "rgba(200, 200, 200, 0.3)"} 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="0.75" />
-      
-    {/* Movement indicators */}
-    <path d="M10 12L14 12" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.5" 
-      strokeLinecap="round"
-      strokeDasharray="1 1" />
-      
-    {/* Chess timer/clock suggestion */}
-    <circle cx="18" cy="6" r="3" 
-      fill={active ? "rgba(201, 169, 106, 0.2)" : "rgba(200, 200, 200, 0.15)"} 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="0.75" />
-      
-    {/* Clock hands */}
-    <path d="M18 4v2h1.5" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="0.75" 
-      strokeLinecap="round" />
+      strokeWidth="1.25" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" />
+    
+    {/* Elegant heading/title section */}
+    <rect x="6" y="6" width="12" height="1" 
+      fill={active ? "var(--primary)" : "currentColor"} 
+      fillOpacity="0.5" 
+      rx="0.5" />
   </svg>
 );
 
