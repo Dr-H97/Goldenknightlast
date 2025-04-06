@@ -1,46 +1,48 @@
-<svg width="400" height="500" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Horse head -->
-  <g transform="translate(120, 50) scale(0.8)">
-    <path d="M200 300 
-           C180 300, 160 280, 150 240
-           C140 200, 150 160, 180 130
-           C170 145, 165 160, 170 175
-           C175 190, 190 195, 200 190
-           C210 185, 215 175, 210 160
-           C205 145, 195 135, 185 130
-           C195 125, 210 120, 225 125
-           C240 130, 250 145, 255 165
-           C260 185, 255 210, 240 230
-           C225 250, 220 270, 220 290
-           L200 300Z" 
-        stroke="#C9A96A" stroke-width="6" fill="none"/>
-    
-    <!-- Mane -->
-    <path d="M185 140 
-           C175 120, 170 100, 175 80"
-        stroke="#C9A96A" stroke-width="6" fill="none"/>
-    
-    <path d="M170 135
-           C160 115, 155 95, 158 75"
-        stroke="#C9A96A" stroke-width="6" fill="none"/>
-    
-    <path d="M155 140
-           C145 120, 140 100, 142 80"
-        stroke="#C9A96A" stroke-width="6" fill="none"/>
-    
-    <!-- Base -->
-    <line x1="150" y1="300" x2="250" y2="300" stroke="#C9A96A" stroke-width="6"/>
-    
-    <!-- Eye -->
-    <path d="M195 160 Q195 155, 190 157" stroke="#C9A96A" stroke-width="3" fill="none"/>
+<svg width="500" height="600" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="600" fill="#1A1A1A"/>
+  
+  <!-- Knight Logo (Golden Horse) -->
+  <g transform="translate(150, 150) scale(1.2)">
+    <path d="M115 170 
+           C100 170, 85 160, 80 135
+           C75 110, 80 90, 100 70
+           C90 80, 87 90, 92 100
+           C97 110, 107 113, 115 110
+           C123 107, 126 97, 122 88
+           C118 79, 110 74, 100 70
+           C108 67, 120 65, 130 68
+           C140 71, 148 80, 151 95
+           C154 110, 150 128, 140 140
+           C130 152, 125 164, 125 175
+           L115 170Z" 
+         stroke="#C9A96A" stroke-width="4" fill="none"/>
+  
+    <!-- Mane Lines -->
+    <path d="M102 78 
+             C93 65, 90 52, 93 40"
+          stroke="#C9A96A" stroke-width="4" fill="none"/>
+  
+    <path d="M90 76
+             C81 63, 78 50, 80 37"
+          stroke="#C9A96A" stroke-width="4" fill="none"/>
+  
+    <path d="M78 78
+             C69 65, 66 52, 68 40"
+          stroke="#C9A96A" stroke-width="4" fill="none"/>
+  
+    <!-- Base Line -->
+    <line x1="75" y1="170" x2="155" y2="170" stroke="#C9A96A" stroke-width="4"/>
+  
+    <!-- Eye Detail -->
+    <path d="M108 90 Q108 87, 105 88" stroke="#C9A96A" stroke-width="2" fill="none"/>
   </g>
   
   <!-- Text "THE" -->
-  <text x="200" y="350" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="30" font-weight="600" text-anchor="middle">THE</text>
+  <text x="250" y="380" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="40" font-weight="600" text-anchor="middle">THE</text>
   
   <!-- Text "GOLDEN KNIGHT" -->
-  <text x="200" y="400" fill="#C9A96A" font-family="Arial, sans-serif" font-size="38" font-weight="bold" text-anchor="middle">GOLDEN KNIGHT</text>
+  <text x="250" y="440" fill="#C9A96A" font-family="Arial, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">GOLDEN KNIGHT</text>
   
   <!-- Text "CHESS CLUB" -->
-  <text x="200" y="450" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="30" font-weight="600" text-anchor="middle">CHESS CLUB</text>
+  <text x="250" y="500" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="40" font-weight="600" text-anchor="middle">CHESS CLUB</text>
 </svg>
