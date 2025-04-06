@@ -16,16 +16,16 @@ const getInitials = (name) => {
 };
 
 const getRankClass = (index) => {
-  if (index === 0) return 'rank-1';
+  if (index === 0) return 'rank-1 champion-card';
   if (index === 1) return 'rank-2';
   if (index === 2) return 'rank-3';
-  return '';
+  return 'card-hover-lift';
 };
 
 const getRankBadge = (index) => {
   if (index === 0) return (
     <>
-      <span className="crown-icon">👑</span>
+      <span className="crown-icon trophy-icon">👑</span>
       <span className="rank-badge">1</span>
     </>
   );
@@ -184,77 +184,104 @@ const Rankings = () => {
         </div>
       </div>
       
-      <div className="leaderboard-table-container slide-up mobile-responsive-table">
+      {/* For accessibility - hidden table with data */}
+      <table className="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>{sortBy === 'performance' ? 'Performance' : 'ELO'}</th>
+            <th>Games</th>
+          </tr>
+        </thead>
+        <tbody>
+          {players.map((player, index) => (
+            <tr key={player.id}>
+              <td>{index + 1}</td>
+              <td>{player.name}</td>
+              <td>{sortBy === 'performance' && player.performanceRating ? player.performanceRating : player.currentElo}</td>
+              <td>{player.gamesPlayed || 0}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      
+      {/* Visual Leaderboard with Cards */}
+      <div className="leaderboard-card-container slide-up">
         <div className="total-players">
           <span>Total Players: {players.length}</span>
         </div>
         
-        <table className="leaderboard-table">
-          <thead>
-            <tr>
-              <th style={{ width: '15%' }}>Rank</th>
-              <th 
-                onClick={() => handleSort('name')}
-                className="sortable"
-                style={{ width: '50%' }}
-              >
-                Player {getSortIcon('name')}
-              </th>
-              <th 
-                onClick={() => handleSort(sortBy === 'performance' ? 'performance' : 'currentElo')}
-                className="sortable"
-                style={{ width: '20%' }}
-              >
-                {sortBy === 'performance' ? 'Performance' : 'ELO'} {getSortIcon(sortBy)}
-              </th>
-              <th style={{ width: '15%' }}>Games</th>
-            </tr>
-          </thead>
-          <tbody>
-            {players.map((player, index) => (
-              <tr 
-                key={player.id} 
-                className={`staggered-item ${getRankClass(index)}`}
-              >
-                <td data-label="Rank">
-                  {getRankBadge(index)}
-                </td>
-                <td data-label="Player">
-                  <div className="player-info">
-                    <div className="player-avatar">
-                      {getInitials(player.name)}
-                    </div>
-                    <div className="player-details">
-                      <span className="player-name">{player.name}</span>
-                      <span className="player-stats">
-                        Win rate: {player.winRate ? Math.round(player.winRate * 100) : 0}%
-                      </span>
-                      {player.winRate && (
-                        <div className="win-percentage-bar">
-                          <div 
-                            className="win-percentage-progress" 
-                            style={{ width: `${Math.round(player.winRate * 100)}%` }}
-                          ></div>
-                        </div>
-                      )}
-                    </div>
+        {players.map((player, index) => (
+          <div 
+            key={player.id} 
+            className={`leaderboard-player-card staggered-item ${getRankClass(index)}`}
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            {index === 0 && (
+              <div className="rank-badge-container">
+                <span className="crown-icon trophy-icon">👑</span>
+                <div className="rank-badge">{index + 1}</div>
+              </div>
+            )}
+            
+            {(index === 1 || index === 2) && (
+              <div className="rank-badge-container">
+                <div className="rank-badge">{index + 1}</div>
+              </div>
+            )}
+            
+            {index > 2 && (
+              <div className="rank-badge-container">
+                <div style={{ 
+                  fontSize: '1.1rem', 
+                  fontWeight: '600', 
+                  color: '#aaaaaa',
+                  marginBottom: '0.25rem' 
+                }}>
+                  #{index + 1}
+                </div>
+              </div>
+            )}
+            
+            <div className="player-info">
+              <div className="player-avatar" aria-hidden="true">
+                {getInitials(player.name)}
+              </div>
+              <div className="player-details">
+                <span className="player-name">{player.name}</span>
+                <span className="player-stats">
+                  Win rate: {player.winRate ? Math.round(player.winRate * 100) : 0}%
+                  <span className="games-badge">{player.gamesPlayed || 0} games</span>
+                </span>
+                {player.winRate && (
+                  <div className="win-percentage-bar">
+                    <div 
+                      className="win-percentage-progress" 
+                      style={{ width: `${Math.round(player.winRate * 100)}%` }}
+                    ></div>
                   </div>
-                </td>
-                <td className="rating-cell" data-label={sortBy === 'performance' ? 'Performance' : 'ELO'}>
-                  {sortBy === 'performance' && player.performanceRating 
-                    ? player.performanceRating 
-                    : player.currentElo}
-                </td>
-                <td data-label="Games">
-                  {player.gamesPlayed || 0}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                )}
+              </div>
+            </div>
+            
+            <div className="rating-container">
+              <div className="rating-label">
+                {sortBy === 'performance' ? 'Performance Rating' : 'ELO Rating'}
+              </div>
+              <div className="rating-value">
+                {sortBy === 'performance' && player.performanceRating 
+                  ? player.performanceRating 
+                  : player.currentElo}
+              </div>
+            </div>
+          </div>
+        ))}
         
         {players.length === 0 && (
-          <p className="text-center">No players found for the selected time period.</p>
+          <div className="no-players">
+            <p>No players found for the selected time period.</p>
+          </div>
         )}
       </div>
       

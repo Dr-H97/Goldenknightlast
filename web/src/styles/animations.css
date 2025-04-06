@@ -176,3 +176,91 @@
   content: '♘';
   color: var(--primary);
 }
+
+/* Leaderboard specific animations */
+@keyframes trophy-shine {
+  0% {
+    text-shadow: 0 0 4px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 4px rgba(255, 215, 0, 0.2);
+  }
+}
+
+.trophy-icon {
+  animation: trophy-shine 2s infinite;
+}
+
+@keyframes card-lift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-8px);
+  }
+}
+
+.card-hover-lift:hover {
+  animation: card-lift 0.3s forwards;
+}
+
+/* Chess piece animations for cards */
+@keyframes piece-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.chess-piece-icon {
+  display: inline-block;
+  animation: piece-rotate 3s infinite ease-in-out;
+}
+
+/* Glowing effect for top players */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(201, 169, 106, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(201, 169, 106, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(201, 169, 106, 0.3);
+  }
+}
+
+.glow-effect {
+  animation: glow 2s infinite;
+}
+
+/* Special animation for first place player */
+@keyframes champion-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.7);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+}
+
+.champion-card {
+  animation: champion-pulse 3s infinite;
+}
