@@ -10,9 +10,10 @@
 .leaderboard-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1rem 4rem; /* Added bottom padding to ensure content doesn't get cut off */
   background-color: #1e1e1e;
   min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .leaderboard-header {
@@ -57,6 +58,8 @@
 .leaderboard-card-container {
   position: relative;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem; /* Add extra space at the bottom to account for card transformations */
+  overflow: visible; /* Ensure transformed elements don't get cut off */
 }
 
 /* Card Stack Effect */
@@ -74,8 +77,9 @@
 }
 
 .leaderboard-player-card:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10; /* Ensure card appears above other cards when hovered */
 }
 
 /* Card Background Shine Animation */

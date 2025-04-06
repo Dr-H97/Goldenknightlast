@@ -216,7 +216,10 @@ const Rankings = () => {
           <div 
             key={player.id} 
             className={`leaderboard-player-card staggered-item ${getRankClass(index)}`}
-            style={{ animationDelay: `${index * 0.1}s` }}
+            style={{ 
+              animationDelay: `${index * 0.1}s`,
+              zIndex: players.length - index  /* Ensure cards have decreasing z-index */
+            }}
           >
             {index === 0 && (
               <div className="rank-badge-container">
