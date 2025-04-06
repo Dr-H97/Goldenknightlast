@@ -169,7 +169,7 @@ const translations = {
     connected: 'Connecté',
     
     // Dashboard
-    welcomeBack: 'Bienvenue, Admin !',
+    welcomeBack: 'Bienvenue',
     yourElo: 'ELO actuel',
     eloHistory: 'Historique ELO',
     recentGames: 'Parties Récentes',
