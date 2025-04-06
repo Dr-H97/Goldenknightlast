@@ -51,6 +51,7 @@ waitForPort = 5000
 
 [deployment]
 run = ["sh", "-c", "./gradlew :app:installDebug && adb shell am start -n com.chessclub.app/.ui.login.LoginActivity"]
+deploymentTarget = "cloudrun"
 
 [[ports]]
 localPort = 3000
