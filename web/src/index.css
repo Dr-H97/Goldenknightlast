@@ -473,10 +473,23 @@ tr:hover {
   --card-bg-lighter: #f4f1eb;
   --border: #dcdcdc;
   --hover: #f9f9f9;
+  --primary-color: #b58863;
+  --primary-hover: #9e7655;
 }
 
 [data-theme="light"] button {
-  background-color: #f9f9f9;
+  background-color: #b58863;
+  color: #ffffff;
+}
+
+[data-theme="light"] .btn-primary {
+  background-color: #b58863;
+  color: #ffffff;
+}
+
+[data-theme="light"] .button {
+  background-color: #b58863;
+  color: #ffffff;
 }
 
 [data-theme="light"] .card {

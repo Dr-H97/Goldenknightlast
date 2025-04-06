@@ -6,6 +6,7 @@ import './styles/tailwind-colors.css';
 import './styles/themes.css';
 import './styles/chessTheme.css';
 import './styles/chess-animations.css';
+import './styles/buttonFixes.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { WebSocketProvider } from './context/WebSocketContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';

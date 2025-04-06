@@ -1,0 +1,59 @@
+/* Button Fixes for Light Theme Contrast Issues */
+
+/* Ensure all buttons have proper text contrast */
+:root[data-theme="light"] .btn-primary,
+:root[data-theme="light"] .button,
+:root[data-theme="light"] .button-primary,
+:root[data-theme="light"] .filter-button,
+:root[data-theme="light"] button[type="submit"],
+:root[data-theme="light"] .leaderboard-fab {
+  background-color: #b58863 !important;
+  color: white !important;
+}
+
+:root[data-theme="light"] .btn-secondary,
+:root[data-theme="light"] .button-neutral {
+  background-color: #e0e0e0 !important;
+  color: #333333 !important;
+  border: 1px solid #cccccc !important;
+}
+
+/* Specific button fixes for the mentioned buttons */
+:root[data-theme="light"] [aria-label="View Profile"],
+:root[data-theme="light"] .game-submit-btn,
+:root[data-theme="light"] button:contains("Submit Game"),
+:root[data-theme="light"] button:contains("Reset Filters"),
+:root[data-theme="light"] button:contains("Reset"),
+:root[data-theme="light"] button:contains("Submit New Game") {
+  background-color: #b58863 !important;
+  color: white !important;
+}
+
+/* Hover states */
+:root[data-theme="light"] .btn-primary:hover,
+:root[data-theme="light"] .button:hover,
+:root[data-theme="light"] .button-primary:hover,
+:root[data-theme="light"] .filter-button:hover,
+:root[data-theme="light"] button[type="submit"]:hover,
+:root[data-theme="light"] .leaderboard-fab:hover {
+  background-color: #9e7655 !important;
+  color: white !important;
+}
+
+:root[data-theme="light"] .btn-secondary:hover,
+:root[data-theme="light"] .button-neutral:hover {
+  background-color: #d0d0d0 !important;
+  color: #333333 !important;
+}
+
+/* Ensure the pagination buttons are visible */
+:root[data-theme="light"] .pagination-button {
+  color: #333333 !important;
+  border: 1px solid #cccccc;
+}
+
+:root[data-theme="light"] .pagination-button.active {
+  background-color: #b58863 !important;
+  color: white !important;
+  border-color: #b58863 !important;
+}
