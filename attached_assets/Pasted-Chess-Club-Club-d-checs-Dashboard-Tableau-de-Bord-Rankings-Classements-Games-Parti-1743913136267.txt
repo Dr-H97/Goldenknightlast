@@ -1,0 +1,84 @@
+Chess Club → Club d'Échecs  
+Dashboard → Tableau de Bord  
+Rankings → Classements  
+Games → Parties  
+Submit a Game → Soumettre une Partie  
+Profile → Profil  
+Admin → Admin  
+Connected → Connecté  
+Logout → Déconnexion  
+Welcome, Admin! → Bienvenue, Admin !
+
+Current ELO → ELO actuel  
+Total Games → Total des parties  
+Record → Bilan  
+Wins → Victoires  
+Losses → Défaites  
+Draws → Nulles  
+Win Rate → Taux de victoire  
+
+View Profile → Voir le Profil  
+Recent Games → Parties Récentes  
+Date → Date  
+Opponent → Adversaire  
+Result → Résultat  
+ELO Change → Changement ELO  
+Draw → Nulle  
+Win → Victoire  
+Loss → Défaite  
+White Win → Victoire des Blancs  
+Black Win → Victoire des Noirs  
+Draw (½–½) → Nulle (½–½)  
+
+Submit New Game → Soumettre une Nouvelle Partie  
+Detailed Statistics → Statistiques Détaillées  
+Most Played Opponent → Adversaire le Plus Fréquent  
+Played X games → X parties jouées  
+Win Rate with White → Taux de Victoire avec les Blancs  
+Win Rate with Black → Taux de Victoire avec les Noirs  
+From X games → Sur X parties  
+
+ELO History → Historique ELO  
+All Time → Tout Temps  
+One Year → Un An  
+Six Months → Six Mois  
+Three Months → Trois Mois  
+One Month → Un Mois  
+All Games → Toutes les Parties  
+Browse all games played in the club. Filter games by time period or by player. → Parcourez toutes les parties jouées dans le club. Filtrez-les par période ou par joueur.  
+View All Games → Voir Toutes les Parties  
+
+♘ Club Rankings → ♘ Classements du Club  
+Ranking Type → Type de Classement  
+Reset Filters → Réinitialiser les Filtres  
+Rank → Rang  
+Player → Joueur  
+Games → Parties  
+Total Players → Total de Joueurs  
+
+Submit Game Result → Soumettre le Résultat d'une Partie  
+White Player → Joueur avec les Blancs  
+Black Player → Joueur avec les Noirs  
+Select Black Player → Sélectionner un Joueur avec les Noirs  
+Select Result → Sélectionner le Résultat  
+Date → Date  
+Time → Heure  
+Player Authentication → Authentification des Joueurs  
+Both players must confirm this game submission with their PINs → Les deux joueurs doivent confirmer la soumission de cette partie avec leur code PIN  
+White Player PIN (Admin) → Code PIN du Joueur Blanc (Admin)  
+Black Player PIN (Select player) → Code PIN du Joueur Noir (Joueur sélectionné)  
+
+Player Profile → Profil du Joueur  
+Player Information → Informations du Joueur  
+Name → Nom  
+Account Type → Type de compte  
+Administrator → Administrateur  
+Theme → Thème  
+Light Mode → Mode Clair  
+Language → Langue  
+French → Français  
+Change PIN → Changer le NIP (or Changer le code PIN)  
+Game History → Historique des Parties  
+Color → Couleur  
+White → Blanc  
+Black → Noir
