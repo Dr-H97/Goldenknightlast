@@ -528,20 +528,21 @@ const GameManagement = () => {
           setPlayers(data.players);
         }
       } catch (error) {
-        console.error('Error fetching players for filter:', error);
+        console.error('Error fetching players:', error);
       }
     };
     
     fetchPlayers();
   }, []);
   
-  // Fetch games initially and when filters change
+  // Fetch games when filters change
   useEffect(() => {
     fetchGames();
   }, [filters]);
   
   // Set up WebSocket listener for real-time updates
   useEffect(() => {
+    // Listen for WebSocket messages
     const removeListener = addMessageListener((message) => {
       if (message.type === 'game_update' || message.type === 'game') {
         console.log('WebSocket: Game update received', message);
@@ -550,35 +551,38 @@ const GameManagement = () => {
     });
     
     return () => {
+      // Clean up the listener when component unmounts
       removeListener();
     };
-  }, [addMessageListener, filters]);
+  }, [addMessageListener]);
   
   const fetchGames = async () => {
     try {
       setLoading(true);
       
-      // Build query string from filters
-      const queryParams = new URLSearchParams();
+      // Base URL with sorting
+      let url = '/api/games?sortBy=date&order=desc';
       
+      // Add date range filter
       if (filters.dateRange) {
-        queryParams.append('dateRange', filters.dateRange);
+        url += `&dateRange=${filters.dateRange}`;
       }
       
+      // Add specific date filter
       if (filters.specificDate) {
-        queryParams.append('specificDate', filters.specificDate);
+        url += `&specificDate=${filters.specificDate}`;
       }
       
+      // Add player filter
       if (filters.playerFilter) {
-        queryParams.append('playerId', filters.playerFilter);
+        url += `&playerId=${filters.playerFilter}`;
       }
       
-      // Get games with filters
-      const response = await fetch(`/api/games?${queryParams}`);
+      const response = await fetch(url);
       const data = await response.json();
       
       if (data.success) {
-        setGames(data.games || []);
+        setGames(data.games);
       } else {
         setError(data.message || 'Failed to load games');
       }
@@ -590,17 +594,33 @@ const GameManagement = () => {
     }
   };
   
-  // Apply filters
+  // Handle filter changes
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Clear other date filters if one is being set
+    if (name === 'dateRange') {
+      setFilters(prev => ({
+        ...prev,
+        dateRange: value,
+        specificDate: '' // Clear specific date when selecting a range
+      }));
+    } else if (name === 'specificDate') {
+      setFilters(prev => ({
+        ...prev,
+        specificDate: value,
+        dateRange: '' // Clear date range when selecting a specific date
+      }));
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
   
-  // Reset filters
-  const handleResetFilters = () => {
+  // Reset all filters
+  const resetFilters = () => {
     setFilters({
       dateRange: '',
       specificDate: '',
@@ -608,9 +628,30 @@ const GameManagement = () => {
     });
   };
   
+  // Verify game
+  const handleVerifyGame = async (gameId) => {
+    try {
+      const response = await fetch(`/api/games/${gameId}/verify`, {
+        method: 'PUT',
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSuccess('Game verified successfully');
+        fetchGames(); // Refresh game list
+      } else {
+        setError(data.message || 'Failed to verify game');
+      }
+    } catch (error) {
+      console.error('Error verifying game:', error);
+      setError('An error occurred while verifying the game');
+    }
+  };
+  
   // Delete game
   const handleDeleteGame = async (gameId) => {
-    if (!window.confirm('Are you sure you want to delete this game? This will also adjust player ratings.')) {
+    if (!window.confirm('Are you sure you want to delete this game?')) {
       return;
     }
     
@@ -633,19 +674,20 @@ const GameManagement = () => {
     }
   };
   
-  // Edit game
+  // Start editing a game
   const handleEditGame = (game) => {
     setEditingGameId(game.id);
+    // Format date to YYYY-MM-DD for input[type=date]
+    const dateObj = new Date(game.date);
+    const formattedDate = dateObj.toISOString().split('T')[0];
+    
     setEditingGame({
-      whiteId: game.whiteId,
-      blackId: game.blackId,
       result: game.result,
-      verified: game.verified,
-      date: game.date.split('T')[0]  // Format date for the input
+      date: formattedDate
     });
   };
   
-  // Handle editing game form changes
+  // Handle editing changes
   const handleEditingGameChange = (e) => {
     const { name, value, type, checked } = e.target;
     setEditingGame(prev => ({
@@ -718,27 +760,32 @@ const GameManagement = () => {
           >
             {showFilterPanel ? 'Hide Filters' : 'Show Filters'}
           </button>
+          
+          {(filters.dateRange || filters.specificDate || filters.playerFilter) && (
+            <button 
+              className="btn-admin"
+              onClick={resetFilters}
+            >
+              Clear Filters
+            </button>
+          )}
         </div>
       </div>
-      
-      {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
       
       {/* Filter Panel */}
       {showFilterPanel && (
         <div className="card" style={{ marginBottom: '20px', padding: '15px' }}>
           <h3>Filter Games</h3>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
-            <div>
-              <label htmlFor="dateRange">Date Range</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginBottom: '15px' }}>
+            {/* Date Range Filter */}
+            <div style={{ minWidth: '200px' }}>
+              <h4>Time Period</h4>
               <select
-                id="dateRange"
                 name="dateRange"
-                className="form-control"
                 value={filters.dateRange}
                 onChange={handleFilterChange}
-                style={{ minWidth: '150px' }}
+                className="form-control"
               >
                 <option value="">All Time</option>
                 <option value="week">Last Week</option>
@@ -747,47 +794,47 @@ const GameManagement = () => {
               </select>
             </div>
             
-            <div>
-              <label htmlFor="specificDate">Specific Date</label>
+            {/* Specific Date Filter */}
+            <div style={{ minWidth: '200px' }}>
+              <h4>Specific Date</h4>
               <input
                 type="date"
-                id="specificDate"
                 name="specificDate"
-                className="form-control"
                 value={filters.specificDate}
                 onChange={handleFilterChange}
+                className="form-control"
               />
             </div>
             
-            <div>
-              <label htmlFor="playerFilter">Player</label>
+            {/* Player Filter */}
+            <div style={{ minWidth: '200px' }}>
+              <h4>Player</h4>
               <select
-                id="playerFilter"
                 name="playerFilter"
-                className="form-control"
                 value={filters.playerFilter}
                 onChange={handleFilterChange}
-                style={{ minWidth: '150px' }}
+                className="form-control"
               >
                 <option value="">All Players</option>
                 {players.map(player => (
-                  <option key={player.id} value={player.id}>{player.name}</option>
+                  <option key={player.id} value={player.id}>
+                    {player.name}
+                  </option>
                 ))}
               </select>
             </div>
-            
-            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-              <button 
-                onClick={handleResetFilters}
-                className="btn-admin"
-                style={{ padding: '8px 15px', marginBottom: '1px' }}
-              >
-                Reset Filters
-              </button>
-            </div>
+          </div>
+          
+          <div>
+            <button className="btn-admin" onClick={resetFilters}>
+              Reset All Filters
+            </button>
           </div>
         </div>
       )}
+      
+      {error && <div className="error">{error}</div>}
+      {success && <div className="success">{success}</div>}
       
       {/* Edit Game Form */}
       {editingGameId && (
@@ -796,9 +843,9 @@ const GameManagement = () => {
           
           <form onSubmit={handleSaveGame}>
             <div className="form-group">
-              <label htmlFor="result">Result</label>
+              <label htmlFor="editResult">Result</label>
               <select
-                id="result"
+                id="editResult"
                 name="result"
                 className="form-control"
                 value={editingGame.result}
@@ -811,15 +858,21 @@ const GameManagement = () => {
             </div>
             
             <div className="form-group">
-              <label htmlFor="date">Date</label>
+              <label htmlFor="editDate">Date</label>
               <input
                 type="date"
-                id="date"
+                id="editDate"
                 name="date"
                 className="form-control"
                 value={editingGame.date}
                 onChange={handleEditingGameChange}
               />
+            </div>
+            
+            {/* Verification checkbox removed */}
+            
+            <div className="form-message">
+              <p><strong>Note:</strong> Changing the result of a game will recalculate ELO ratings.</p>
             </div>
             
             <div style={{ display: 'flex', gap: '10px' }}>

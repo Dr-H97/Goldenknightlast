@@ -214,25 +214,23 @@ const Profile = () => {
           <p><strong>{t('currentElo')}:</strong> {currentUser.currentElo || currentUser.initialElo}</p>
           <p><strong>{t('accountType')}:</strong> {currentUser.isAdmin ? t('admin') : t('player')}</p>
           
-          {/* Theme Toggle */}
+          {/* Theme and Language Toggles */}
           <div style={{ 
-            display: 'flex',
-            alignItems: 'center', 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: '15px',
             marginTop: '15px',
-            marginBottom: '10px'
-          }}>
-            <p style={{ marginRight: '10px', marginBottom: '0' }}><strong>{t('theme')}:</strong></p>
-            <ThemeToggle large showText />
-          </div>
-          
-          {/* Language Toggle */}
-          <div style={{ 
-            display: 'flex',
-            alignItems: 'center', 
             marginBottom: '15px'
           }}>
-            <p style={{ marginRight: '10px', marginBottom: '0' }}><strong>{t('language')}:</strong></p>
-            <LanguageToggle large showText />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
+              <span><strong>{t('theme')}:</strong></span>
+              <ThemeToggle large showText />
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
+              <span><strong>{t('language')}:</strong></span>
+              <LanguageToggle large showText />
+            </div>
           </div>
           
           <div style={{ 
@@ -339,7 +337,7 @@ const Profile = () => {
         <h2>{t('gameHistory')}</h2>
         
         {gameHistory.length > 0 ? (
-          <div className="table-responsive">
+          <div className="table-responsive mobile-responsive-table">
             <table>
               <thead>
                 <tr>
@@ -353,17 +351,20 @@ const Profile = () => {
               <tbody>
                 {gameHistory.map(game => (
                   <tr key={game.id}>
-                    <td>{formatDate(game.date)}</td>
-                    <td>{getOpponentName(game)}</td>
-                    <td>{game.whitePlayerId === currentUser.id ? t('white') : t('black')}</td>
-                    <td>{t(getGameResult(game).toLowerCase())}</td>
-                    <td style={{ 
-                      color: getEloChange(game) > 0 
-                        ? '#51cf66' 
-                        : getEloChange(game) < 0 
-                          ? '#ff6b6b' 
-                          : 'inherit'
-                    }}>
+                    <td data-label={t('date')}>{formatDate(game.date)}</td>
+                    <td data-label={t('opponent')}>{getOpponentName(game)}</td>
+                    <td data-label={t('color')}>{game.whitePlayerId === currentUser.id ? t('white') : t('black')}</td>
+                    <td data-label={t('result')}>{t(getGameResult(game).toLowerCase())}</td>
+                    <td 
+                      data-label={t('eloChange')}
+                      style={{ 
+                        color: getEloChange(game) > 0 
+                          ? '#51cf66' 
+                          : getEloChange(game) < 0 
+                            ? '#ff6b6b' 
+                            : 'inherit'
+                      }}
+                    >
                       {getEloChange(game) > 0 ? '+' : ''}
                       {getEloChange(game)}
                     </td>

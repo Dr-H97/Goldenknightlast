@@ -204,8 +204,16 @@ const Games = () => {
       
       <div className="card slide-up" style={{ marginBottom: '20px' }}>
         <h3>{t('filterOptions') || 'Filter Options'}</h3>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '15px'
+        }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '15px'
+          }}>
             <div>
               <label htmlFor="timeRange">{t('timeRange') || 'Time Period'}: </label>
               <select 
@@ -213,7 +221,7 @@ const Games = () => {
                 className="form-control"
                 value={timeFilter}
                 onChange={handleTimeFilterChange}
-                style={{ minWidth: '180px' }}
+                style={{ width: '100%' }}
               >
                 <option value="all">{t('allTime') || 'All Time'}</option>
                 <option value="last-week">{t('lastWeek') || 'Last Week'}</option>
@@ -229,7 +237,7 @@ const Games = () => {
                 className="form-control"
                 value={selectedPlayer}
                 onChange={handlePlayerChange}
-                style={{ minWidth: '180px' }}
+                style={{ width: '100%' }}
               >
                 <option value="all">{t('allPlayers') || 'All Players'}</option>
                 {players.map(player => (
@@ -239,12 +247,14 @@ const Games = () => {
             </div>
           </div>
           
-          <button 
-            onClick={resetFilters}
-            className="btn-games chess-piece-hover"
-          >
-            {t('reset') || 'Reset'}
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button 
+              onClick={resetFilters}
+              className="btn-games chess-piece-hover"
+            >
+              {t('reset') || 'Reset'}
+            </button>
+          </div>
         </div>
       </div>
       
