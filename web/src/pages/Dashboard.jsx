@@ -353,15 +353,15 @@ const Dashboard = () => {
       {/* Detailed Statistics Section */}
       {playerStats && playerStats.totalGames > 0 && (
         <div className="card slide-up" style={{ animationDelay: '0.2s' }}>
-          <h2>{t('Detailed Statistics')}</h2>
+          <h2>{t('statisticsDetailed')}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
             {/* Most Played Opponent */}
             <div className="stat-card staggered-item">
-              <h3>Most Played Opponent</h3>
+              <h3>{t('mostPlayedOpponent')}</h3>
               {playerStats.mostPlayedOpponent ? (
                 <div>
                   <p className="stat-highlight">{playerStats.mostPlayedOpponent}</p>
-                  <p className="text-secondary">Played {playerStats.gamesWithMostPlayed} games</p>
+                  <p className="text-secondary">{t('playedXGames').replace('X', playerStats.gamesWithMostPlayed)}</p>
                 </div>
               ) : (
                 <p className="text-secondary">No games played yet</p>
@@ -370,11 +370,11 @@ const Dashboard = () => {
             
             {/* Win Rate with White */}
             <div className="stat-card staggered-item">
-              <h3>Win Rate with White</h3>
+              <h3>{t('winRateWhite')}</h3>
               {playerStats.gamesAsWhite > 0 ? (
                 <div>
                   <p className="stat-highlight">{playerStats.winRateAsWhite}%</p>
-                  <p className="text-secondary">From {playerStats.gamesAsWhite} games</p>
+                  <p className="text-secondary">{t('fromXGames').replace('X', playerStats.gamesAsWhite)}</p>
                 </div>
               ) : (
                 <p className="text-secondary">No games played as White</p>
@@ -383,11 +383,11 @@ const Dashboard = () => {
             
             {/* Win Rate with Black */}
             <div className="stat-card staggered-item">
-              <h3>Win Rate with Black</h3>
+              <h3>{t('winRateBlack')}</h3>
               {playerStats.gamesAsBlack > 0 ? (
                 <div>
                   <p className="stat-highlight">{playerStats.winRateAsBlack}%</p>
-                  <p className="text-secondary">From {playerStats.gamesAsBlack} games</p>
+                  <p className="text-secondary">{t('fromXGames').replace('X', playerStats.gamesAsBlack)}</p>
                 </div>
               ) : (
                 <p className="text-secondary">No games played as Black</p>

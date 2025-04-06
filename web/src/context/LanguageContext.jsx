@@ -158,7 +158,7 @@ const translations = {
     loading: 'Chargement...',
     error: 'Une erreur est survenue',
     success: 'Succès !',
-    viewProfile: 'Voir le Profil',
+    viewProfile: 'Voir votre profile',
     
     // Auth
     login: 'Se Connecter',
@@ -187,6 +187,12 @@ const translations = {
     viewAllGames: 'Voir Toutes les Parties',
     gamesDescription: 'Parcourez toutes les parties jouées dans le club. Filtrez-les par période ou par joueur.',
     record: 'Bilan',
+    statisticsDetailed: 'Statistiques Détaillées',
+    mostPlayedOpponent: 'Adversaire le Plus Fréquent',
+    winRateWhite: 'Taux de Victoire avec les Blancs',
+    winRateBlack: 'Taux de Victoire avec les Noirs',
+    fromXGames: 'Sur X parties',
+    playedXGames: 'X parties jouées',
     
     // Rankings & Games
     playerRankings: '♘ Classements du Club',
@@ -274,22 +280,6 @@ const translations = {
     pinUpdateSuccess: 'Code PIN mis à jour avec succès',
     failedToUpdatePin: 'Échec de la mise à jour du code PIN',
     pinUpdateError: 'Une erreur est survenue lors de la mise à jour du code PIN',
-    
-    // Additional translations for dashboard and statistics
-    statisticsDetailed: 'Statistiques Détaillées',
-    mostPlayedOpponent: 'Adversaire le Plus Fréquent',
-    winRateWhite: 'Taux de Victoire avec les Blancs',
-    winRateBlack: 'Taux de Victoire avec les Noirs',
-    fromXGames: 'Sur X parties',
-    playedXGames: 'X parties jouées',
-    eloHistory: 'Historique ELO',
-    allTime: 'Tout Temps',
-    oneYear: 'Un An',
-    sixMonths: 'Six Mois',
-    threeMonths: 'Trois Mois',
-    oneMonth: 'Un Mois',
-    allGames: 'Toutes les Parties',
-    viewAllGames: 'Voir Toutes les Parties',
     
     // Admin
     adminTitle: 'Panneau d\'administration',
