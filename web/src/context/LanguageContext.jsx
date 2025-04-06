@@ -309,6 +309,9 @@ export const LanguageProvider = ({ children }) => {
   // Update localStorage when language changes
   useEffect(() => {
     localStorage.setItem('chessClubLanguage', language);
+    
+    // Set the HTML lang attribute to match the selected language
+    document.documentElement.setAttribute('lang', language);
   }, [language]);
   
   // Get text for a specific key in the current language

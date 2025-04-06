@@ -1,0 +1,50 @@
+/* Fixes for mobile navigation with long French translations */
+
+/* Reduce font size especially for French translations */
+html[lang="fr"] .mobile-nav-item {
+  font-size: 10px;
+  line-height: 1.1;
+  padding: 6px 0;
+}
+
+/* Add more space for the icon and text alignment */
+.mobile-nav-icon {
+  margin-bottom: 6px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Make text wrap better and stay centered */
+.mobile-nav-item span {
+  max-width: 100%;
+  text-align: center;
+  display: block;
+  word-wrap: break-word;
+  line-height: 1.2;
+}
+
+/* For French version: fix "Soumettre une Partie" which is very long */
+html[lang="fr"] .mobile-nav-item span {
+  max-width: 80px; /* Limit width to allow wrapping */
+  font-size: 9px; /* Even smaller font for French */
+  line-height: 1.1;
+}
+
+/* Create a specific rule for the submit game button which has the longest text */
+html[lang="fr"] .mobile-nav-item:nth-child(3) span {
+  max-width: 82px;
+  white-space: normal;
+}
+
+@media (max-width: 360px) {
+  .mobile-nav-item {
+    min-width: 50px; /* Slightly smaller items on very small screens */
+    padding: 6px 2px;
+  }
+  
+  .mobile-nav-container {
+    padding: 0 4px;
+  }
+}
