@@ -159,11 +159,11 @@ const Games = () => {
   const renderGameResult = (game) => {
     switch (game.result) {
       case '1-0':
-        return 'White Win';
+        return t('whiteWins') || 'White Win';
       case '0-1':
-        return 'Black Win';
+        return t('blackWins') || 'Black Win';
       case '1/2-1/2':
-        return 'Draw';
+        return t('draw') || 'Draw';
       default:
         return game.result;
     }
@@ -176,14 +176,14 @@ const Games = () => {
       const playerId = parseInt(selectedPlayer);
       if (game.whitePlayerId === playerId) {
         // Current filter player played as White
-        if (game.result === '1-0') return 'Win';
-        if (game.result === '0-1') return 'Loss';
-        return 'Draw';
+        if (game.result === '1-0') return t('win') || 'Win';
+        if (game.result === '0-1') return t('loss') || 'Loss';
+        return t('draw') || 'Draw';
       } else if (game.blackPlayerId === playerId) {
         // Current filter player played as Black
-        if (game.result === '1-0') return 'Loss';
-        if (game.result === '0-1') return 'Win';
-        return 'Draw';
+        if (game.result === '1-0') return t('loss') || 'Loss';
+        if (game.result === '0-1') return t('win') || 'Win';
+        return t('draw') || 'Draw';
       }
     }
     
