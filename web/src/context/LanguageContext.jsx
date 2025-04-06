@@ -7,7 +7,7 @@ const LanguageContext = createContext();
 const translations = {
   en: {
     // Common
-    appTitle: 'Chess Club',
+    appTitle: 'The Golden Knight Chess Club',
     greeting: 'Hello',
     submit: 'Submit',
     cancel: 'Cancel',
@@ -21,7 +21,7 @@ const translations = {
     
     // Auth
     login: 'Login',
-    loginTitle: 'Chess Club Login',
+    loginTitle: 'The Golden Knight Chess Club',
     playerName: 'Player name',
     pin: 'PIN',
     loginButton: 'Login',
@@ -148,7 +148,7 @@ const translations = {
   },
   fr: {
     // Common
-    appTitle: 'Club d\'Échecs',
+    appTitle: 'Le Cavalier d\'Or',
     greeting: 'Bonjour',
     submit: 'Soumettre',
     cancel: 'Annuler',
@@ -162,7 +162,7 @@ const translations = {
     
     // Auth
     login: 'Se Connecter',
-    loginTitle: 'Connexion Club d\'Échecs',
+    loginTitle: 'Le Cavalier d\'Or',
     playerName: 'Nom du Joueur',
     pin: 'Code PIN',
     loginButton: 'Se Connecter',

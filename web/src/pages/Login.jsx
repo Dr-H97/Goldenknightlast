@@ -13,7 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   
   const { login } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { theme } = useTheme();
   const navigate = useNavigate();
   
@@ -55,6 +55,40 @@ const Login = () => {
       minHeight: 'calc(100vh - 100px)',
     }}>
       <div className="card" style={{ marginBottom: '20px', flex: '1' }}>
+        <div className="logo-container" style={{ textAlign: 'center', marginBottom: '25px' }}>
+          {language === 'fr' ? (
+            // French logo
+            theme === 'dark' ? (
+              <img 
+                src="/images/cavalier-d-or-full-dark.svg" 
+                alt="Le Cavalier d'Or Logo" 
+                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+              />
+            ) : (
+              <img 
+                src="/images/cavalier-d-or-full-light.svg" 
+                alt="Le Cavalier d'Or Logo" 
+                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+              />
+            )
+          ) : (
+            // English logo
+            theme === 'dark' ? (
+              <img 
+                src="/images/golden-knight-full-dark.svg" 
+                alt="The Golden Knight Chess Club Logo" 
+                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+              />
+            ) : (
+              <img 
+                src="/images/golden-knight-full-light.svg" 
+                alt="The Golden Knight Chess Club Logo" 
+                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+              />
+            )
+          )}
+        </div>
+        
         <h2 style={{ textAlign: 'center', margin: '0 0 20px 0' }}>{t('loginTitle')}</h2>
         
         {error && <div className="error" style={{ marginBottom: '15px' }}>{error}</div>}

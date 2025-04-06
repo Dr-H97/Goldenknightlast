@@ -1,0 +1,25 @@
+<svg width="400" height="500" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Knight logo -->
+  <g transform="translate(100, 50) scale(0.7)">
+    <path d="M105 320L195 320M150 280L150 320" stroke="#C9A96A" stroke-width="10" stroke-linecap="round"/>
+    <path d="M105 120v30c0 30 30 50 45 50s45-20 45-50v-30" stroke="#C9A96A" stroke-width="8"/>
+    <path d="M85 60L125 30L160 60L150 90L100 90L85 60z" fill="#C9A96A" fill-opacity="0.2" stroke="#C9A96A" stroke-width="5"/>
+    <path d="M100 120c5-10 15-30 50-30s45 20 50 30" stroke="#C9A96A" stroke-width="8" stroke-linecap="round"/>
+    <path d="M120 90c-10 10-15 30-5 40" stroke="#C9A96A" stroke-width="6" stroke-linecap="round"/>
+    <path d="M150 90v30" stroke="#C9A96A" stroke-width="6" stroke-linecap="round"/>
+    <line x1="90" y1="200" x2="210" y2="200" stroke="#C9A96A" stroke-width="3"/>
+  </g>
+  
+  <!-- Text "LE" -->
+  <text x="200" y="320" fill="#222222" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">LE</text>
+  
+  <!-- Text "CAVALIER D'OR" -->
+  <text x="200" y="380" fill="#C9A96A" font-family="Arial, sans-serif" font-size="46" font-weight="bold" text-anchor="middle">CAVALIER D'OR</text>
+  
+  <!-- Text smaller font if needed -->
+  <style>
+    @media (max-width: 400px) {
+      text { font-size: 90%; }
+    }
+  </style>
+</svg>
