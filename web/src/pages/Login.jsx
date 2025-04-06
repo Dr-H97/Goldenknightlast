@@ -60,36 +60,34 @@ const Login = () => {
             // French logo
             theme === 'dark' ? (
               <img 
-                src="/images/cavalier-d-or-full-dark.svg" 
-                alt="Le Cavalier d'Or Logo" 
-                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+                src="/images/golden-knight-dark.svg" 
+                alt="Chess Knight Logo" 
+                style={{ maxWidth: '150px', margin: '0 auto 10px' }}
               />
             ) : (
               <img 
-                src="/images/cavalier-d-or-full-light.svg" 
-                alt="Le Cavalier d'Or Logo" 
-                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+                src="/images/golden-knight-light.svg" 
+                alt="Chess Knight Logo" 
+                style={{ maxWidth: '150px', margin: '0 auto 10px' }}
               />
             )
           ) : (
             // English logo
             theme === 'dark' ? (
               <img 
-                src="/images/golden-knight-full-dark.svg" 
-                alt="The Golden Knight Chess Club Logo" 
-                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+                src="/images/golden-knight-dark.svg" 
+                alt="Chess Knight Logo" 
+                style={{ maxWidth: '150px', margin: '0 auto 10px' }}
               />
             ) : (
               <img 
-                src="/images/golden-knight-full-light.svg" 
-                alt="The Golden Knight Chess Club Logo" 
-                style={{ maxWidth: '250px', margin: '0 auto 10px' }}
+                src="/images/golden-knight-light.svg" 
+                alt="Chess Knight Logo" 
+                style={{ maxWidth: '150px', margin: '0 auto 10px' }}
               />
             )
           )}
         </div>
-        
-        <h2 style={{ textAlign: 'center', margin: '0 0 20px 0' }}>{t('loginTitle')}</h2>
         
         {error && <div className="error" style={{ marginBottom: '15px' }}>{error}</div>}
         
