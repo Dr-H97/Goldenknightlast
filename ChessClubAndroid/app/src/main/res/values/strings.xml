@@ -1,0 +1,162 @@
+<resources>
+    <string name="app_name">Golden Knight Chess Club</string>
+    <string name="app_name_fr">Le Cavalier D\'or</string>
+    
+    <!-- Login Screen -->
+    <string name="login_title">Golden Knight Chess Club</string>
+    <string name="login_title_fr">Le Cavalier D\'or</string>
+    <string name="login_subtitle">Player Login</string>
+    <string name="login_subtitle_fr">Connexion du Joueur</string>
+    <string name="username">Username</string>
+    <string name="username_fr">Nom d\'utilisateur</string>
+    <string name="pin">PIN</string>
+    <string name="login">Login</string>
+    <string name="login_fr">Connexion</string>
+    
+    <!-- Navigation -->
+    <string name="nav_rankings">Rankings</string>
+    <string name="nav_rankings_fr">Classements</string>
+    <string name="nav_games">Games</string>
+    <string name="nav_games_fr">Parties</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_profile_fr">Profil</string>
+    <string name="nav_submit">Submit</string>
+    <string name="nav_submit_fr">Soumettre</string>
+    <string name="nav_admin">Admin</string>
+    
+    <!-- Rankings -->
+    <string name="rankings_title">Player Rankings</string>
+    <string name="rankings_title_fr">Classements des Joueurs</string>
+    <string name="rank">Rank</string>
+    <string name="rank_fr">Rang</string>
+    <string name="player">Player</string>
+    <string name="player_fr">Joueur</string>
+    <string name="rating">Rating</string>
+    <string name="rating_fr">Évaluation</string>
+    <string name="games_played">Games</string>
+    <string name="games_played_fr">Parties</string>
+    
+    <!-- Games -->
+    <string name="games_title">My Games</string>
+    <string name="games_title_fr">Mes Parties</string>
+    <string name="date">Date</string>
+    <string name="date_fr">Date</string>
+    <string name="white">White</string>
+    <string name="white_fr">Blancs</string>
+    <string name="black">Black</string>
+    <string name="black_fr">Noirs</string>
+    <string name="result">Result</string>
+    <string name="result_fr">Résultat</string>
+    <string name="filter">Filter</string>
+    <string name="filter_fr">Filtrer</string>
+    
+    <!-- Submit Game -->
+    <string name="submit_game_title">Submit a Game</string>
+    <string name="submit_game_title_fr">Soumettre une Partie</string>
+    <string name="white_player">White Player</string>
+    <string name="white_player_fr">Joueur avec les blancs</string>
+    <string name="black_player">Black Player</string>
+    <string name="black_player_fr">Joueur avec les noirs</string>
+    <string name="white_player_pin">White Player PIN</string>
+    <string name="white_player_pin_fr">PIN du joueur avec les blancs</string>
+    <string name="black_player_pin">Black Player PIN</string>
+    <string name="black_player_pin_fr">PIN du joueur avec les noirs</string>
+    <string name="game_result">Game Result</string>
+    <string name="game_result_fr">Résultat de la partie</string>
+    <string name="white_wins">White Wins</string>
+    <string name="white_wins_fr">Victoire des blancs</string>
+    <string name="black_wins">Black Wins</string>
+    <string name="black_wins_fr">Victoire des noirs</string>
+    <string name="draw">Draw</string>
+    <string name="draw_fr">Partie nulle</string>
+    <string name="submit">Submit</string>
+    <string name="submit_fr">Soumettre</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancel_fr">Annuler</string>
+    
+    <!-- Profile -->
+    <string name="profile_title">My Profile</string>
+    <string name="profile_title_fr">Mon Profil</string>
+    <string name="current_rating">Current Rating</string>
+    <string name="current_rating_fr">Évaluation Actuelle</string>
+    <string name="games_won">Games Won</string>
+    <string name="games_won_fr">Parties Gagnées</string>
+    <string name="games_lost">Games Lost</string>
+    <string name="games_lost_fr">Parties Perdues</string>
+    <string name="games_drawn">Games Drawn</string>
+    <string name="games_drawn_fr">Parties Nulles</string>
+    <string name="change_pin">Change PIN</string>
+    <string name="change_pin_fr">Changer le PIN</string>
+    <string name="current_pin">Current PIN</string>
+    <string name="current_pin_fr">PIN Actuel</string>
+    <string name="new_pin">New PIN</string>
+    <string name="new_pin_fr">Nouveau PIN</string>
+    <string name="confirm_pin">Confirm PIN</string>
+    <string name="confirm_pin_fr">Confirmer le PIN</string>
+    <string name="save">Save</string>
+    <string name="save_fr">Enregistrer</string>
+    
+    <!-- Admin -->
+    <string name="admin_title">Admin Panel</string>
+    <string name="admin_title_fr">Panneau d\'Administration</string>
+    <string name="players">Players</string>
+    <string name="players_fr">Joueurs</string>
+    <string name="games">Games</string>
+    <string name="games_fr">Parties</string>
+    <string name="add_player">Add Player</string>
+    <string name="add_player_fr">Ajouter un Joueur</string>
+    <string name="edit">Edit</string>
+    <string name="edit_fr">Modifier</string>
+    <string name="delete">Delete</string>
+    <string name="delete_fr">Supprimer</string>
+    <string name="verify">Verify</string>
+    <string name="verify_fr">Vérifier</string>
+    
+    <!-- Misc -->
+    <string name="loading">Loading...</string>
+    <string name="loading_fr">Chargement...</string>
+    <string name="error">Error</string>
+    <string name="error_fr">Erreur</string>
+    <string name="success">Success</string>
+    <string name="success_fr">Succès</string>
+    <string name="yes">Yes</string>
+    <string name="yes_fr">Oui</string>
+    <string name="no">No</string>
+    <string name="no_fr">Non</string>
+</resources>
+    <string name="players">Players</string>
+    <string name="players_fr">Joueurs</string>
+    <string name="no_rankings_data">No player rankings available</string>
+    <string name="no_rankings_data_fr">Aucun classement de joueur disponible</string>
+    <string name="no_games_data">No games found</string>
+    <string name="no_games_data_fr">Aucune partie trouvée</string>
+    <string name="win_rate">Win Rate</string>
+    <string name="win_rate_fr">Taux de Victoire</string>
+    <string name="rating_history">Rating History</string>
+    <string name="rating_history_fr">Historique des Évaluations</string>
+    <string name="logout">Logout</string>
+    <string name="logout_fr">Déconnexion</string>
+    <string name="rating_change_format">Rating: %1$s / %2$s</string>
+    <string name="rating_change_format_fr">Évolution: %1$s / %2$s</string>
+    <string name="fill_all_fields">Please fill all fields</string>
+    <string name="fill_all_fields_fr">Veuillez remplir tous les champs</string>
+    <string name="different_players_required">Please select different players</string>
+    <string name="different_players_required_fr">Veuillez sélectionner des joueurs différents</string>
+    <string name="select_result">Please select a result</string>
+    <string name="select_result_fr">Veuillez sélectionner un résultat</string>
+    <string name="invalid_player_names">Invalid player names</string>
+    <string name="invalid_player_names_fr">Noms de joueurs non valides</string>
+    <string name="game_submitted">Game submitted successfully</string>
+    <string name="game_submitted_fr">Partie soumise avec succès</string>
+    <string name="error_submitting_game">Error submitting game</string>
+    <string name="error_submitting_game_fr">Erreur lors de la soumission de la partie</string>
+    <string name="pin_changed_successfully">PIN changed successfully</string>
+    <string name="pin_changed_successfully_fr">PIN modifié avec succès</string>
+    <string name="error_changing_pin">Error changing PIN</string>
+    <string name="error_changing_pin_fr">Erreur lors du changement de PIN</string>
+    <string name="pins_dont_match">New PINs don\'t match</string>
+    <string name="pins_dont_match_fr">Les nouveaux PIN ne correspondent pas</string>
+    <string name="invalid_credentials">Invalid username or PIN</string>
+    <string name="invalid_credentials_fr">Nom d\'utilisateur ou PIN invalide</string>
+    <string name="fields_required">All fields are required</string>
+    <string name="fields_required_fr">Tous les champs sont obligatoires</string>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/navigation_rankings">
+    
+    <fragment
+        android:id="@+id/navigation_rankings"
+        android:name="com.chessclub.android.ui.rankings.RankingsFragment"
+        android:label="@string/nav_rankings" />
+    
+    <fragment
+        android:id="@+id/navigation_games"
+        android:name="com.chessclub.android.ui.game.GamesFragment"
+        android:label="@string/nav_games" />
+    
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.chessclub.android.ui.profile.ProfileFragment"
+        android:label="@string/nav_profile" />
+</navigation>

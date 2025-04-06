@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "123456789012",
+    "firebase_url": "https://Com.chesstracker.FarassDahabi.firebaseio.com",
+    "project_id": "Com.chesstracker.FarassDahabi",
+    "storage_bucket": "Com.chesstracker.FarassDahabi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "AIzaSyC_exVAVUKlPXpuW31tT-WaJN2GKMG2fYE",
+        "android_client_info": {
+          "package_name": "com.chessclub.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "farassdahabi"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
