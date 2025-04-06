@@ -8,7 +8,6 @@ import './styles/chessTheme.css';
 import './styles/chess-animations.css';
 import './styles/buttonFixes.css';
 import './styles/mobile-nav-fixes.css';
-import './styles/loginAnimations.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { WebSocketProvider } from './context/WebSocketContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
