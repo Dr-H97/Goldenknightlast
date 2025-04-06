@@ -65,7 +65,7 @@ const initializeSampleData = async () => {
           whiteEloChange: 8,
           blackEloChange: -8,
           verified: true,
-          date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) // 10 days ago
+          date: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000) // 25 days ago (last month)
         },
         {
           whitePlayerId: player3.id,
@@ -74,7 +74,7 @@ const initializeSampleData = async () => {
           whiteEloChange: 5,
           blackEloChange: -5,
           verified: true,
-          date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000) // 8 days ago
+          date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000) // 8 days ago (outside last week)
         },
         {
           whitePlayerId: player2.id,
@@ -83,7 +83,7 @@ const initializeSampleData = async () => {
           whiteEloChange: -2,
           blackEloChange: 2,
           verified: true,
-          date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago
+          date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago (within last week)
         },
         {
           whitePlayerId: player4.id,
@@ -92,7 +92,7 @@ const initializeSampleData = async () => {
           whiteEloChange: -10,
           blackEloChange: 10,
           verified: true,
-          date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
+          date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago (within last week)
         },
         {
           whitePlayerId: player1.id,
@@ -101,7 +101,16 @@ const initializeSampleData = async () => {
           whiteEloChange: 4,
           blackEloChange: -4,
           verified: true,
-          date: new Date() // Today
+          date: new Date() // Today (within last week)
+        },
+        {
+          whitePlayerId: player3.id,
+          blackPlayerId: player2.id,
+          result: '1-0',
+          whiteEloChange: 7,
+          blackEloChange: -7,
+          verified: true,
+          date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000) // 6 days ago (within last week)
         }
       ]);
       
@@ -111,11 +120,11 @@ const initializeSampleData = async () => {
         .where(eq(players.id, player1.id));
       
       await db.update(players)
-        .set({ currentElo: 1300 - 8 - 2 })
+        .set({ currentElo: 1300 - 8 - 2 - 7 })
         .where(eq(players.id, player2.id));
       
       await db.update(players)
-        .set({ currentElo: 1600 + 5 + 10 })
+        .set({ currentElo: 1600 + 5 + 10 + 7 })
         .where(eq(players.id, player3.id));
       
       await db.update(players)
