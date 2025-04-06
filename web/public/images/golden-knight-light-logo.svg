@@ -1,0 +1,35 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Horse head -->
+  <path d="M200 300 
+           C180 300, 160 280, 150 240
+           C140 200, 150 160, 180 130
+           C170 145, 165 160, 170 175
+           C175 190, 190 195, 200 190
+           C210 185, 215 175, 210 160
+           C205 145, 195 135, 185 130
+           C195 125, 210 120, 225 125
+           C240 130, 250 145, 255 165
+           C260 185, 255 210, 240 230
+           C225 250, 220 270, 220 290
+           L200 300Z" 
+        stroke="#C9A96A" stroke-width="6" fill="none"/>
+  
+  <!-- Mane -->
+  <path d="M185 140 
+           C175 120, 170 100, 175 80"
+        stroke="#C9A96A" stroke-width="6" fill="none"/>
+  
+  <path d="M170 135
+           C160 115, 155 95, 158 75"
+        stroke="#C9A96A" stroke-width="6" fill="none"/>
+  
+  <path d="M155 140
+           C145 120, 140 100, 142 80"
+        stroke="#C9A96A" stroke-width="6" fill="none"/>
+  
+  <!-- Base -->
+  <line x1="150" y1="300" x2="250" y2="300" stroke="#C9A96A" stroke-width="6"/>
+  
+  <!-- Eye -->
+  <path d="M195 160 Q195 155, 190 157" stroke="#C9A96A" stroke-width="3" fill="none"/>
+</svg>
