@@ -122,6 +122,14 @@ const translations = {
     failedToUpdatePin: 'Failed to update PIN',
     pinUpdateError: 'An error occurred while updating PIN',
     
+    // Additional translations for dashboard and statistics
+    statisticsDetailed: 'Detailed Statistics',
+    mostPlayedOpponent: 'Most Played Opponent',
+    winRateWhite: 'Win Rate with White',
+    winRateBlack: 'Win Rate with Black',
+    fromXGames: 'From X games',
+    playedXGames: 'Played X games',
+    
     // Admin
     adminTitle: 'Admin panel',
     playerManagement: 'Player management',
@@ -266,11 +274,22 @@ const translations = {
     pinUpdateSuccess: 'Code PIN mis à jour avec succès',
     failedToUpdatePin: 'Échec de la mise à jour du code PIN',
     pinUpdateError: 'Une erreur est survenue lors de la mise à jour du code PIN',
+    
+    // Additional translations for dashboard and statistics
+    statisticsDetailed: 'Statistiques Détaillées',
     mostPlayedOpponent: 'Adversaire le Plus Fréquent',
-    playedXGames: 'X parties jouées',
     winRateWhite: 'Taux de Victoire avec les Blancs',
     winRateBlack: 'Taux de Victoire avec les Noirs',
     fromXGames: 'Sur X parties',
+    playedXGames: 'X parties jouées',
+    eloHistory: 'Historique ELO',
+    allTime: 'Tout Temps',
+    oneYear: 'Un An',
+    sixMonths: 'Six Mois',
+    threeMonths: 'Trois Mois',
+    oneMonth: 'Un Mois',
+    allGames: 'Toutes les Parties',
+    viewAllGames: 'Voir Toutes les Parties',
     
     // Admin
     adminTitle: 'Panneau d\'administration',
