@@ -1,31 +1,35 @@
 /* Chess-themed Color Variables - Professional Design */
 :root {
-  /* Light Theme (Default) - Updated with improved contrast */
-  --background-light: #f8f8f8; /* Slightly off-white for better eye comfort */
-  --text-light: #222222; /* Darker text for better contrast */
-  --text-secondary-light: #444444; /* Darker secondary text */
-  --primary-light: #8c5e3d; /* Darker brown for better contrast on light backgrounds */
-  --secondary-light: #b8a57e; /* Darker beige for better visibility */
-  --surface-light: #ffffff; /* Pure white for card surfaces */
-  --board-light: #ede6d1; /* Light square - cream */
-  --board-dark: #8c5e3d; /* Dark square - darker wood brown */
+  /* Light Theme (Default) - Updated with chess-inspired premium design */
+  --background-light: #fefefe; /* Soft white, clean and elegant */
+  --text-light: #1e1e1e; /* Deep charcoal for primary text */
+  --text-secondary-light: #4f4f4f; /* Muted gray for secondary text */
+  --primary-light: #b58863; /* Inspired by chessboard wood color */
+  --secondary-light: #c9a96a; /* Warm golden sand for highlights */
+  --surface-light: #f7f6f2; /* Light warm beige tone for card surfaces */
+  --board-light: #f7f6f2; /* Light square - warm beige */
+  --board-dark: #b58863; /* Dark square - wood brown */
   --white-piece: #ffffff;
   --black-piece: #333333;
-  --card-bg-light: #ffffff; /* White card background */
-  --card-bg-alt-light: #f4f4f4; /* Light gray for alternate rows */
-  --header-bg-light: #f0f0f0; /* Slightly darker header for distinction */
-  --border-light: #cccccc; /* Darker borders for better visibility */
+  --card-bg-light: #f7f6f2; /* Warm beige card background */
+  --card-bg-alt-light: #f1f0ec; /* Slightly darker alternate for rows */
+  --header-bg-light: #f9f8f4; /* Subtle lighter header for distinction */
+  --border-light: #e0e0e0; /* Subtle card/frame separators */
   --success-light: #1e7e34; /* Darker success for readability */
   --warning-light: #d39e00; /* Darker warning for readability */
   --error-light: #c82333; /* Darker error for readability */
   --info-light: #138496; /* Darker info for readability */
-  --nav-default-light: #777777; /* Darker navigation text */
-  --nav-active-light: #8c5e3d; /* Active navigation matching primary */
-  --modal-overlay-light: rgba(0, 0, 0, 0.5); /* Darker overlay for better contrast */
-  --reset-btn-bg-light: #777777;
-  --reset-btn-text-light: #ffffff;
-  --reset-btn-border-light: #777777;
-  --chart-grid-light: #dddddd; /* Chart grid lines */
+  --nav-default-light: #4f4f4f; /* Darker navigation text */
+  --nav-active-light: #b58863; /* Active navigation matching primary */
+  --modal-overlay-light: rgba(0, 0, 0, 0.3); /* Lighter overlay for better contrast */
+  --reset-btn-bg-light: transparent;
+  --reset-btn-text-light: #b58863;
+  --reset-btn-border-light: #b58863;
+  --chart-grid-light: #e0e0e0; /* Chart grid lines */
+  --rank-1-light: #d4af37; /* Premium gold for top rank */
+  --rank-2-light: #c0c0c0; /* Soft silver */
+  --rank-3-light: #cd7f32; /* Warm bronze */
+  --progress-light: #c9a96a; /* Warm golden sand for progress bars */
   
   /* Dark Theme - Updated with new palette */
   --background-dark: #1e1e1e; /* Updated deep neutral black */
@@ -53,6 +57,10 @@
   --reset-btn-text-dark: #f5f5f5;
   --reset-btn-border-dark: #999999;
   --chart-grid-dark: #444444; /* Chart grid lines */
+  --rank-1-dark: #d4af37; /* Gold medal color */
+  --rank-2-dark: #c0c0c0; /* Silver medal color */
+  --rank-3-dark: #cd7f32; /* Bronze medal color */
+  --progress-dark: #c9a96a; /* Progress bar color */
 }
 
 /* Light Theme (Default) */
@@ -74,6 +82,10 @@
   --reset-btn-bg: var(--reset-btn-bg-light);
   --reset-btn-text: var(--reset-btn-text-light);
   --reset-btn-border: var(--reset-btn-border-light);
+  --rank-1: var(--rank-1-light);
+  --rank-2: var(--rank-2-light);
+  --rank-3: var(--rank-3-light);
+  --progress: var(--progress-light);
   
   /* Chess-specific colors */
   --board-light-square: var(--board-light);
@@ -101,6 +113,10 @@
   --reset-btn-bg: var(--reset-btn-bg-dark);
   --reset-btn-text: var(--reset-btn-text-dark);
   --reset-btn-border: var(--reset-btn-border-dark);
+  --rank-1: var(--rank-1-dark);
+  --rank-2: var(--rank-2-dark);
+  --rank-3: var(--rank-3-dark);
+  --progress: var(--progress-dark);
   
   /* Chess-specific colors */
   --board-light-square: var(--board-light-theme);
@@ -356,24 +372,6 @@ input, select, textarea {
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(181, 136, 99, 0.2); /* Updated to match new primary */
-  outline: none;
-}
-
-/* Form Control Class */
-.form-control {
-  background-color: var(--card-bg);
-  color: var(--text);
-  border: 2px solid var(--border);
-  border-radius: 1rem; /* rounded-2xl for soft, modern feel */
-  padding: 12px 16px;
-  transition: all 0.3s ease;
-  font-size: 16px;
-  width: 100%;
-}
-
-.form-control:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(181, 136, 99, 0.2); /* Updated to match new primary */
   outline: none;
@@ -687,12 +685,15 @@ tr:hover {
   background-color: var(--card-bg);
   color: var(--text);
   font-size: 16px;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a29061' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 16px;
   transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a29061' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
 }
 
 .app-form-select:focus {
@@ -701,346 +702,58 @@ tr:hover {
   outline: none;
 }
 
-/* App-like Buttons */
-.app-btn {
-  display: inline-flex;
+/* Floating Action Button (FAB) */
+.fab {
+  position: fixed;
+  bottom: 100px; /* Positioned above mobile nav */
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.app-btn-primary {
-  background-color: var(--primary);
-  color: white !important;
+  z-index: 90;
   border: none;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.app-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  filter: brightness(1.1);
+.fab:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background-color: var(--secondary);
 }
 
-.app-btn-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+.fab:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.app-btn-secondary {
-  background-color: transparent;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-}
-
-.app-btn-secondary:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transform: translateY(-2px);
-}
-
-.app-btn-secondary:active {
-  transform: translateY(0);
-}
-
-/* Games Button */
-.btn-games {
-  background-color: #2c3e50;
-  color: white !important;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.btn-games:hover {
-  background-color: #34495e;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  color: white !important;
-}
-
-.btn-games:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  color: white !important;
-}
-
-/* Admin Button */
-.btn-admin {
-  background-color: #7d3c98;
-  color: white !important;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.btn-admin:hover {
-  background-color: #9b59b6;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  color: white !important;
-}
-
-.btn-admin:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  color: white !important;
-}
-
-.app-btn-icon {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.app-btn-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* App-like Layout */
-.app-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-.app-page-title {
+.fab-icon {
   font-size: 24px;
-  font-weight: 700;
-  margin: 16px 0 24px;
-  color: var(--text);
+  transition: transform 0.3s ease;
 }
 
-.app-section {
-  margin-bottom: 32px;
+.fab:hover .fab-icon {
+  transform: rotate(90deg);
 }
 
-.app-section-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 16px;
-  color: var(--text);
-}
-
-/* App-like Grid Layout */
-.app-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-
-@media (max-width: 768px) {
-  .app-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .app-page-title {
-    font-size: 20px;
-    margin: 8px 0 16px;
-  }
-  
-  .app-section-title {
-    font-size: 18px;
-  }
-  
-  .app-container {
-    padding: 16px 12px;
-  }
-  
-  /* Main content padding to accommodate fixed bottom nav */
-  main {
-    padding-bottom: 80px;
-  }
-}
-
-/* App-like Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.fade-in {
-  animation: fadeIn 0.3s ease forwards;
-}
-
-.slide-up {
-  animation: slideUp 0.3s ease forwards;
-}
-
-.slide-in-right {
-  animation: slideInRight 0.3s ease forwards;
-}
-
-/* App Navbar Styling */
-.app-navbar {
-  background-color: var(--card-bg);
-  border-bottom: 1px solid var(--border);
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 0;
-  width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.app-navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  max-width: 1200px;
+/* Loading States */
+.loading-spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 3px solid var(--primary);
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
   margin: 0 auto;
 }
 
-.app-navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.app-navbar-logo h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.app-navbar-links {
-  display: flex;
-  gap: 24px;
-}
-
-.app-navbar-links a {
-  text-decoration: none;
-  color: var(--text);
-  font-weight: 500;
-  font-size: 16px;
-  padding: 6px 0;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.app-navbar-links a:hover {
-  color: var(--primary);
-}
-
-.app-navbar-links a.active {
-  color: var(--primary);
-}
-
-.app-navbar-links a.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: var(--primary);
-  transition: all 0.3s ease;
-}
-
-.app-navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.app-navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.app-navbar-user span {
-  font-weight: 500;
-}
-
-.app-btn-sm {
-  padding: 6px 12px;
-  font-size: 14px;
-}
-
-.app-navbar-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--text);
-  cursor: pointer;
-  padding: 4px;
-}
-
-@media (max-width: 768px) {
-  .app-navbar-container {
-    padding: 12px 16px;
-  }
-  
-  .app-navbar-logo h2 {
-    font-size: 18px;
-  }
-  
-  .app-navbar-links {
-    position: fixed;
-    top: 64px; /* Height of navbar */
-    left: 0;
-    width: 100%;
-    background-color: var(--card-bg);
-    flex-direction: column;
-    gap: 0;
-    height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 90;
-  }
-  
-  .app-navbar-links.open {
-    height: auto;
-    padding: 16px 0;
-  }
-  
-  .app-navbar-links a {
-    padding: 12px 24px;
-    width: 100%;
-    border-bottom: 1px solid var(--border);
-  }
-  
-  .app-navbar-links a:last-child {
-    border-bottom: none;
-  }
-  
-  .app-navbar-actions {
-    gap: 12px;
-  }
-  
-  .app-navbar-user span {
-    display: none;
-  }
-  
-  .app-navbar-menu-toggle {
-    display: block;
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

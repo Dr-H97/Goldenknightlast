@@ -1,0 +1,83 @@
+Redesign the Chess Club Club Rankings page for light mode, keeping the structure of the dark theme intact, but with brighter, modern, and chess-inspired colors. Ensure the design is clean, mobile-first, and enhanced with subtle animations and premium UI details.
+
+🎨 Color Palette – Light Theme
+Element	Color	Notes
+Background	#fefefe	Soft white, clean and elegant
+Card Background	#f7f6f2	Light warm beige tone
+Border	#e0e0e0	Subtle card/frame separators
+Rank 1 (Gold)	#d4af37	Premium gold for top rank
+Rank 2 (Silver)	#c0c0c0	Soft silver
+Rank 3 (Bronze)	#cd7f32	Warm bronze
+Text Primary	#1e1e1e	Deep charcoal
+Text Secondary	#4f4f4f	Muted gray
+Accent Color	#b58863	Inspired by chessboard wood color
+Win Rate Bar (Fill)	#c9a96a	Warm golden sand for progress bars
+Button (FAB)	#b58863	Floating action button
+Nav Active Icon	#b58863	Match rest of UI accents
+📱 Mobile Page Structure
+Page Title
+
+Club Rankings
+
+Icon: 🏆 or ♘ in #b58863
+
+Filters Panel
+
+Select dropdowns for:
+
+Ranking Type (ELO Rating)
+
+Time Period (All Time)
+
+Reset Filters button: bordered #b58863, rounded, hover effect
+
+Player Cards (List Format)
+
+Card: Rounded corners (rounded-xl), soft shadow, padding (p-4)
+
+Top 3 ranks:
+
+Rank Badge: Circle with gold/silver/bronze background
+
+Initial Avatar: Circle with player initial (animated pop-in)
+
+Text sections:
+
+Player name (text-lg font-semibold)
+
+ELO Rating (text-2xl font-bold)
+
+Win Rate: small label + animated progress bar (transition-all)
+
+Games count: text-sm text-secondary
+
+Cards should animate in with fade + translateY scroll motion
+
+Floating Action Button (FAB)
+
+Positioned bottom-right
+
+Button: #b58863 with + icon, shadow-lg, circular
+
+Tap opens slide-up drawer for game submission
+
+Bottom Navigation
+
+Fixed, mobile-friendly
+
+Light background: #f7f6f2
+
+Active icon in #b58863
+
+Hover: soft scale on tap
+
+🎞️ Motion & Animation (Optional but Powerful)
+Use Framer Motion or native CSS for:
+
+Card entrance animation: opacity: 0 → 1, translateY: 20px → 0
+
+Progress bar slide: width: 0 → XX% on load
+
+FAB pop-in: scale bounce
+
+Icon hover/tap: scale(1.05) or ripple effect

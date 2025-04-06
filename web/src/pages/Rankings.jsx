@@ -140,7 +140,7 @@ const Rankings = () => {
     <div className="leaderboard-container">
       <div className="leaderboard-header fade-in">
         <div className="leaderboard-logo">
-          <img src={logo} alt="Chess Club Logo" className="leaderboard-logo-icon" />
+          <span className="leaderboard-logo-icon">♘</span>
           <h1 className="leaderboard-title">Club Rankings</h1>
         </div>
       </div>
@@ -239,7 +239,7 @@ const Rankings = () => {
                 <div style={{ 
                   fontSize: '1.1rem', 
                   fontWeight: '600', 
-                  color: '#aaaaaa',
+                  color: 'var(--text-secondary)',
                   marginBottom: '0.25rem' 
                 }}>
                   #{index + 1}
@@ -288,7 +288,10 @@ const Rankings = () => {
         )}
       </div>
       
-      {/* Submit game button removed */}
+      {/* Floating Action Button for Game Submission */}
+      <Link to="/submit" className="leaderboard-fab" title="Submit a game">
+        <span style={{ fontSize: '24px' }}>+</span>
+      </Link>
     </div>
   );
 };
