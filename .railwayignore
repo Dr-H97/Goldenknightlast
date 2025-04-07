@@ -1,4 +1,4 @@
-# Ignore Android/Java files to prevent Gradle detection
+# Ignore Android/Java files
 app/
 *.java
 *.gradle

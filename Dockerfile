@@ -1,10 +1,10 @@
+# Chess Club Web Application - THIS IS A NODE.JS PROJECT (NOT Java/Gradle)
 FROM node:18-alpine
 
 WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install express@4.18.3 --save
 RUN npm install
 
 # Copy web package files and install frontend dependencies
@@ -13,14 +13,16 @@ WORKDIR /app/web
 RUN npm install
 WORKDIR /app
 
-# Create .dockerignore file on the fly to exclude Android app files
-RUN echo "app/" > .dockerignore && \
-    echo "*.java" >> .dockerignore && \
-    echo "*.gradle" >> .dockerignore && \
-    echo "gradlew*" >> .dockerignore
-
-# Copy the rest of the application code (excluding Android app files)
-COPY . .
+# Copy only Node.js project files (explicitly avoiding Java/Android files)
+COPY server/ ./server/
+COPY web/src/ ./web/src/
+COPY web/public/ ./web/public/
+COPY web/index.html ./web/
+COPY web/vite.config.js ./web/
+COPY shared/ ./shared/
+COPY .dockerignore ./
+COPY .railwayignore ./
+COPY railway.json ./
 
 # Build the frontend
 WORKDIR /app/web
