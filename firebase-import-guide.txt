@@ -1,0 +1,72 @@
+# Firebase Import Guide for Chess Club App
+
+To import your data into Firebase Firestore for the Android app:
+
+## Option 1: Manual Import via Firebase Console
+
+1. Go to Firebase Console (https://console.firebase.google.com/)
+2. Select your project
+3. Navigate to Firestore Database
+4. Create two collections: "players" and "games"
+5. For each player:
+   - Add a document with ID matching the player's "id" in the JSON
+   - Add all fields from the player object
+6. For each game:
+   - Add a document with ID matching the game's "id" in the JSON
+   - Add all fields from the game object
+
+## Option 2: Automated Import using Node.js
+
+1. Download the firebase-import.json file
+2. Create a new folder on your computer
+3. Install Node.js if needed
+4. Create a package.json file:
+```
+{
+  "name": "firebase-import",
+  "version": "1.0.0",
+  "dependencies": {
+    "firebase-admin": "^11.9.0"
+  }
+}
+```
+5. Install dependencies: npm install
+6. Get a service account key file:
+   - Go to Firebase Console > Project Settings > Service Accounts
+   - Click "Generate New Private Key"
+   - Save as serviceAccountKey.json
+7. Create import.js:
+```
+const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccountKey.json');
+const data = require('./firebase-import.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+
+async function importData() {
+  try {
+    // Import players
+    for (const [id, player] of Object.entries(data.players)) {
+      await db.collection('players').doc(id).set(player);
+      console.log(`Imported player: ${player.name}`);
+    }
+    
+    // Import games
+    for (const [id, game] of Object.entries(data.games)) {
+      await db.collection('games').doc(id).set(game);
+      console.log(`Imported game: ${game.whitePlayerName} vs ${game.blackPlayerName}`);
+    }
+    
+    console.log('Import completed!');
+  } catch (error) {
+    console.error('Error during import:', error);
+  }
+}
+
+importData();
+```
+8. Run the script: node import.js

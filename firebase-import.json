@@ -1,0 +1,178 @@
+{
+  "players": {
+    "1": {
+      "id": "1",
+      "name": "Hamza Bouzida",
+      "rating": 2000,
+      "pin": "$2b$10$9tQT0fuPj8XszTzuCAzXfOw2QxoeLyA2h1MBYwGxpgp30WjB3TAeO",
+      "isAdmin": true,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743728741866
+    },
+    "18": {
+      "id": "18",
+      "name": "Abla Makhlouk",
+      "rating": 1728,
+      "pin": "$2b$10$.y.L4ojIUWP.c6a7secH1.ii2ImjkKcEJmre2II9pNQjpPV65Unu2",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743959716674
+    },
+    "19": {
+      "id": "19",
+      "name": "Achraf El Hamss",
+      "rating": 1947,
+      "pin": "$2b$10$C37.5snN2RSKVB44z517xewkX65OIcOc8zJbOIYTX4uG4GaHteoLW",
+      "isAdmin": true,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743959778326
+    },
+    "20": {
+      "id": "20",
+      "name": "Anouar Benmbarek",
+      "rating": 1600,
+      "pin": "$2b$10$LQlLVrDPnY2iFg5hOFf5g.D.PEQV0HDWfX8LNQqHULMzdPYEw7Z4S",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743959983791
+    },
+    "21": {
+      "id": "21",
+      "name": "Hicham Oussalah",
+      "rating": 1667,
+      "pin": "$2b$10$RoCdToH3TXiM8aGvWS/bIuldq3.GAFvyP0Zwx1BeY22PlYBhwtL9m",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960054376
+    },
+    "22": {
+      "id": "22",
+      "name": "Ayoub Elhallaoui",
+      "rating": 1629,
+      "pin": "$2b$10$vN0JVzTn8asUuPEOv4ZNluIicV2jhhqRb8xK/vDAPfvWqQQwtl0f.",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960097851
+    },
+    "23": {
+      "id": "23",
+      "name": "El Hadj Kacem Hafid",
+      "rating": 1892,
+      "pin": "$2b$10$4oFA3IOPgZPzM.bngvgu/eTPKHWLFhf3FnR/xdrxYsbLU6EXizNQy",
+      "isAdmin": false,
+      "gamesPlayed": 1,
+      "gamesWon": 1,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960208010
+    },
+    "24": {
+      "id": "24",
+      "name": "Yassmine Aboutaib",
+      "rating": 1400,
+      "pin": "$2b$10$1pY2lebJHJJMsSPl37UBE.afiiPGtnnY/RAFNxGDaElnqIkGzrxG6",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960263623
+    },
+    "25": {
+      "id": "25",
+      "name": "Abdoulmoutalib Belmokadem",
+      "rating": 1776,
+      "pin": "$2b$10$klULE.um3vjw6DqTarl9iu0LJsdsfHrjdtMJu72vHxQDR7OJDpyKS",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960445567
+    },
+    "26": {
+      "id": "26",
+      "name": "Ilia Tsertsvadze",
+      "rating": 1748,
+      "pin": "$2b$10$Llmn2oTJLEvHWNgI6UkpuOj5GP82Hcng7HVKn2yD0dORt.xR/Uxou",
+      "isAdmin": false,
+      "gamesPlayed": 1,
+      "gamesWon": 0,
+      "gamesLost": 1,
+      "gamesDrawn": 0,
+      "createdAt": 1743960533277
+    },
+    "27": {
+      "id": "27",
+      "name": "Amine El Allam",
+      "rating": 1837,
+      "pin": "$2b$10$NEC.AeO6r3JOI33gXDFTo.JXFvaFYIODR.cmi7b7uADNpGpj47lpi",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960650516
+    },
+    "28": {
+      "id": "28",
+      "name": "Mohamed Amine Mejd",
+      "rating": 2050,
+      "pin": "$2b$10$BFFUGOLSFpdPGWpdWg7EUOPORdnKly8zaMAGToooejR1l7bdwwrbK",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960694148
+    },
+    "29": {
+      "id": "29",
+      "name": "Zakaria Boudhak",
+      "rating": 1949,
+      "pin": "$2b$10$CWziUh4ZJZuvizF0QnAk8.kDd4Hp69Skx3FeYB0SrSENKmXGuMZ/y",
+      "isAdmin": false,
+      "gamesPlayed": 0,
+      "gamesWon": 0,
+      "gamesLost": 0,
+      "gamesDrawn": 0,
+      "createdAt": 1743960914778
+    }
+  },
+  "games": {
+    "40": {
+      "id": "40",
+      "whitePlayerId": "26",
+      "blackPlayerId": "23",
+      "result": "0-1",
+      "date": 1743961020000,
+      "verified": true,
+      "whitePlayerName": "Ilia Tsertsvadze",
+      "blackPlayerName": "El Hadj Kacem Hafid",
+      "whitePlayerRatingBefore": 1754,
+      "blackPlayerRatingBefore": 1886,
+      "whitePlayerRatingAfter": 1748,
+      "blackPlayerRatingAfter": 1892,
+      "whiteEloChange": -6,
+      "blackEloChange": 6
+    }
+  }
+}
