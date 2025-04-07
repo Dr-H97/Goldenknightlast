@@ -96,7 +96,7 @@ function broadcast(message) {
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5000', 'https://localhost:5000', '*'],
+  origin: ['http://localhost:5000', 'https://localhost:5000', 'https://golden-knight-chess-club.onrender.com', '*'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
@@ -143,7 +143,9 @@ const startServer = async () => {
     // Start listening
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
-      console.log(`WebSocket server running at ws://localhost:${PORT}/ws`);
+      const protocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
+      const host = process.env.NODE_ENV === 'production' ? 'golden-knight-chess-club.onrender.com' : `localhost:${PORT}`;
+      console.log(`WebSocket server running at ${protocol}://${host}/ws`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
