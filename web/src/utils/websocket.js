@@ -33,11 +33,20 @@ export const initWebSocket = (onStatusChange) => {
   
   try {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // For Replit we need to use the API URL
+    // Handle various deployment environments
     const isReplit = window.location.hostname.includes('replit');
-    const wsUrl = isReplit 
-      ? `${protocol}//${window.location.host}/ws` 
-      : `${protocol}//${window.location.host}/ws`;
+    const isRailway = window.location.hostname.includes('railway.app');
+    
+    // Use the appropriate WebSocket URL based on the hosting environment
+    let wsUrl;
+    if (isReplit) {
+      wsUrl = `${protocol}//${window.location.host}/ws`;
+    } else if (isRailway) {
+      wsUrl = `${protocol}//${window.location.host}/ws`;
+    } else {
+      // Local development
+      wsUrl = `${protocol}//${window.location.host}/ws`;
+    }
     
     console.log(`Connecting to WebSocket at ${wsUrl}`);
     socket = new WebSocket(wsUrl);

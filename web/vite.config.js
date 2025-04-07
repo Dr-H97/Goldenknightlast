@@ -35,7 +35,7 @@ export default defineConfig({
     // Allow all hosts for Replit environment
     strictPort: true,
     // Explicitly set allowed hosts
-    allowedHosts: ['770c0eb0-ea44-423a-bcae-0704eaf85366-00-3aex3huoublv2.worf.replit.dev', 'localhost', '0.0.0.0', '127.0.0.1', '.repl.co', '.replit.dev', '.repl.run', '.replit.app', 'b533dc8e9f4e']
+    allowedHosts: ['770c0eb0-ea44-423a-bcae-0704eaf85366-00-3aex3huoublv2.worf.replit.dev', 'localhost', '0.0.0.0', '127.0.0.1', '.repl.co', '.replit.dev', '.repl.run', '.replit.app', '.railway.app', 'b533dc8e9f4e']
   },
   optimizeDeps: {
     esbuildOptions: {
@@ -43,6 +43,18 @@ export default defineConfig({
     }
   },
   build: {
-    target: 'es2020'
+    target: 'es2020',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: true,
+    // Ensure relative paths work correctly
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom']
+        }
+      }
+    }
   }
 });

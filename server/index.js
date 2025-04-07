@@ -168,7 +168,8 @@ app.use(cors({
     // In production, check against allowed origins
     const allowedOrigins = [
       'https://golden-knight-chess-club.onrender.com',
-      'https://golden-knight-chess-db.onrender.com'
+      'https://golden-knight-chess-db.onrender.com',
+      'https://golden-knight-chess-club.up.railway.app'
     ];
     
     // Allow requests with no origin (like mobile apps, curl requests)
@@ -225,7 +226,10 @@ const startServer = async () => {
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
       const protocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
-      const host = process.env.NODE_ENV === 'production' ? 'golden-knight-chess-club.onrender.com' : `localhost:${PORT}`;
+      // Use Railway app domain if available, otherwise fallback to Render
+      const host = process.env.RAILWAY_STATIC_URL || process.env.NODE_ENV === 'production' 
+        ? process.env.RAILWAY_STATIC_URL || 'golden-knight-chess-club.up.railway.app' 
+        : `localhost:${PORT}`;
       console.log(`WebSocket server running at ${protocol}://${host}/ws`);
     });
   } catch (error) {
