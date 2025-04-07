@@ -8,13 +8,16 @@ import '../styles/navbar.css';
 
 // Golden Knight Chess Logo
 const ChessLogo = () => (
-  <img 
-    src="/images/logo.png" 
-    alt="Golden Knight Chess Logo" 
-    className="chess-logo-icon" 
-    width="28" 
-    height="28" 
-  />
+  <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="chess-logo-icon">
+    <path d="M80.5 25C77.5 21 71.5 20 65.5 24C59.5 28 55.5 33 54.5 37L52.5 33C52.5 33 47.5 23 39.5 29C31.5 35 34.5 47 34.5 47L30.5 49C30.5 49 14.5 55 19.5 66C24.5 77 36.5 71 36.5 71C36.5 71 44.5 81 59.5 81C74.5 81 77.5 69 77.5 69L82.5 49L80.5 39V25Z" 
+          fill="none" stroke="var(--primary-accent, #c9a96a)" strokeWidth="2.5"/>
+    <path d="M40.5 42C40.5 42 44.5 39 47.5 39C50.5 39 46.5 42 46.5 42" 
+          fill="none" stroke="var(--primary-accent, #c9a96a)" strokeWidth="1.5"/>
+    <path d="M69.5 35C69.5 35 63.5 38 60.5 38" 
+          fill="none" stroke="var(--primary-accent, #c9a96a)" strokeWidth="1.5"/>
+    <path d="M90.5 95H10" 
+          fill="none" stroke="var(--primary-accent, #c9a96a)" strokeWidth="3"/>
+  </svg>
 );
 
 const MenuIcon = () => (
