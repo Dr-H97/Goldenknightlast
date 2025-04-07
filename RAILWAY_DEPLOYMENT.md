@@ -10,13 +10,14 @@ Railway is a modern deployment platform that makes it easy to deploy web applica
 
 The following files have been created or modified to ensure a smooth deployment to Railway:
 
-1. `railway.json` - Defines the build and deployment process
-2. `Procfile` - Specifies the command to start the application 
-3. `.env.example` - Template for required environment variables
-4. `server/middleware/auth.js` - Authentication middleware
-5. WebSocket configurations in `web/src/utils/websocket.js` - Adapted for Railway
-6. CORS settings in `server/index.js` - Updated with Railway domain
-7. Enhanced Vite config in `web/vite.config.js` - Production optimizations for Railway
+1. `Dockerfile` - Contains instructions for building and running the application
+2. `railway.json` - Defines the build and deployment process using Dockerfile
+3. `Procfile` - Specifies the command to start the application (optional when using Dockerfile)
+4. `.env.example` - Template for required environment variables
+5. `server/middleware/auth.js` - Authentication middleware
+6. WebSocket configurations in `web/src/utils/websocket.js` - Adapted for Railway
+7. CORS settings in `server/index.js` - Updated with Railway domain
+8. Enhanced Vite config in `web/vite.config.js` - Production optimizations for Railway
 
 ## Step-by-Step Deployment Guide
 
@@ -81,10 +82,10 @@ In your Railway dashboard:
 ### Step 8: Deploy Your Application
 
 Railway will automatically:
-1. Detect the Node.js application
-2. Install dependencies based on `package.json`
-3. Build the frontend using your build command in `railway.json`
-4. Start the application using the command in `Procfile`
+1. Use the Dockerfile to build your application
+2. Install dependencies and build the frontend as defined in the Dockerfile
+3. Start the application using the command in the Dockerfile CMD directive
+4. Monitor application health using the healthcheck endpoint defined in railway.json
 
 ### Step 9: Initialize the Database
 
@@ -127,8 +128,10 @@ If WebSocket connections fail:
 
 If the build process fails:
 1. Check the build logs in the Railway dashboard
-2. Verify that all dependencies are correctly listed in package.json
-3. Ensure that build commands in railway.json are correct
+2. Verify that the Dockerfile syntax is correct
+3. Ensure that all dependencies are correctly listed in package.json
+4. Check if there are any issues with the multi-stage build process in the Dockerfile
+4. Check if there are any issues with the multi-stage build process in the Dockerfile
 
 ## Additional Railway Features
 
