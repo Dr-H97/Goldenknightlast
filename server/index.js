@@ -18,21 +18,55 @@ const { initializeSampleData } = require('./seed');
 const app = express();
 const server = http.createServer(app);
 
-// Create WebSocket server
-const wss = new WebSocketServer({ server, path: '/ws' });
+// Create WebSocket server with enhanced configuration for Replit
+const wss = new WebSocketServer({ 
+  server, 
+  path: '/ws',
+  // Add more robust error handling for Replit environment
+  clientTracking: true,
+  perMessageDeflate: {
+    zlibDeflateOptions: {
+      chunkSize: 1024,
+      memLevel: 7,
+      level: 3
+    },
+    zlibInflateOptions: {
+      chunkSize: 10 * 1024
+    },
+    concurrencyLimit: 10,
+    threshold: 1024 // Only compress messages larger than 1KB
+  }
+});
 
 // Attach WebSocket server to the server object for use in other modules
 server.wss = wss;
 
+// Handle server-level WebSocket errors
+wss.on('error', (error) => {
+  console.error('WebSocket server error:', error);
+});
+
 // WebSocket connections
-wss.on('connection', (ws) => {
-  console.log('Client connected to WebSocket');
+wss.on('connection', (ws, req) => {
+  const clientIp = req.socket.remoteAddress;
+  console.log(`Client connected to WebSocket from ${clientIp}`);
+  
+  // Setup ping/pong to keep connection alive
+  ws.isAlive = true;
+  ws.on('pong', () => {
+    ws.isAlive = true;
+  });
   
   // Send welcome message
-  ws.send(JSON.stringify({
-    type: 'connection',
-    message: 'Connected to Chess Club WebSocket Server'
-  }));
+  try {
+    ws.send(JSON.stringify({
+      type: 'connection',
+      message: 'Connected to Chess Club WebSocket Server',
+      timestamp: Date.now()
+    }));
+  } catch (err) {
+    console.error('Error sending welcome message:', err);
+  }
   
   // Handle messages from clients
   ws.on('message', (message) => {
@@ -60,10 +94,14 @@ wss.on('connection', (ws) => {
           
         case 'ping':
           // Respond to ping with pong
-          ws.send(JSON.stringify({
-            type: 'pong',
-            timestamp: Date.now()
-          }));
+          try {
+            ws.send(JSON.stringify({
+              type: 'pong',
+              timestamp: Date.now()
+            }));
+          } catch (err) {
+            console.error('Error sending pong response:', err);
+          }
           break;
           
         default:
@@ -75,14 +113,38 @@ wss.on('connection', (ws) => {
   });
   
   // Handle disconnection
-  ws.on('close', () => {
-    console.log('Client disconnected from WebSocket');
+  ws.on('close', (code, reason) => {
+    console.log(`Client disconnected from WebSocket: ${code} - ${reason || 'No reason provided'}`);
+    ws.isAlive = false;
   });
   
   // Handle errors
   ws.on('error', (error) => {
-    console.error('WebSocket error:', error);
+    console.error('WebSocket client error:', error);
+    // Try to close gracefully
+    try {
+      ws.close();
+    } catch (err) {
+      console.error('Error closing WebSocket after error:', err);
+    }
   });
+});
+
+// Heartbeat interval to check for disconnected clients
+const heartbeatInterval = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (ws.isAlive === false) {
+      return ws.terminate();
+    }
+    
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 30000); // Check every 30 seconds
+
+// Clear interval when server closes
+wss.on('close', () => {
+  clearInterval(heartbeatInterval);
 });
 
 // Broadcast to all connected clients

@@ -33,7 +33,11 @@ export const initWebSocket = (onStatusChange) => {
   
   try {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    // For Replit we need to use the API URL
+    const isReplit = window.location.hostname.includes('replit');
+    const wsUrl = isReplit 
+      ? `${protocol}//${window.location.host}/ws` 
+      : `${protocol}//${window.location.host}/ws`;
     
     console.log(`Connecting to WebSocket at ${wsUrl}`);
     socket = new WebSocket(wsUrl);
@@ -141,11 +145,14 @@ const scheduleReconnect = () => {
     clearTimeout(reconnectTimeout);
   }
   
-  // Reconnect after 3 seconds
+  // Use exponential backoff for reconnection attempts
+  const backoffTime = Math.min(30000, 3000 * (1 + Math.random())); // Max 30 seconds
+  
+  // Reconnect after backoff time
   reconnectTimeout = setTimeout(() => {
-    console.log('Attempting to reconnect WebSocket...');
+    console.log(`Attempting to reconnect WebSocket after ${backoffTime}ms...`);
     initWebSocket();
-  }, 3000);
+  }, backoffTime);
 };
 
 /**
