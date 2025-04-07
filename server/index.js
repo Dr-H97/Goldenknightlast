@@ -158,7 +158,26 @@ function broadcast(message) {
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5000', 'https://localhost:5000', 'https://golden-knight-chess-club.onrender.com', '*'],
+  origin: (origin, callback) => {
+    // Allow any origin in development
+    if (process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+      return;
+    }
+    
+    // In production, check against allowed origins
+    const allowedOrigins = [
+      'https://golden-knight-chess-club.onrender.com',
+      'https://golden-knight-chess-db.onrender.com'
+    ];
+    
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // For now, allow all origins in production too
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
