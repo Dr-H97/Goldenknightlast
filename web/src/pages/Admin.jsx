@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useWebSocket } from '../context/WebSocketContext';
 
+import "../styles/button-styles.css";
 
 const Admin = () => {
   const { currentUser } = useAuth();
@@ -299,7 +300,7 @@ const PlayerManagement = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Player Management</h2>
         <button 
-          className="btn-admin"
+          className="btn-admin chess-piece-hover"
           onClick={() => setShowAddForm(!showAddForm)}
         >
           {showAddForm ? 'Cancel' : 'Add New Player'}
@@ -368,7 +369,7 @@ const PlayerManagement = () => {
               <label htmlFor="isAdmin">Admin Access</label>
             </div>
             
-            <button type="submit" className="btn-admin">
+            <button type="submit" className="btn-admin chess-piece-hover">
               Add Player
             </button>
           </form>
@@ -434,10 +435,10 @@ const PlayerManagement = () => {
             </div>
             
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="submit" className="btn-admin">
+              <button type="submit" className="btn-admin chess-piece-hover">
                 Save Changes
               </button>
-              <button type="button" className="btn-admin" onClick={handleCancelEdit}>
+              <button type="button" className="btn-admin chess-piece-hover" onClick={handleCancelEdit}>
                 Cancel
               </button>
             </div>
@@ -467,7 +468,7 @@ const PlayerManagement = () => {
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button 
                     onClick={() => handleEditPlayer(player)}
-                    className="btn-admin"
+                    className="btn-admin chess-piece-hover"
                     style={{ padding: '8px 15px' }}
                   >
                     Edit
@@ -713,7 +714,7 @@ const GameManagement = () => {
         
         <div style={{ display: 'flex', gap: '10px' }}>
           <button 
-            className="btn-admin"
+            className="btn-admin chess-piece-hover"
             onClick={() => setShowFilterPanel(!showFilterPanel)}
           >
             {showFilterPanel ? 'Hide Filters' : 'Show Filters'}
@@ -779,7 +780,7 @@ const GameManagement = () => {
             <div style={{ display: 'flex', alignItems: 'flex-end' }}>
               <button 
                 onClick={handleResetFilters}
-                className="btn-admin"
+                className="btn-admin chess-piece-hover"
                 style={{ padding: '8px 15px', marginBottom: '1px' }}
               >
                 Reset Filters
@@ -823,10 +824,10 @@ const GameManagement = () => {
             </div>
             
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button type="submit" className="btn-admin">
+              <button type="submit" className="btn-admin chess-piece-hover">
                 Save Changes
               </button>
-              <button type="button" className="btn-admin" onClick={handleCancelEdit}>
+              <button type="button" className="btn-admin chess-piece-hover" onClick={handleCancelEdit}>
                 Cancel
               </button>
             </div>
@@ -862,7 +863,7 @@ const GameManagement = () => {
                   <td data-label={t('actions')} style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                     <button 
                       onClick={() => handleEditGame(game)}
-                      className="btn-admin"
+                      className="btn-admin chess-piece-hover"
                       style={{ padding: '5px 10px' }}
                     >
                       {t('edit')}

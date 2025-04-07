@@ -77,35 +77,23 @@ const GamesIcon = ({ active }) => (
 
 const SubmitGameIcon = ({ active }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Elegant paper/form background */}
-    <rect x="4" y="4" width="16" height="16" rx="2" 
-      fill={active ? "rgba(201, 169, 106, 0.1)" : "rgba(200, 200, 200, 0.05)"} 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.25" />
-    
-    {/* Document lines - stylish form design */}
-    <path d="M8 9h8M8 13h8M8 17h5" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.25" 
-      strokeLinecap="round" 
-      strokeOpacity="0.8" />
-    
-    {/* Stylish check mark / submit symbol */}
-    <circle cx="17" cy="17" r="3" 
+    {/* Knight chess piece - using golden color for the piece */}
+    <path 
+      d="M11.4 3C9.6 3 8.4 4.05 8.4 5.7C8.4 6.45 8.7 7.05 9.3 7.5C8.7 7.8 8.1 8.25 7.5 8.7C6.9 9.15 6.3 9.75 5.7 10.5C4.8 11.7 3.9 13.35 3 15.5C2.7 16.5 2.85 17.4 3.6 18C4.35 18.6 5.1 18.75 6 18.75H18.3V17.25H6C5.7 17.25 5.4 17.2 5.1 17.05C4.8 16.9 4.5 16.55 4.5 16.1C5.4 14 6 12.5 6.9 11.5C7.2 11.05 7.5 10.65 7.8 10.35C8.4 9.75 9 9.15 9.6 8.85C9.9 9.45 10.2 9.9 10.5 10.35C10.8 10.8 11.1 11.25 11.4 11.8C11.1 11.95 10.8 12.25 10.65 12.55C10.5 12.85 10.5 13.15 10.5 13.5C10.5 14 10.75 14.5 11 14.8C11.25 15.1 11.65 15.4 12.3 15.4C12.95 15.4 13.4 15.2 13.7 14.8C14 14.4 14.1 13.9 14.1 13.5C14.1 13.1 14 12.75 13.8 12.5C13.5 12.2 13.2 12 12.9 11.85C12.6 11.25 12.3 10.8 12 10.35C11.7 9.9 11.4 9.45 11.1 8.85H12.3C12.6 8.85 12.9 8.8 13.2 8.75C13.8 8.6 14.4 8.4 15 8.1C15.9 7.8 16.5 7.2 16.8 6.45C17.1 5.7 17.1 4.9 17.1 4.25V4.2C17.1 3.75 16.8 3.4 16.5 3.4H11.4Z" 
       fill={active ? "var(--primary)" : "currentColor"} 
-      fillOpacity="0.3" />
+      fillOpacity={active ? "1" : "0.6"} 
+    />
     
-    <path d="M15.5 17L16.5 18L18.5 16" 
-      stroke={active ? "var(--primary)" : "currentColor"} 
-      strokeWidth="1.25" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" />
-    
-    {/* Elegant heading/title section */}
-    <rect x="6" y="6" width="12" height="1" 
+    {/* "Plus" sign for adding a game */}
+    <circle cx="19" cy="19" r="4" 
       fill={active ? "var(--primary)" : "currentColor"} 
-      fillOpacity="0.5" 
-      rx="0.5" />
+      fillOpacity="0.2" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="0.8" />
+    <path d="M19 17v4M17 19h4" 
+      stroke={active ? "var(--primary)" : "currentColor"} 
+      strokeWidth="1" 
+      strokeLinecap="round" />
   </svg>
 );
 
@@ -162,32 +150,39 @@ const MobileNav = () => {
     return null;
   }
   
+  // Determine if the user is playing (non-admin) or admin
+  const isAdmin = currentUser?.isAdmin;
+  
   return (
     <nav className="mobile-nav">
-      <div className="mobile-nav-container">
-        <Link 
-          to="/dashboard" 
-          className={`mobile-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
-        >
-          <div className="mobile-nav-icon">
-            <DashboardIcon active={location.pathname === '/dashboard'} />
-          </div>
-          <span>{t('dashboard')}</span>
-        </Link>
+      <div className={`mobile-nav-container ${!isAdmin ? 'player-nav' : ''}`}>
+        {/* First group: Dashboard and Rankings */}
+        <div className="nav-group">
+          <Link 
+            to="/dashboard" 
+            className={`mobile-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
+          >
+            <div className="mobile-nav-icon">
+              <DashboardIcon active={location.pathname === '/dashboard'} />
+            </div>
+            <span>{t('dashboard')}</span>
+          </Link>
+          
+          <Link 
+            to="/rankings" 
+            className={`mobile-nav-item ${location.pathname === '/rankings' ? 'active' : ''}`}
+          >
+            <div className="mobile-nav-icon">
+              <RankingsIcon active={location.pathname === '/rankings'} />
+            </div>
+            <span>{t('rankings')}</span>
+          </Link>
+        </div>
         
-        <Link 
-          to="/rankings" 
-          className={`mobile-nav-item ${location.pathname === '/rankings' ? 'active' : ''}`}
-        >
-          <div className="mobile-nav-icon">
-            <RankingsIcon active={location.pathname === '/rankings'} />
-          </div>
-          <span>{t('rankings')}</span>
-        </Link>
-        
+        {/* Central "Submit Game" button, prominent for players */}
         <Link 
           to="/submit-game" 
-          className={`mobile-nav-item ${location.pathname === '/submit-game' ? 'active' : ''}`}
+          className={`mobile-nav-item submit-game-button ${location.pathname === '/submit-game' ? 'active' : ''} ${!isAdmin ? 'centered-button' : ''}`}
         >
           <div className="mobile-nav-icon">
             <SubmitGameIcon active={location.pathname === '/submit-game'} />
@@ -195,37 +190,40 @@ const MobileNav = () => {
           <span>{t('submitGame')}</span>
         </Link>
         
-        <Link 
-          to="/games" 
-          className={`mobile-nav-item ${location.pathname === '/games' ? 'active' : ''}`}
-        >
-          <div className="mobile-nav-icon">
-            <GamesIcon active={location.pathname === '/games'} />
-          </div>
-          <span>{t('allGames') || 'Games'}</span>
-        </Link>
-        
-        {currentUser?.isAdmin && (
+        {/* Last group: Games, Admin (if applicable), and Profile */}
+        <div className="nav-group">
           <Link 
-            to="/admin" 
-            className={`mobile-nav-item ${location.pathname.startsWith('/admin') ? 'active' : ''}`}
+            to="/games" 
+            className={`mobile-nav-item ${location.pathname === '/games' ? 'active' : ''}`}
           >
             <div className="mobile-nav-icon">
-              <AdminIcon active={location.pathname.startsWith('/admin')} />
+              <GamesIcon active={location.pathname === '/games'} />
             </div>
-            <span>{t('adminNav')}</span>
+            <span>{t('allGames') || 'Games'}</span>
           </Link>
-        )}
-        
-        <Link 
-          to="/profile" 
-          className={`mobile-nav-item ${location.pathname === '/profile' ? 'active' : ''}`}
-        >
-          <div className="mobile-nav-icon">
-            <ProfileIcon active={location.pathname === '/profile'} />
-          </div>
-          <span>{t('profile')}</span>
-        </Link>
+          
+          {isAdmin && (
+            <Link 
+              to="/admin" 
+              className={`mobile-nav-item ${location.pathname.startsWith('/admin') ? 'active' : ''}`}
+            >
+              <div className="mobile-nav-icon">
+                <AdminIcon active={location.pathname.startsWith('/admin')} />
+              </div>
+              <span>{t('adminNav')}</span>
+            </Link>
+          )}
+          
+          <Link 
+            to="/profile" 
+            className={`mobile-nav-item ${location.pathname === '/profile' ? 'active' : ''}`}
+          >
+            <div className="mobile-nav-icon">
+              <ProfileIcon active={location.pathname === '/profile'} />
+            </div>
+            <span>{t('profile')}</span>
+          </Link>
+        </div>
       </div>
     </nav>
   );

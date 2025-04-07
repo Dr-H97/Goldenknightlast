@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import '../styles/animations.css';
 import '../styles/responsive-tables.css';
+import "../styles/button-styles.css";
 import '../styles/gamespage-fix.css';
 
 const Games = () => {

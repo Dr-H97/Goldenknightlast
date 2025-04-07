@@ -6,11 +6,15 @@ import { useTheme } from '../context/ThemeContext';
 import WebSocketStatus from './WebSocketStatus';
 import '../styles/navbar.css';
 
-// SVG Icons for the navbar
+// Golden Knight Chess Logo
 const ChessLogo = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C11.5 2 11 2.19 10.59 2.59L7 6.17L7.03 6.14C7 6.14 7 6.16 7 6.17V6.17L9.72 8.9L9 9.62L8.28 8.9V8.91L7.56 8.19L5 10.76V11.59L7.5 14.09L8.21 13.38L10.59 15.76L10.76 15.93C10.76 15.93 10.79 15.95 10.76 15.93C10.76 15.93 10.76 15.93 10.76 15.93V17.59L12.41 19.24V22H13.59V19.31L14.12 18.78L15.31 20L15.6 20.26L19 23.68L20.68 22L17.43 18.72L16 17.28V17.28L14.12 15.38L13.71 14.97L11.63 12.9L9.51 10.78L10.94 9.35L10.97 9.38L13.07 11.5L15.31 13.72L16.94 15.35L18.5 16.93L20.84 19.26L22.5 17.59V16.76L19.86 14.12L19.88 14.09L19.28 13.5L18.25 12.47L12.41 6.62V6.63L11 5.21L12.71 3.5H14.5V2.09C14.5 2.09 14.5 2 14.5 2H12ZM7.78 15.06L5.25 17.59V18.5H6.16L8.69 15.97L7.78 15.06Z" fill="currentColor" />
-  </svg>
+  <img 
+    src="/images/golden-knight.svg" 
+    alt="Golden Knight Chess Logo" 
+    className="chess-logo-icon" 
+    width="28" 
+    height="28" 
+  />
 );
 
 const MenuIcon = () => (

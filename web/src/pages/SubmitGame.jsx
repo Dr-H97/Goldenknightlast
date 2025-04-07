@@ -329,7 +329,7 @@ const SubmitGame = () => {
           
           <button 
             type="submit" 
-            className="btn-primary submit-game-btn btn-animate-queen"
+            className="btn-games submit-game-btn btn-animate-queen chess-piece-hover"
             style={{ width: '100%', marginTop: '10px' }}
             disabled={submitting}
           >

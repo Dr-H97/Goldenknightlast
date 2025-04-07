@@ -25,24 +25,30 @@
 
 .app-navbar-logo h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
+  white-space: nowrap;
+}
+
+.chess-logo-icon {
+  filter: drop-shadow(0 0 2px rgba(201, 169, 106, 0.5));
 }
 
 .app-navbar-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Added proper spacing between links */
+  gap: 1rem; /* Reduced spacing between links */
 }
 
 .app-navbar-links a {
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
-  padding: 0.25rem 0.5rem; /* Added padding for better click targets */
+  font-size: 0.85rem; /* Reduced font size */
+  padding: 0.25rem 0.4rem; /* Slightly reduced padding */
   border-radius: 4px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .app-navbar-links a:hover {

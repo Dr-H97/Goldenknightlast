@@ -48,3 +48,62 @@ html[lang="fr"] .mobile-nav-item:nth-child(3) span {
     padding: 0 4px;
   }
 }
+
+/* Updated mobile navigation with proper submit game button positioning and styling */
+.mobile-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.mobile-nav-container.player-nav {
+  position: relative;
+  padding-top: 8px;
+}
+
+.nav-group {
+  display: flex;
+  gap: 5px;
+}
+
+.submit-game-button {
+  position: relative;
+  color: var(--primary-accent);
+  font-weight: 600;
+}
+
+.submit-game-button.centered-button {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--nav-bg);
+  border: 2px solid var(--primary-accent);
+  border-radius: 20px;
+  padding: 8px 16px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+}
+
+.submit-game-button.centered-button:active,
+.submit-game-button.centered-button.active {
+  transform: translateX(-50%) translateY(2px);
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjust icon size for submit game button */
+.submit-game-button .mobile-nav-icon {
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+  .nav-group {
+    gap: 2px;
+  }
+  
+  .submit-game-button.centered-button {
+    padding: 6px 12px;
+  }
+}

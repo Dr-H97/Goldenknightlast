@@ -1,0 +1,135 @@
+/* Custom button styles for different sections */
+
+/* Games section buttons - blue theme */
+.btn-games {
+  background-color: #3577a0;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-games:hover {
+  background-color: #2a6283;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-games:active {
+  transform: translateY(0);
+}
+
+.btn-games.chess-piece-hover::before {
+  content: '♟';
+  margin-right: 6px;
+  font-size: 1.1em;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.btn-games.chess-piece-hover:hover::before {
+  transform: translateY(-3px);
+}
+
+/* Admin section buttons - purple theme */
+.btn-admin {
+  background-color: #7952b3;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-admin:hover {
+  background-color: #63449c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-admin:active {
+  transform: translateY(0);
+}
+
+.btn-admin.chess-piece-hover::before {
+  content: '♔';
+  margin-right: 6px;
+  font-size: 1.1em;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.btn-admin.chess-piece-hover:hover::before {
+  transform: translateY(-3px);
+}
+
+/* Button size variants */
+.btn-sm {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.btn-lg {
+  padding: 0.9rem 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Add button colors to the nav tabs for the Admin page */
+.nav-tab {
+  background-color: transparent;
+  border: 2px solid #7952b3;
+  color: #7952b3;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+  background-color: rgba(121, 82, 179, 0.1);
+}
+
+.nav-tab.active {
+  background-color: #7952b3;
+  color: white;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 5;
+}
+
+/* Danger button for deletions */
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Success button for confirmations */
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}

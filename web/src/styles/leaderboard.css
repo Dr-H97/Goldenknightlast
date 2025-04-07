@@ -608,3 +608,43 @@
   }
 }
 /* Floating Action Button has been removed */
+
+/* Chess piece icons styling */
+.chess-piece-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--primary);
+  filter: drop-shadow(0 0 2px rgba(201, 169, 106, 0.6));
+  margin-right: 4px;
+}
+
+.player-piece {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface-secondary);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  border: 2px solid var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.rank-1 .player-piece {
+  background-color: var(--badge-gold-bg);
+  border-color: var(--badge-gold-border);
+}
+
+.rank-2 .player-piece {
+  background-color: var(--badge-silver-bg);
+  border-color: var(--badge-silver-border);
+}
+
+.rank-3 .player-piece {
+  background-color: var(--badge-bronze-bg);
+  border-color: var(--badge-bronze-border);
+}
