@@ -1,195 +1,95 @@
-# Golden Knight Chess Club - Railway Deployment Guide
+# Deploying to Railway
 
-This comprehensive guide provides step-by-step instructions to deploy the Golden Knight Chess Club application to Railway.
+This document provides instructions for deploying the Chess Club application to Railway.
 
-## What is Railway?
+## Prerequisites
 
-Railway is a modern deployment platform that makes it easy to deploy web applications without the hassle of managing infrastructure. It provides a fully managed PostgreSQL database service, CI/CD pipelines, and environment variables management.
+- A Railway account (free or paid)
+- The Railway CLI (optional but recommended)
 
-## Files Already Prepared for Railway
+## Troubleshooting Java/Gradle Detection Issues
 
-The following files have been created or modified to ensure a smooth deployment to Railway:
+If you encounter an error like `ClassNotFoundException: org.gradle.wrapper.GradleWrapperMain`, Railway is incorrectly detecting your project as a Java/Gradle application due to the Android app files in your repository.
 
-1. `Dockerfile` - Contains instructions for building and running the application
-2. `railway.json` - Defines the build and deployment process using Dockerfile
-3. `Procfile` - Specifies the command to start the application (optional when using Dockerfile)
-4. `.env.example` - Template for required environment variables
-5. `server/middleware/auth.js` - Authentication middleware
-6. WebSocket configurations in `web/src/utils/websocket.js` - Adapted for Railway
-7. CORS settings in `server/index.js` - Updated with Railway domain
-8. Enhanced Vite config in `web/vite.config.js` - Production optimizations for Railway
+### Solution 1: Use NIXPACKS Builder with Command Override
 
-## Step-by-Step Deployment Guide
+The updated `railway.json` in this repository uses the NIXPACKS builder instead of Dockerfile, with explicit build commands:
 
-### Step 1: Create a Railway Account
-
-If you don't already have one, sign up for a free account at [Railway](https://railway.app/).
-
-### Step 2: Install the Railway CLI (Optional)
-
-For easier management, you can install the Railway CLI:
-
-```bash
-npm i -g @railway/cli
+```json
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm install && cd web && npm install && npm run build"
+  },
+  "deploy": {
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
+    "healthcheckPath": "/api/players",
+    "healthcheckTimeout": 300,
+    "startCommand": "node server/index.js",
+    "numReplicas": 1
+  }
+}
 ```
 
-### Step 3: Push Your Code to GitHub
+### Solution 2: Create a Deployment Branch (Recommended)
 
-Make sure your project is in a GitHub repository:
+The most reliable solution is to create a separate deployment branch without any Android files:
 
-1. Create a new repository on GitHub
-2. Push your code to the repository:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/yourusername/golden-knight-chess-club.git
-   git push -u origin main
+1. Create a new branch in your local repository
+2. Remove all Android/Java related files and directories:
+   - `app/` directory
+   - Any `*.gradle` files
+   - `gradlew` and related files
+   - `build.gradle`
+   - `settings.gradle`
+   - `local.properties`
+3. Commit these changes and push the branch to your repository
+4. In Railway, deploy from this specific branch instead of the main branch
+
+### Solution 3: Deploy with Railway CLI
+
+If you have the Railway CLI installed:
+
+1. Login to Railway: `railway login`
+2. Link to your project: `railway link`
+3. Deploy only specific files:
+   ```
+   railway up --detach --filter="server/**,web/**,shared/**,package.json,railway.json"
    ```
 
-### Step 4: Create a New Project on Railway
+This command explicitly defines which files to include, avoiding the Android app files altogether.
 
-1. Log in to the Railway dashboard
-2. Click on "New Project"
-3. Choose "Deploy from GitHub repo"
-4. Select your GitHub repository
-5. Select the branch you want to deploy (usually `main`)
+## Environment Variables
 
-### Step 5: Add a PostgreSQL Database
+Make sure to set these environment variables in your Railway project:
 
-1. In your project dashboard, click "New Service"
-2. Select "Database" > "PostgreSQL"
-3. Wait for the database to be provisioned
+- `NODE_ENV`: `production`
+- `PORT`: `3000` (or let Railway assign it)
+- `DATABASE_URL`: Your PostgreSQL connection string (Railway will provide this automatically if you add a PostgreSQL plugin)
+- `SESSION_SECRET`: A random string for session encryption
 
-### Step 6: Connect Services
+## Database Setup
 
-Railway will automatically connect your services, but ensure that:
+Railway offers PostgreSQL as a plugin. Simply add it to your project and Railway will automatically set up the database and provide the connection string as `DATABASE_URL`.
 
-1. Your web service can access the database service
-2. The `DATABASE_URL` environment variable is automatically populated
+## Deployment Steps
 
-### Step 7: Configure Environment Variables
-
-In your Railway dashboard:
-
-1. Go to your web service
-2. Navigate to the "Variables" tab
-3. Add the following variables:
-   - `NODE_ENV`: Set to `production`
-   - `SESSION_SECRET`: A strong random string (you can generate one with `openssl rand -hex 32`)
-
-### Step 8: Deploy Your Application
-
-Railway will automatically:
-1. Use the Dockerfile to build your application
-2. Install dependencies and build the frontend as defined in the Dockerfile
-3. Start the application using the command in the Dockerfile CMD directive
-4. Monitor application health using the healthcheck endpoint defined in railway.json
-
-### Step 9: Initialize the Database
-
-After deployment, you'll need to run the database migration to create the tables:
-
-```bash
-railway run npm run db:push
-```
-
-Or via the dashboard:
-1. Go to your web service
-2. Click on the "Deploy" tab
-3. Under "Custom Deploy Commands", run: `node db-push.js`
-
-### Step 10: Access Your Deployed Application
-
-Once the deployment is complete, you can access your application via the URL provided by Railway:
-
-1. In the Railway dashboard, go to your web service
-2. Click on the "Settings" tab
-3. Find your application URL under "Domains"
-
-## Troubleshooting Common Issues
-
-### Database Connection Issues
-
-If your application can't connect to the database:
-1. Check that the `DATABASE_URL` environment variable is set correctly
-2. Verify database credentials in the Railway dashboard
-3. Ensure your app is using the correct environment variables
-
-### WebSocket Connection Problems
-
-If WebSocket connections fail:
-1. Check browser console for connection errors
-2. Verify that the WebSocket URL is correctly configured for production
-3. Ensure CORS settings include your Railway domain
-
-### Build Failures
-
-If the build process fails:
-1. Check the build logs in the Railway dashboard
-2. Verify that the Dockerfile syntax is correct
-3. Ensure that all dependencies are correctly listed in package.json
-4. Verify your .dockerignore and .railwayignore files are correctly excluding Android/Java files
-
-#### Handling Gradle/Java Errors
-
-If you see errors like `ClassNotFoundException: org.gradle.wrapper.GradleWrapperMain`, this indicates Railway is incorrectly detecting the project as a Java/Gradle application due to the presence of Android app files. To fix this:
-
-1. Make sure the .railwayignore file contains the following:
-   ```
-   # Android/Java files
-   app/
-   *.java
-   *.gradle
-   gradlew*
-   gradle/
-   build.gradle
-   settings.gradle
-   local.properties
-   ```
-
-2. Double-check that your railway.json explicitly specifies the DOCKERFILE builder:
-   ```json
-   {
-     "build": {
-       "builder": "DOCKERFILE",
-       "dockerfilePath": "Dockerfile"
-     }
-   }
-   ```
-
-3. In extreme cases, you might need to temporarily remove the Android files from your repository before deployment.
-
-## Additional Railway Features
-
-### Automatic Deployments
-
-Railway can automatically deploy your application whenever you push to your GitHub repository:
-1. Go to your web service settings
-2. Under "Deployments", ensure "Auto Deploy" is enabled
-
-### Custom Domains
-
-To use your own domain instead of the Railway-provided one:
-1. Go to your web service settings
-2. Navigate to "Domains"
-3. Click "Add Domain"
-4. Follow the instructions to set up DNS records
-
-### Scale Your Application
-
-As your user base grows, you can easily scale your application:
-1. Go to your web service settings
-2. Navigate to "Scaling"
-3. Adjust the resources allocated to your application
+1. Push your code to a GitHub repository
+2. Log in to [Railway](https://railway.app/)
+3. Create a new project
+4. Connect to your GitHub repository
+5. (Optional) Add the PostgreSQL plugin
+6. Configure environment variables
+7. Deploy the application
 
 ## Need Help?
 
-If you encounter any issues during deployment, refer to the [Railway documentation](https://docs.railway.app/) or reach out to Railway support.
+If you continue to experience issues with Gradle/Java detection:
 
-## Account Credentials for Testing
+1. Contact Railway support
+2. Check their documentation for troubleshooting build detection
+3. Consider using Render.com as an alternative deployment platform
 
-When testing your deployed application, use these admin credentials:
-- Username: "Hamza Bouzida" (ID 1)
-- PIN: Test with "1234" (Note: actual PIN is hashed in the database)
+Remember that the deployment process assumes the web app has already been built. If you encounter errors, check your build logs carefully.

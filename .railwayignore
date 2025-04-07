@@ -1,4 +1,4 @@
-# Android/Java files
+# Ignore Android/Java files to prevent Gradle detection
 app/
 *.java
 *.gradle
@@ -7,7 +7,5 @@ gradle/
 build.gradle
 settings.gradle
 local.properties
-
-# Other files not needed for deployment
-*.md
-!RAILWAY_DEPLOYMENT.md
+AndroidManifest.xml
+res/
