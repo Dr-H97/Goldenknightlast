@@ -13,7 +13,13 @@ WORKDIR /app/web
 RUN npm install
 WORKDIR /app
 
-# Copy the rest of the application code
+# Create .dockerignore file on the fly to exclude Android app files
+RUN echo "app/" > .dockerignore && \
+    echo "*.java" >> .dockerignore && \
+    echo "*.gradle" >> .dockerignore && \
+    echo "gradlew*" >> .dockerignore
+
+# Copy the rest of the application code (excluding Android app files)
 COPY . .
 
 # Build the frontend

@@ -1,0 +1,13 @@
+# Android/Java files
+app/
+*.java
+*.gradle
+gradlew*
+gradle/
+build.gradle
+settings.gradle
+local.properties
+
+# Other files not needed for deployment
+*.md
+!RAILWAY_DEPLOYMENT.md

@@ -130,8 +130,36 @@ If the build process fails:
 1. Check the build logs in the Railway dashboard
 2. Verify that the Dockerfile syntax is correct
 3. Ensure that all dependencies are correctly listed in package.json
-4. Check if there are any issues with the multi-stage build process in the Dockerfile
-4. Check if there are any issues with the multi-stage build process in the Dockerfile
+4. Verify your .dockerignore and .railwayignore files are correctly excluding Android/Java files
+
+#### Handling Gradle/Java Errors
+
+If you see errors like `ClassNotFoundException: org.gradle.wrapper.GradleWrapperMain`, this indicates Railway is incorrectly detecting the project as a Java/Gradle application due to the presence of Android app files. To fix this:
+
+1. Make sure the .railwayignore file contains the following:
+   ```
+   # Android/Java files
+   app/
+   *.java
+   *.gradle
+   gradlew*
+   gradle/
+   build.gradle
+   settings.gradle
+   local.properties
+   ```
+
+2. Double-check that your railway.json explicitly specifies the DOCKERFILE builder:
+   ```json
+   {
+     "build": {
+       "builder": "DOCKERFILE",
+       "dockerfilePath": "Dockerfile"
+     }
+   }
+   ```
+
+3. In extreme cases, you might need to temporarily remove the Android files from your repository before deployment.
 
 ## Additional Railway Features
 

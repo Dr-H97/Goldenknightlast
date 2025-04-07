@@ -1,0 +1,13 @@
+# Ignore Android app files
+app/
+*.java
+*.gradle
+gradlew*
+gradle/
+
+# Other common files to ignore
+node_modules/
+.git/
+.gitignore
+.env
+.env.local
