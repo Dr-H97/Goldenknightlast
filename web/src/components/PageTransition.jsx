@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { CSSTransition } from 'react-transition-group';
+
 import '../styles/chessLoader.css';
 
 /**
@@ -48,25 +50,37 @@ const PageTransition = ({
     );
   }
 
-  // Custom CSS classes for animation
-  const fadeInClass = show ? 'opacity-100 transition-opacity duration-300' : 'opacity-0';
+  // Apply appropriate transition class based on type
+  let transitionClass = 'page-transition';
   
   if (initialLoad) {
     return (
       <div className="chess-board-reveal">
-        {show && (
-          <div className={`chess-piece-fade-in ${fadeInClass}`}>
+        <CSSTransition
+          in={show}
+          timeout={300}
+          classNames={transitionClass}
+          unmountOnExit
+        >
+          <div className="chess-piece-fade-in">
             {children}
           </div>
-        )}
+        </CSSTransition>
       </div>
     );
   }
 
   return (
-    <div className={fadeInClass}>
-      {show && children}
-    </div>
+    <CSSTransition
+      in={show}
+      timeout={300}
+      classNames={transitionClass}
+      unmountOnExit
+    >
+      <div>
+        {children}
+      </div>
+    </CSSTransition>
   );
 };
 

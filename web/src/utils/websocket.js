@@ -32,33 +32,8 @@ export const initWebSocket = (onStatusChange) => {
   statusChangeCallback?.(SOCKET_STATUS.CONNECTING);
   
   try {
-    // Handle various deployment environments
-    const isReplit = window.location.hostname.includes('replit');
-    const isRailway = window.location.hostname.includes('railway.app');
-    const isVercel = window.location.hostname.includes('vercel.app');
-    
-    // Get the appropriate WebSocket URL based on environment
-    let wsUrl;
-    
-    // Check if we have a backend URL defined in environment variables
-    const backendWsUrl = import.meta.env?.VITE_BACKEND_WS_URL;
-    
-    if (backendWsUrl) {
-      // Use the environment variable if available (best for production)
-      wsUrl = backendWsUrl;
-    } else if (isVercel) {
-      // For Vercel, WebSocket endpoints should be pointed to the backend (Railway)
-      const backendHost = "chess-club-backend.railway.app"; // Update this to your actual backend host
-      wsUrl = `wss://${backendHost}/ws`;
-    } else if (isReplit || isRailway) {
-      // For Replit and Railway, WebSockets are on the same domain
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      wsUrl = `${protocol}//${window.location.host}/ws`;
-    } else {
-      // Local development
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      wsUrl = `${protocol}//${window.location.hostname}:3000/ws`;
-    }
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/ws`;
     
     console.log(`Connecting to WebSocket at ${wsUrl}`);
     socket = new WebSocket(wsUrl);
@@ -166,14 +141,11 @@ const scheduleReconnect = () => {
     clearTimeout(reconnectTimeout);
   }
   
-  // Use exponential backoff for reconnection attempts
-  const backoffTime = Math.min(30000, 3000 * (1 + Math.random())); // Max 30 seconds
-  
-  // Reconnect after backoff time
+  // Reconnect after 3 seconds
   reconnectTimeout = setTimeout(() => {
-    console.log(`Attempting to reconnect WebSocket after ${backoffTime}ms...`);
+    console.log('Attempting to reconnect WebSocket...');
     initWebSocket();
-  }, backoffTime);
+  }, 3000);
 };
 
 /**
