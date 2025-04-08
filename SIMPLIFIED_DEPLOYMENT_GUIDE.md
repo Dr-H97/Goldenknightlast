@@ -35,21 +35,33 @@ No server backend is needed as we've migrated all functionality to Firebase!
      - projectId
      - appId
 
-## Step 2: Deploy Frontend to Vercel
+## Step 2: Deploy Frontend to Cloud Run (or Vercel)
 
-1. Create a [Vercel account](https://vercel.com/signup) (free)
+### Option A: Deploy to Cloud Run
 
-2. Push your code to GitHub:
-   - Create a new GitHub repository
-   - Push your code to this repository
+1. Create a Google Cloud account and create a new project
+   - Enable Cloud Run API
+   - Install the Google Cloud CLI if deploying from your local machine
+
+2. Prepare your project for Cloud Run:
+   - Make sure your `web/package.json` has both `"start"` and `"build"` scripts:
+     ```json
+     "scripts": {
+       "dev": "vite --host 0.0.0.0",
+       "start": "vite --host 0.0.0.0",
+       "build": "vite build",
+       "preview": "vite preview"
+     }
+     ```
 
 3. Create a `vercel.json` configuration file in the root directory:
    ```json
    {
      "version": 2,
      "framework": "vite",
-     "buildCommand": "cd web && npm install && npm run build",
+     "buildCommand": "cd web && npm install",
      "outputDirectory": "web/dist",
+     "deploymentTarget": "cloudrun",
      "routes": [
        { "handle": "filesystem" },
        { "src": "/assets/(.*)", "dest": "/assets/$1" },
@@ -57,6 +69,12 @@ No server backend is needed as we've migrated all functionality to Firebase!
      ]
    }
    ```
+
+4. Deploy to Cloud Run:
+   - Use the Google Cloud Console or CLI to deploy your application
+   - Set your start command to: `cd web && npm start`
+
+### Option B: Deploy to Vercel
 
 4. Make sure your `web/package.json` has all necessary dependencies:
    ```json
@@ -176,7 +194,12 @@ To update your app:
 
 - **Authentication issues**: Check Firebase authentication settings
 - **Database access denied**: Verify Firestore security rules
-- **App not updating**: Make sure your GitHub repository is connected to Vercel and automatic deployments are enabled
+- **App not updating**: Make sure your GitHub repository is connected to your deployment platform and automatic deployments are enabled
 - **Build command failure**: Verify that dependencies in web/package.json are correct
-- **Missing JavaScript files**: Ensure the outputDirectory in vercel.json matches where Vite builds your files
-- **Deployment configuration errors**: This is a web application using Vite/React - not an Android app. No Gradle wrapper or ADB tools needed.
+- **Missing JavaScript files**: Ensure the outputDirectory matches where Vite builds your files
+- **Deployment configuration errors**: This is a web application using Vite/React, not an Android app
+  - Do not use Android-specific commands like `./gradlew :app:installDebug` or `adb shell am start -n com.chessclub.app/.ui.login.LoginActivity`
+  - Use web commands instead: `cd web && npm install` for building and `cd web && npm start` for running
+- **Cloud Run deployment**: 
+  - Make sure your package.json has both a "start" and "build" script
+  - Set the correct buildCommand and deployment target in vercel.json

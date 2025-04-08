@@ -1,8 +1,9 @@
 {
   "version": 2,
   "framework": "vite",
-  "buildCommand": "cd web && npm install && npm run build",
+  "buildCommand": "cd web && npm install",
   "outputDirectory": "web/dist",
+  "deploymentTarget": "cloudrun",
   "routes": [
     { "handle": "filesystem" },
     { "src": "/assets/(.*)", "dest": "/assets/$1" },
