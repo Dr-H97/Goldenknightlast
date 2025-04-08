@@ -7,34 +7,6 @@ channel = "stable-24_05"
 runButton = "Project"
 
 [[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "ReferenceServer"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "ChessClubFrontend"
-
-[[workflows.workflow]]
-name = "ReferenceServer"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "node server/simple-server.js"
-waitForPort = 3000
-
-[[workflows.workflow]]
 name = "Dev"
 author = 41133334
 mode = "parallel"
@@ -48,7 +20,16 @@ task = "shell.exec"
 args = "cd web && npm run dev"
 
 [[workflows.workflow]]
-name = "ChessClubFrontend"
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "ChessClubApp"
+
+[[workflows.workflow]]
+name = "ChessClubApp"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -59,7 +40,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd web && npm start"
+args = "node server.js"
 waitForPort = 5000
 
 [deployment]
