@@ -1,0 +1,54 @@
+GOLDEN KNIGHT CHESS CLUB - RAILWAY DEPLOYMENT GUIDE
+===================================================
+
+STEP 1: PREPARE YOUR REPOSITORY
+------------------------------
+- Make sure your code is pushed to GitHub
+- Ensure the Procfile exists (with: web: node server/index.js)
+- Check that db-push.js script is included (created in this update)
+
+STEP 2: DEPLOY ON RAILWAY
+------------------------
+1. Sign up/login at https://railway.app
+2. Click "New Project" → "Deploy from GitHub repo"
+3. Select your repository
+4. Railway will automatically detect your Node.js application
+
+STEP 3: ADD A DATABASE
+---------------------
+1. In your project, click "New" → "Database" → "PostgreSQL"
+2. Railway will provision a PostgreSQL database
+3. The DATABASE_URL env var will be automatically added
+
+STEP 4: CONFIGURE ENVIRONMENT VARIABLES
+-------------------------------------
+1. Go to the "Variables" tab
+2. Add these variables:
+   - NODE_ENV: production
+   - JWT_SECRET: (add a secure random string)
+
+STEP 5: INITIALIZE THE DATABASE
+-----------------------------
+1. After deployment completes, open shell
+2. Run: node db-push.js
+3. For sample data: node db-push.js --with-sample-data
+
+STEP 6: ACCESS YOUR APPLICATION
+-----------------------------
+1. Use the URL provided by Railway
+2. Login with Admin/1234
+
+KEY CHANGES MADE FOR RAILWAY COMPATIBILITY:
+-----------------------------------------
+1. Updated server/index.js to detect Railway deployment
+2. Added CORS support for Railway domains
+3. Created db-push.js for database schema initialization
+4. Enhanced WebSocket host detection for Railway
+
+TROUBLESHOOTING
+--------------
+- Database issues: Check DATABASE_URL and run db-push.js
+- Connection problems: Check CORS and WebSocket URL configuration
+- Deployment failures: Check build logs in Railway dashboard
+
+For complete documentation, refer to Railway docs: https://docs.railway.app

@@ -1,0 +1,23 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm install && cd web && npm install && npm run build"
+
+[deploy]
+startCommand = "node server/index.js"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[deploy.envs]
+NODE_ENV = "production"
+
+[[services]]
+name = "database"
+type = "postgres"
+internal_port = 5432
+connection_uri_env_var_names = ["DATABASE_URL"]
+
+[[services.envs]]
+key = "DATABASE_SCHEMA"
+value = "public"

@@ -96,7 +96,12 @@ function broadcast(message) {
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5000', 'https://localhost:5000', 'https://golden-knight-chess-club.onrender.com', '*'],
+  origin: ['http://localhost:5000', 'https://localhost:5000', 
+           'https://golden-knight-chess-club.onrender.com', 
+           'https://golden-knight-chess-club.up.railway.app',
+           process.env.RAILWAY_STATIC_URL, 
+           process.env.RENDER_EXTERNAL_URL,
+           '*'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
@@ -144,7 +149,26 @@ const startServer = async () => {
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
       const protocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
-      const host = process.env.NODE_ENV === 'production' ? 'golden-knight-chess-club.onrender.com' : `localhost:${PORT}`;
+      
+      // Determine host based on platform
+      let host;
+      if (process.env.NODE_ENV === 'production') {
+        // Support different deployment platforms
+        if (process.env.RAILWAY_STATIC_URL) {
+          // For Railway deployment
+          host = process.env.RAILWAY_STATIC_URL.replace(/^https?:\/\//, '');
+        } else if (process.env.RENDER_EXTERNAL_URL) {
+          // For Render deployment
+          host = process.env.RENDER_EXTERNAL_URL.replace(/^https?:\/\//, '');
+        } else {
+          // Generic fallback
+          host = 'your-app-domain.com';
+        }
+      } else {
+        // Local development
+        host = `localhost:${PORT}`;
+      }
+      
       console.log(`WebSocket server running at ${protocol}://${host}/ws`);
     });
   } catch (error) {
