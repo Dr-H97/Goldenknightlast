@@ -1,0 +1,28 @@
+{
+  "name": "chess-club-app",
+  "version": "1.0.0",
+  "description": "Chess Club Management Application - NODEJS PROJECT (NOT JAVA)",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "build": "cd web && npm run build",
+    "postinstall": "cd web && npm install"
+  },
+  "keywords": [
+    "chess",
+    "club",
+    "management",
+    "nodejs",
+    "react"
+  ],
+  "author": "Golden Knight Chess Club",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}

@@ -1,0 +1,90 @@
+
+
+building '/nix/store/49fy279p1p08yjgsllmr88rh0ngn5s39-59dc10b5a6f2a592af36375c68fda41246794b86-env.drv'...
+
+created 35 symlinks in user environment
+
+building '/nix/store/i16ppb2m7agq1nhqavckdb7506nr5p9b-user-environment.drv'...
+
+removing old generations of profile /nix/var/nix/profiles/per-user/root/channels
+
+removing old generations of profile /nix/var/nix/profiles/per-user/root/profile
+
+removing profile version 1
+
+removing old generations of profile /nix/var/nix/profiles/per-user/root/channels
+
+removing old generations of profile /nix/var/nix/profiles/per-user/root/profile
+
+finding garbage collector roots...
+
+removing stale link from '/nix/var/nix/gcroots/auto/lzjbmb2ry0z7lma2fvpqprb12921pnb5' to '/nix/var/nix/profiles/per-user/root/profile-1-link'
+
+deleting garbage...
+
+deleting '/nix/store/ir9fki7838bmk4hlj0zmwbw45q101j66-user-environment.drv'
+
+deleting '/nix/store/b9rj4wk1cxh7g2ib89aqbcapzzar8p2s-user-environment'
+
+deleting '/nix/store/xxyn8jfxcpr5ac9dvismfzx39ijh9kiv-env-manifest.nix'
+
+deleting '/nix/store/6qrh430icf6ajdq9251ydkbvlia03bbc-stdenv-linux'
+
+deleting '/nix/store/452v8bl3sjaq4kil1d9vqxc5vns4cvpp-gnumake-4.4.1'
+
+deleting '/nix/store/1713hchhyzawkxfhk9srxklv03bqj55y-gawk-5.2.2'
+
+deleting '/nix/store/9gmnbb6bn43900wwvdyaljj3qi5jhzz4-source'
+
+deleting '/nix/store/w1qzwvqwv127nblp4hjydp8c9hhmb7zk-builder.pl'
+
+deleting '/nix/store/sq0w0jchkjqbxl47h52kfwa33qp1adfh-findutils-4.9.0'
+
+deleting '/nix/store/j0blrlhddcnqgq1v1cd4pfggjr2wah8n-update-autotools-gnu-config-scripts-hook'
+
+deleting '/nix/store/7fqp73ncnbwr5bxxszqicf6r33d9yhkw-gnused-4.9'
+
+deleting '/nix/store/67sxjwjzqhxn8ld3knpswwp0j84sgqk5-libraries'
+
+deleting '/nix/store/f3g84l92p0njh0gyk1z7cp2k4qnh91ha-diffutils-3.10'
+
+deleting '/nix/store/l6s9gwsallxxgz3qy7xk6410y842m6dn-patch-2.7.6'
+
+deleting '/nix/store/fx9hkrym88ahxkibcqnkl8907vakbqvg-perl-5.38.2'
+
+deleting '/nix/store/y83pz60av31hpr11zlbvc7bb93bk5fkd-gnu-config-2023-09-19'
+
+deleting '/nix/store/pyq6gyhgck1nkfyjs6842ysxkxzjxkaj-patchelf-0.15.0'
+
+deleting '/nix/store/hnz8p5w9xc0ivsiyrgky6f6h7sjb28a5-file-5.45'
+
+deleting '/nix/store/a4wik3fj6icqr357dsc9h7z573nh1a3p-ed-1.19'
+
+deleting unused links...
+
+note: currently hard linking saves -0.00 MiB
+
+19 store paths deleted, 210.63 MiB freed
+
+[stage-0 4/8] RUN nix-env -if .nixpacks/nixpkgs-59dc10b5a6f2a592af36375c68fda41246794b86.nix && nix-collect-garbage -d  ✔ 43s
+
+[stage-0 5/8] COPY . /app/.
+
+[stage-0 5/8] COPY . /app/.  ✔ 159ms
+
+[stage-0 6/8] RUN --mount=type=cache,id=s/f4a28468-5404-446f-813c-69f00518930d-/root/gradle,target=/root/.gradle chmod +x gradlew
+
+[stage-0 6/8] RUN --mount=type=cache,id=s/f4a28468-5404-446f-813c-69f00518930d-/root/gradle,target=/root/.gradle chmod +x gradlew  ✔ 91ms
+
+[stage-0 7/8] RUN --mount=type=cache,id=s/f4a28468-5404-446f-813c-69f00518930d-/root/gradle,target=/root/.gradle ./gradlew clean build -x check -x test
+
+Error: Could not find or load main class org.gradle.wrapper.GradleWrapperMain
+Caused by: java.lang.ClassNotFoundException: org.gradle.wrapper.GradleWrapperMain
+
+✕ [stage-0 7/8] RUN --mount=type=cache,id=s/f4a28468-5404-446f-813c-69f00518930d-/root/gradle,target=/root/.gradle ./gradlew clean build -x check -x test 
+process "/bin/bash -ol pipefail -c ./gradlew clean build -x check -x test" did not complete successfully: exit code: 1
+ 
+
+ERROR: failed to solve: process "/bin/bash -ol pipefail -c ./gradlew clean build -x check -x test" did not complete successfully: exit code: 1
+
+Error: Docker build failed

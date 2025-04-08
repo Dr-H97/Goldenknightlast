@@ -169,7 +169,10 @@ app.use(cors({
     const allowedOrigins = [
       'https://golden-knight-chess-club.onrender.com',
       'https://golden-knight-chess-db.onrender.com',
-      'https://golden-knight-chess-club.up.railway.app'
+      'https://golden-knight-chess-club.up.railway.app',
+      'https://chess-club-app.up.railway.app',
+      'https://chess-club-app-production.up.railway.app',
+      'https://chess-club-app.railway.app'
     ];
     
     // Allow requests with no origin (like mobile apps, curl requests)
@@ -212,6 +215,15 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 3000;
 
+// Check for required environment variables
+if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+  console.warn('Warning: SESSION_SECRET environment variable is not set in production. Using a default value.');
+  process.env.SESSION_SECRET = 'chess-club-default-secret-key';
+} else if (!process.env.SESSION_SECRET) {
+  // Set a default for development
+  process.env.SESSION_SECRET = 'chess-club-dev-secret-key';
+}
+
 const startServer = async () => {
   try {
     // Initialize the database
@@ -225,12 +237,39 @@ const startServer = async () => {
     // Start listening
     server.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV}`);
+      
       const protocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
-      // Use Railway app domain if available, otherwise fallback to Render
-      const host = process.env.RAILWAY_STATIC_URL || process.env.NODE_ENV === 'production' 
-        ? process.env.RAILWAY_STATIC_URL || 'golden-knight-chess-club.up.railway.app' 
-        : `localhost:${PORT}`;
+      
+      // Get the host based on environment variables
+      let host;
+      if (process.env.RAILWAY_STATIC_URL) {
+        // Railway deployment
+        host = process.env.RAILWAY_STATIC_URL.replace(/^https?:\/\//, '');
+        console.log(`Using Railway URL: ${host}`);
+      } else if (process.env.RENDER_EXTERNAL_URL) {
+        // Render deployment
+        host = process.env.RENDER_EXTERNAL_URL.replace(/^https?:\/\//, '');
+        console.log(`Using Render URL: ${host}`);
+      } else if (process.env.NODE_ENV === 'production') {
+        // Default production fallback
+        host = 'chess-club-app.up.railway.app';
+        console.log(`Using default production URL: ${host}`);
+      } else {
+        // Local development
+        host = `localhost:${PORT}`;
+        console.log(`Using local development URL: ${host}`);
+      }
+      
       console.log(`WebSocket server running at ${protocol}://${host}/ws`);
+      
+      // Log all environment variables to help with debugging
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Environment variables:');
+        Object.keys(process.env)
+          .filter(key => key.includes('RAILWAY_') || key.includes('RENDER_') || key === 'NODE_ENV' || key === 'PORT')
+          .forEach(key => console.log(`  ${key}: ${key.includes('SECRET') ? '[REDACTED]' : process.env[key]}`));
+      }
     });
   } catch (error) {
     console.error('Failed to start server:', error);

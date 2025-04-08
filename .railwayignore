@@ -1,11 +1,4 @@
-# Ignore Android/Java files
 app/
 *.java
 *.gradle
-gradlew*
-gradle/
-build.gradle
-settings.gradle
-local.properties
-AndroidManifest.xml
-res/
+*.xml

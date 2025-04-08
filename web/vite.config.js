@@ -35,7 +35,25 @@ export default defineConfig({
     // Allow all hosts for Replit environment
     strictPort: true,
     // Explicitly set allowed hosts
-    allowedHosts: ['770c0eb0-ea44-423a-bcae-0704eaf85366-00-3aex3huoublv2.worf.replit.dev', 'localhost', '0.0.0.0', '127.0.0.1', '.repl.co', '.replit.dev', '.repl.run', '.replit.app', '.railway.app', 'b533dc8e9f4e']
+    allowedHosts: [
+      // Replit hosts
+      '770c0eb0-ea44-423a-bcae-0704eaf85366-00-3aex3huoublv2.worf.replit.dev', 
+      'localhost', 
+      '0.0.0.0', 
+      '127.0.0.1', 
+      '.repl.co', 
+      '.replit.dev', 
+      '.repl.run', 
+      '.replit.app', 
+      // Railway hosts
+      '.railway.app',
+      'chess-club-app.up.railway.app',
+      'chess-club-app-production.up.railway.app',
+      'chess-club-app.railway.app',
+      'golden-knight-chess-club.up.railway.app',
+      // Other hosts
+      'b533dc8e9f4e'
+    ]
   },
   optimizeDeps: {
     esbuildOptions: {

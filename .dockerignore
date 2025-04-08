@@ -1,19 +1,4 @@
-# Android/Java files
 app/
 *.java
 *.gradle
-gradlew*
-gradle/
-build.gradle
-settings.gradle
-local.properties
-AndroidManifest.xml
-res/
-
-# Common files to ignore
-node_modules/
-web/node_modules/
-.git/
-.gitignore
-.env
-.env.local
+*.xml

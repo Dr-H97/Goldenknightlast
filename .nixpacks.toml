@@ -1,0 +1,14 @@
+# This file tells Nixpacks (Railway's builder) exactly what type of application this is
+# This prevents auto-detection as Java/Gradle
+
+[phases.setup]
+nixPkgs = ["nodejs", "nodejs.pkgs.npm"]
+
+[phases.install]
+cmds = ["npm install", "cd web && npm install"]
+
+[phases.build]
+cmds = ["cd web && npm run build"]
+
+[start]
+cmd = "node server/index.js"
