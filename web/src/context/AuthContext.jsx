@@ -1,111 +1,96 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { auth } from '../firebase/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { authenticateWithPin, logout, getCurrentPlayer } from '../firebase/authService';
 
-// Create the Authentication Context
-const AuthContext = createContext();
+// Create the context
+const AuthContext = createContext(null);
 
 // Custom hook to use the auth context
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
-// Provider component to wrap the app and provide auth context
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentPlayer, setCurrentPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
-  
-  // On mount, check if user is already logged in from localStorage
+  const [error, setError] = useState(null);
+
+  // Listen for auth state changes when the component mounts
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem('chessClubUser');
-      if (storedUser) {
-        setCurrentUser(JSON.parse(storedUser));
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+      
+      if (user) {
+        try {
+          const player = await getCurrentPlayer(user.uid);
+          setCurrentPlayer(player);
+        } catch (err) {
+          console.error('Error getting player data:', err);
+          setError('Failed to retrieve player data');
+        }
+      } else {
+        setCurrentPlayer(null);
       }
-    } catch (error) {
-      console.error('Error loading user data from localStorage:', error);
-      localStorage.removeItem('chessClubUser');
+      
+      setLoading(false);
+    });
+
+    // Clean up subscription
+    return () => unsubscribe();
+  }, []);
+
+  // Login with player name and PIN
+  const login = async (playerName, pin) => {
+    try {
+      setError(null);
+      setLoading(true);
+      
+      const player = await authenticateWithPin(playerName, pin);
+      setCurrentPlayer(player);
+      
+      return player;
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.message || 'Failed to login');
+      throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  // Login function
-  const login = async (name, pin) => {
+  // Logout
+  const signOut = async () => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache'
-        },
-        body: JSON.stringify({ name, pin }),
-        credentials: 'same-origin'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Login failed with status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.message || 'Failed to login');
-      }
-
-      // Save user in state and localStorage
-      setCurrentUser(data.player);
-      localStorage.setItem('chessClubUser', JSON.stringify(data.player));
-      return data.player;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+      setLoading(true);
+      await logout();
+      setCurrentUser(null);
+      setCurrentPlayer(null);
+    } catch (err) {
+      console.error('Logout error:', err);
+      setError(err.message || 'Failed to logout');
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Logout function
-  const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('chessClubUser');
-  };
+  // Clear error
+  const clearError = () => setError(null);
 
-  // Verify PIN for game submission or other actions
-  const verifyPin = async (playerId, pin) => {
-    try {
-      const response = await fetch('/api/auth/verify-pin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache'
-        },
-        body: JSON.stringify({ playerId, pin }),
-        credentials: 'same-origin'
-      });
-      
-      if (!response.ok) {
-        console.error(`PIN verification failed with status: ${response.status}`);
-        return false;
-      }
-
-      const data = await response.json();
-      return data.success;
-    } catch (error) {
-      console.error('PIN verification error:', error);
-      return false;
-    }
-  };
-
-  // Value to be provided to consumers of this context
+  // Value object to provide through the context
   const value = {
     currentUser,
+    currentPlayer,
+    isAdmin: currentPlayer?.is_admin || false,
     loading,
+    error,
     login,
-    logout,
-    verifyPin,
-    isAdmin: currentUser?.isAdmin || false,
+    logout: signOut,
+    clearError
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
