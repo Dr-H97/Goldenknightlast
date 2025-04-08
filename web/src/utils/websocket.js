@@ -42,6 +42,9 @@ export const initWebSocket = (onStatusChange) => {
       console.log('WebSocket connection established');
       statusChangeCallback?.(SOCKET_STATUS.CONNECTED);
       
+      // Reset reconnection attempts on successful connection
+      reconnectAttempts = 0;
+      
       // Clear any pending reconnect timeouts
       if (reconnectTimeout) {
         clearTimeout(reconnectTimeout);
@@ -136,16 +139,39 @@ const notifyListeners = (data) => {
 /**
  * Schedule reconnection attempt
  */
+// Keep track of reconnection attempts
+let reconnectAttempts = 0;
+const MAX_RECONNECT_ATTEMPTS = 10;
+const BASE_RECONNECT_DELAY = 1000;
+
 const scheduleReconnect = () => {
   if (reconnectTimeout) {
     clearTimeout(reconnectTimeout);
   }
   
-  // Reconnect after 3 seconds
+  // Exponential backoff with jitter
+  reconnectAttempts += 1;
+  const delay = Math.min(
+    30000, // Max delay of 30 seconds
+    BASE_RECONNECT_DELAY * Math.pow(1.5, Math.min(reconnectAttempts, 10))
+  ) * (0.9 + (0.2 * Math.random())); // Add jitter
+  
+  console.log(`Attempting to reconnect WebSocket after ${delay.toFixed(1)}ms...`);
+  
   reconnectTimeout = setTimeout(() => {
-    console.log('Attempting to reconnect WebSocket...');
     initWebSocket();
-  }, 3000);
+  }, delay);
+  
+  // Reset reconnect attempts when too many failures
+  if (reconnectAttempts > MAX_RECONNECT_ATTEMPTS) {
+    console.log('Too many reconnection attempts, will try again later');
+    reconnectAttempts = 0;
+    // Try again after a longer delay
+    setTimeout(() => {
+      reconnectAttempts = 0;
+      initWebSocket();
+    }, 60000);
+  }
 };
 
 /**
