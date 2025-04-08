@@ -25,6 +25,13 @@ const translations = {
     playerName: 'Player name',
     pin: 'PIN',
     loginButton: 'Login',
+    loginWithGoogle: 'Login with Google',
+    or: 'or',
+    signInWithGoogle: 'Sign in with Google',
+    signInTo: 'Sign in to',
+    bySigningIn: 'By signing in, you agree to our terms and conditions',
+    welcome: 'Welcome to',
+    heroText: 'Track your chess progress, submit game results, and compete with club members in our ELO-based rating system.',
     
     // Navigation
     dashboard: 'Dashboard',
@@ -166,6 +173,13 @@ const translations = {
     playerName: 'Nom du Joueur',
     pin: 'Code PIN',
     loginButton: 'Se Connecter',
+    loginWithGoogle: 'Se connecter avec Google',
+    or: 'ou',
+    signInWithGoogle: 'Se connecter avec Google',
+    signInTo: 'Se connecter à',
+    bySigningIn: 'En vous connectant, vous acceptez nos conditions d\'utilisation',
+    welcome: 'Bienvenue sur',
+    heroText: 'Suivez vos progrès aux échecs, soumettez les résultats de vos parties, et jouez avec les membres du club dans notre système de classement basé sur l\'ELO.',
     
     // Navigation
     dashboard: 'Tableau de Bord',

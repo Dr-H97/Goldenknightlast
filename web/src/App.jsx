@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth } from './context/AuthContext';
 import { useTheme } from './context/ThemeContext';
 import { useLanguage } from './context/LanguageContext';
+import { FirebaseAuthProvider } from './context/FirebaseAuthContext';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -12,6 +13,7 @@ import PageTransition from './components/PageTransition';
 
 // Pages
 import Login from './pages/Login';
+import FirebaseLogin from './pages/FirebaseLogin';
 import Dashboard from './pages/Dashboard';
 import Rankings from './pages/Rankings';
 import Profile from './pages/Profile';
@@ -45,109 +47,120 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      {currentUser && !isMobile && <Navbar />}
-      
-      <div className="app-container" style={{ 
-        width: '100%', 
-        padding: isMobile ? '12px' : '20px',
-        paddingBottom: isMobile ? '70px' : '20px',  // Add padding for mobile nav
-        backgroundColor: 'var(--background)',
-        color: 'var(--text)',
-        minHeight: '100vh',
-        transition: 'background-color 0.3s ease, color 0.3s ease'
-      }}>
-        <Routes>
-          {/* Public routes */}
-          <Route 
-            path="/login" 
-            element={currentUser ? <Navigate to="/dashboard" /> : 
-              <PageTransition loaderType="simple">
-                <Login />
-              </PageTransition>
-            } 
-          />
-          
-          {/* Protected routes */}
-          <Route 
-            path="/" 
-            element={<Navigate to={currentUser ? "/dashboard" : "/login"} />} 
-          />
-          
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
+    <FirebaseAuthProvider>
+      <Router>
+        {currentUser && !isMobile && <Navbar />}
+        
+        <div className="app-container" style={{ 
+          width: '100%', 
+          padding: isMobile ? '12px' : '20px',
+          paddingBottom: isMobile ? '70px' : '20px',  // Add padding for mobile nav
+          backgroundColor: 'var(--background)',
+          color: 'var(--text)',
+          minHeight: '100vh',
+          transition: 'background-color 0.3s ease, color 0.3s ease'
+        }}>
+          <Routes>
+            {/* Public routes */}
+            <Route 
+              path="/login" 
+              element={currentUser ? <Navigate to="/dashboard" /> : 
                 <PageTransition loaderType="simple">
-                  <Dashboard />
+                  <Login />
                 </PageTransition>
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/rankings" 
-            element={
-              <ProtectedRoute>
-                <PageTransition loaderType="chess">
-                  <Rankings />
-                </PageTransition>
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <PageTransition loaderType="knight">
-                  <Profile />
-                </PageTransition>
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/submit-game" 
-            element={
-              <ProtectedRoute>
-                <PageTransition loaderType="chess">
-                  <SubmitGame />
-                </PageTransition>
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/games" 
-            element={
-              <ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/firebase-login" 
+              element={currentUser ? <Navigate to="/dashboard" /> : 
                 <PageTransition loaderType="simple">
-                  <Games />
+                  <FirebaseLogin />
                 </PageTransition>
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute requireAdmin={true}>
-                <PageTransition loaderType="knight">
-                  <Admin />
-                </PageTransition>
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* 404 route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-      
-      {/* Show mobile navigation on mobile devices */}
-      {currentUser && isMobile && <MobileNav />}
-    </Router>
+              } 
+            />
+            
+            {/* Protected routes */}
+            <Route 
+              path="/" 
+              element={<Navigate to={currentUser ? "/dashboard" : "/login"} />} 
+            />
+            
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <PageTransition loaderType="simple">
+                    <Dashboard />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/rankings" 
+              element={
+                <ProtectedRoute>
+                  <PageTransition loaderType="chess">
+                    <Rankings />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <PageTransition loaderType="knight">
+                    <Profile />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/submit-game" 
+              element={
+                <ProtectedRoute>
+                  <PageTransition loaderType="chess">
+                    <SubmitGame />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/games" 
+              element={
+                <ProtectedRoute>
+                  <PageTransition loaderType="simple">
+                    <Games />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <PageTransition loaderType="knight">
+                    <Admin />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* 404 route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+        
+        {/* Show mobile navigation on mobile devices */}
+        {currentUser && isMobile && <MobileNav />}
+      </Router>
+    </FirebaseAuthProvider>
   );
 }
 

@@ -129,6 +129,40 @@ const Login = () => {
             {loading ? t('loading') : t('loginButton')}
           </button>
         </form>
+        
+        <div className="firebase-login-option" style={{ marginTop: '20px', textAlign: 'center' }}>
+          <p className="or-divider" style={{ 
+            position: 'relative', 
+            textAlign: 'center', 
+            marginBottom: '15px',
+            color: 'var(--text-secondary)'
+          }}>
+            <span style={{ 
+              backgroundColor: 'var(--card-bg)', 
+              padding: '0 10px', 
+              position: 'relative', 
+              zIndex: 1 
+            }}>
+              {t('or')}
+            </span>
+            <span style={{ 
+              position: 'absolute', 
+              top: '50%', 
+              left: 0, 
+              right: 0, 
+              height: '1px', 
+              backgroundColor: 'var(--border)',
+              zIndex: 0
+            }}></span>
+          </p>
+          <a 
+            href="/firebase-login" 
+            className="btn-secondary" 
+            style={{ display: 'inline-block', width: '100%' }}
+          >
+            {t('loginWithGoogle')}
+          </a>
+        </div>
       </div>
       
       {/* Settings at the bottom */}

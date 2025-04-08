@@ -1,155 +1,84 @@
-# Vercel Deployment Guide for Chess Club Application
+# Vercel Deployment Guide with Firebase Authentication
 
-This guide provides step-by-step instructions for deploying the Chess Club application on Vercel (frontend) and Railway (backend). This separated approach is optimal because:
-
-1. Vercel excels at hosting frontend applications
-2. Railway is better suited for backend services and databases
+This guide describes how to deploy the Chess Club application using Vercel for the frontend and Firebase for authentication.
 
 ## Prerequisites
 
-- GitHub account
-- Vercel account (sign up at vercel.com)
-- Railway account (sign up at railway.app)
+- A Vercel account (sign up at [vercel.com](https://vercel.com))
+- A Firebase account and project (create at [console.firebase.google.com](https://console.firebase.google.com))
 
-## Step 1: Prepare for Deployment
+## Firebase Setup
 
-The necessary configuration files have already been created:
+1. Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project (or use an existing one).
 
-1. `vercel.json` - Configuration for Vercel deployment
-2. `web/.env.production` - Environment variables for production
-3. Updated WebSocket utility to handle cross-domain communication
-4. Updated Vite configuration for Vercel
+2. In your Firebase project, click "Add app" and select the Web platform (`</>`).
 
-## Step 2: Deploy Backend to Railway
+3. Register your app with a nickname (e.g., "Chess Club Web") and click "Register app".
 
-First, deploy the backend to Railway:
+4. Go to the "Authentication" section in your Firebase project and enable the Google sign-in method.
 
-1. Push your code to a GitHub repository
-2. Go to [Railway.app](https://railway.app/) and log in
-3. Click "New Project" and select "Deploy from GitHub repo"
-4. Select your repository
-5. Set the following environment variables:
-   - `DATABASE_URL` - Railway will automatically create a PostgreSQL database
-   - `NODE_ENV` - Set to "production"
-   - `PORT` - Railway will set this automatically, but you can set it to 3000
-   - `SESSION_SECRET` - Add a strong secret for session management
+5. Add your production domain (will be from Vercel) and development domain to the "Authorized domains" list in the Firebase Authentication settings.
 
-6. After deployment, note the URL of your Railway app (e.g., `chess-club-backend.railway.app`)
+6. Note down the following values from your Firebase config:
+   - `apiKey`
+   - `projectId`
+   - `appId`
 
-## Step 3: Update Environment Variables
+## Vercel Setup
 
-1. Update the backend URL in `web/.env.production`:
-   ```
-   VITE_API_URL=https://your-backend-url.railway.app
-   VITE_BACKEND_WS_URL=wss://your-backend-url.railway.app/ws
-   ```
+1. Fork or clone your repository to GitHub (or GitLab/BitBucket).
 
-2. Update the backend URL in `vercel.json` rewrites:
-   ```json
-   "rewrites": [
-     {
-       "source": "/api/:path*",
-       "destination": "https://your-backend-url.railway.app/api/:path*"
-     },
-     {
-       "source": "/ws",
-       "destination": "https://your-backend-url.railway.app/ws"
-     }
-   ]
-   ```
+2. Log in to [Vercel](https://vercel.com) and click "New Project".
 
-3. Update the WebSocket utility in `web/src/utils/websocket.js`:
-   - Change `const backendHost = "chess-club-backend.railway.app"` to your actual backend URL
-
-## Step 4: Deploy Frontend to Vercel
-
-1. Push your updated code to GitHub
-2. Go to [Vercel.com](https://vercel.com) and sign in
-3. Click "Add New" > "Project"
-4. Import your GitHub repository
-5. Configure the project:
+3. Import your repository and configure the project:
    - Framework Preset: Vite
-   - Root Directory: ./web
-   - Build Command: npm run build
-   - Output Directory: dist
-6. Add the environment variables from `web/.env.production`:
-   - `VITE_API_URL`
-   - `VITE_BACKEND_WS_URL`
-7. Click "Deploy"
+   - Root Directory: `web` (important: select the web directory, not the root)
+   - Build Command: `npm run build` (default)
+   - Output Directory: `dist` (default)
 
-## Step 5: Vercel Deployment Settings
+4. Add Environment Variables:
+   - `VITE_FIREBASE_API_KEY`: Your Firebase API key
+   - `VITE_FIREBASE_PROJECT_ID`: Your Firebase project ID
+   - `VITE_FIREBASE_APP_ID`: Your Firebase app ID
 
-After the initial deployment, you might want to adjust some settings:
+5. Click "Deploy"!
 
-1. **Custom Domain** (optional):
-   - Go to Project Settings > Domains
-   - Add your custom domain (e.g., chessclub.yourdomain.com)
+## After Deployment
 
-2. **Environment Variables**:
-   - Go to Project Settings > Environment Variables
-   - Verify that the variables are set correctly
+1. Once deployed, Vercel will provide you with a domain (e.g., `your-app.vercel.app`).
 
-3. **Production Branch**:
-   - Go to Project Settings > Git
-   - Set the production branch (usually `main` or `master`)
+2. Copy this domain and add it to the "Authorized domains" list in your Firebase Authentication settings.
 
-## Step 6: Test the Deployment
+3. Test your application to ensure Firebase authentication is working as expected.
 
-1. Visit your Vercel deployment URL
-2. Verify that:
-   - The frontend loads correctly
-   - API calls to the backend work
-   - WebSocket connection is established
-   - Authentication functions properly
-   - Game submission and other features work as expected
+## Custom Domain (Optional)
+
+1. In your Vercel project settings, go to the "Domains" section.
+
+2. Add your custom domain and follow the instructions to configure DNS.
+
+3. Remember to add your custom domain to the "Authorized domains" list in Firebase Authentication settings.
+
+## Backend Configuration
+
+This frontend deployment assumes your backend API is already deployed and accessible. Make sure your API endpoints are properly configured in the frontend code. Your backend services should be deployed separately on a service like Railway, Heroku, or another hosting provider.
+
+For the Chess Club application, the backend is configured in:
+- `web/src/utils/api.js` - Contains the API base URL
+- `web/src/utils/websocket.js` - Contains WebSocket connection settings
 
 ## Troubleshooting
 
-### CORS Issues
-If you encounter CORS errors:
-
-1. Ensure your backend has the correct CORS configuration in `server/index.js`:
-   ```javascript
-   app.use(cors({
-     origin: [
-       'https://your-vercel-app.vercel.app',
-       'https://your-custom-domain.com'
-     ],
-     credentials: true,
-     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-     allowedHeaders: ['Content-Type', 'Authorization']
-   }));
-   ```
-
-### WebSocket Connection Issues
-If WebSocket connections fail:
-
-1. Check browser console for specific errors
-2. Verify that the WebSocket URL in `web/.env.production` is correct
-3. Ensure the backend is properly handling WebSocket connections
-
-### Database Connection Issues
-If the backend can't connect to the database:
-
-1. Verify the `DATABASE_URL` environment variable on Railway
-2. Check Railway logs for database connection errors
-
-## Continuous Deployment
-
-Both Vercel and Railway support automatic deployments when you push to your GitHub repository. This means:
-
-1. When you push changes to your frontend code, Vercel will automatically rebuild and deploy
-2. When you push changes to your backend code, Railway will automatically rebuild and deploy
-
-## Security Considerations
-
-1. Ensure that `SESSION_SECRET` is a strong, random string
-2. Consider setting up rate limiting on your API endpoints
-3. Implement proper CSRF protection
-4. Use HTTPS for all communications (Vercel and Railway handle this automatically)
+- **Authentication Issues**: Ensure your domain is added to Firebase authorized domains.
+- **CORS Issues**: Verify your API server allows requests from your Vercel domain.
+- **Environment Variables**: Check that all required environment variables are set in Vercel.
 
 ## Maintenance
 
-1. Regularly update dependencies to patch security vulnerabilities
-2. Monitor application logs on both Vercel and Railway for issues
-3. Set up alerts for application errors or downtime
+To update your application:
+1. Push changes to your repository.
+2. Vercel will automatically rebuild and deploy your application.
+
+---
+
+For additional help, refer to the [Vercel Documentation](https://vercel.com/docs) and [Firebase Documentation](https://firebase.google.com/docs).
