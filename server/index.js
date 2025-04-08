@@ -172,7 +172,10 @@ app.use(cors({
       'https://golden-knight-chess-club.up.railway.app',
       'https://chess-club-app.up.railway.app',
       'https://chess-club-app-production.up.railway.app',
-      'https://chess-club-app.railway.app'
+      'https://chess-club-app.railway.app',
+      'https://chess-club-app.vercel.app',
+      'https://golden-knight-chess-club.vercel.app',
+      'https://chess-club.vercel.app'
     ];
     
     // Allow requests with no origin (like mobile apps, curl requests)

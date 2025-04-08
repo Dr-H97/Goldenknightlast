@@ -32,20 +32,32 @@ export const initWebSocket = (onStatusChange) => {
   statusChangeCallback?.(SOCKET_STATUS.CONNECTING);
   
   try {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     // Handle various deployment environments
     const isReplit = window.location.hostname.includes('replit');
     const isRailway = window.location.hostname.includes('railway.app');
+    const isVercel = window.location.hostname.includes('vercel.app');
     
-    // Use the appropriate WebSocket URL based on the hosting environment
+    // Get the appropriate WebSocket URL based on environment
     let wsUrl;
-    if (isReplit) {
-      wsUrl = `${protocol}//${window.location.host}/ws`;
-    } else if (isRailway) {
+    
+    // Check if we have a backend URL defined in environment variables
+    const backendWsUrl = import.meta.env?.VITE_BACKEND_WS_URL;
+    
+    if (backendWsUrl) {
+      // Use the environment variable if available (best for production)
+      wsUrl = backendWsUrl;
+    } else if (isVercel) {
+      // For Vercel, WebSocket endpoints should be pointed to the backend (Railway)
+      const backendHost = "chess-club-backend.railway.app"; // Update this to your actual backend host
+      wsUrl = `wss://${backendHost}/ws`;
+    } else if (isReplit || isRailway) {
+      // For Replit and Railway, WebSockets are on the same domain
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       wsUrl = `${protocol}//${window.location.host}/ws`;
     } else {
       // Local development
-      wsUrl = `${protocol}//${window.location.host}/ws`;
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      wsUrl = `${protocol}//${window.location.hostname}:3000/ws`;
     }
     
     console.log(`Connecting to WebSocket at ${wsUrl}`);
