@@ -4,7 +4,7 @@ modules = ["java", "nodejs-20"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Project"
+runButton = "Dev"
 
 [[workflows.workflow]]
 name = "Project"
@@ -49,9 +49,23 @@ task = "shell.exec"
 args = "node server/simple-server.js"
 waitForPort = 3000
 
+[[workflows.workflow]]
+name = "Dev"
+author = 41133334
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server/index.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd web && npm run dev"
+
 [deployment]
-run = ["sh", "-c", "./gradlew :app:installDebug && adb shell am start -n com.chessclub.app/.ui.login.LoginActivity"]
+run = ["sh", "-c", "node server/index.js"]
 deploymentTarget = "cloudrun"
+build = ["sh", "-c", "cd web && npm install && npm run build"]
 
 [[ports]]
 localPort = 3000
