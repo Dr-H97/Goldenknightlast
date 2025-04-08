@@ -14,10 +14,10 @@
  * @returns {Object} - New ELO ratings and changes
  */
 export const calculateElo = (whiteElo, blackElo, gameResult) => {
-  // Default K-factor
+  // K-factor (determines the maximum change in rating)
   const K = 20;
   
-  // Convert string ratings to numbers if needed
+  // Convert ratings to numbers to ensure proper calculation
   const whiteRating = Number(whiteElo);
   const blackRating = Number(blackElo);
   
@@ -29,9 +29,11 @@ export const calculateElo = (whiteElo, blackElo, gameResult) => {
   let whiteActual, blackActual;
   
   if (gameResult === '1-0') {
+    // White wins
     whiteActual = 1;
     blackActual = 0;
   } else if (gameResult === '0-1') {
+    // Black wins
     whiteActual = 0;
     blackActual = 1;
   } else {
@@ -41,17 +43,22 @@ export const calculateElo = (whiteElo, blackElo, gameResult) => {
   }
   
   // Calculate new ratings
-  const whiteEloDiff = Math.round(K * (whiteActual - whiteExpected));
-  const blackEloDiff = Math.round(K * (blackActual - blackExpected));
+  const whiteNewEloRaw = whiteRating + K * (whiteActual - whiteExpected);
+  const blackNewEloRaw = blackRating + K * (blackActual - blackExpected);
   
-  const whiteNewElo = whiteRating + whiteEloDiff;
-  const blackNewElo = blackRating + blackEloDiff;
+  // Round to nearest integer
+  const whiteNewElo = Math.round(whiteNewEloRaw);
+  const blackNewElo = Math.round(blackNewEloRaw);
+  
+  // Calculate rating changes
+  const whiteEloChange = whiteNewElo - whiteRating;
+  const blackEloChange = blackNewElo - blackRating;
   
   return {
     whiteNewElo,
     blackNewElo,
-    whiteEloDiff,
-    blackEloDiff
+    whiteEloChange,
+    blackEloChange
   };
 };
 
@@ -68,23 +75,24 @@ export const calculateElo = (whiteElo, blackElo, gameResult) => {
  * @returns {number} - Performance rating
  */
 export const calculatePerformanceRating = (opponentRatings, results) => {
-  if (!opponentRatings.length || opponentRatings.length !== results.length) {
+  if (opponentRatings.length === 0 || opponentRatings.length !== results.length) {
     return 0;
   }
   
   // Calculate average opponent rating
-  const avgRating = opponentRatings.reduce((sum, rating) => sum + Number(rating), 0) / opponentRatings.length;
+  const avgOpponentRating = opponentRatings.reduce((sum, rating) => sum + Number(rating), 0) / opponentRatings.length;
   
-  // Calculate performance score
-  const score = results.reduce((sum, result) => sum + result, 0);
-  const performance = score / results.length;
+  // Calculate performance (percentage of points scored)
+  const points = results.reduce((sum, result) => sum + result, 0);
+  const performance = points / results.length;
   
-  // Avoid division by zero or invalid logarithm
-  if (performance === 0) return avgRating - 400;
-  if (performance === 1) return avgRating + 400;
+  // Avoid division by zero or log of zero
+  if (performance === 0) return avgOpponentRating - 400;
+  if (performance === 1) return avgOpponentRating + 400;
   
-  // Calculate performance difference
-  const diff = -400 * Math.log10((1 - performance) / performance);
+  // Calculate performance rating
+  const D = -400 * Math.log10((1 - performance) / performance);
+  const performanceRating = avgOpponentRating + D;
   
-  return Math.round(avgRating + diff);
+  return Math.round(performanceRating);
 };

@@ -4,7 +4,7 @@ modules = ["java", "nodejs-20"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Dev"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
@@ -13,26 +13,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "ChessClubFrontend"
+args = "ReferenceServer"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "ReferenceServer"
-
-[[workflows.workflow]]
-name = "ChessClubFrontend"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd web && npm start"
-waitForPort = 5000
+args = "ChessClubFrontend"
 
 [[workflows.workflow]]
 name = "ReferenceServer"
@@ -61,6 +46,21 @@ args = "node server/index.js"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd web && npm run dev"
+
+[[workflows.workflow]]
+name = "ChessClubFrontend"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd web && npm start"
+waitForPort = 5000
 
 [deployment]
 run = ["sh", "-c", "node server/index.js"]

@@ -1,340 +1,259 @@
-/* Chess Club Theme - Updated Styles */
+/* Chess Club App Theme - Golden Knight Chess Club */
 
-/* Dark Theme Variables (Default) */
-:root[data-theme="dark"] {
-  --background: #1e1e1e;
-  --surface: #2a2a2a;
-  --primary-accent: #c9a96a; /* modern golden-sand tone */
-  --primary-accent-hover: #d6b26d;
-  --text-primary: #f5f5f5; /* Brighter white for better contrast */
-  --text-secondary: #cccccc; /* Lightened secondary text */
-  --card-border: #3a3a3a;
-  --neutral-button-bg: #3a3a3a;
-  --neutral-button-hover: #4a4a4a;
-  --chart-line: #d6b26d;
-  --card-bg: #2a2a2a;
-  --nav-bg: #1e1e1e;
-  --nav-border: #3a3a3a;
-  --nav-active: #c9a96a;
-  --font-weight-heading: 600;
-  --font-weight-normal: 400;
-  --table-row-alt: #242424;
-  --table-header-bg: #333333;
+:root {
+  /* Light theme colors */
+  --light-primary: #8B5A2B; /* Golden Brown */
+  --light-secondary: #654321; /* Dark Brown */
+  --light-background: #F5F5DC; /* Beige */
+  --light-surface: #FFFFFF; /* White */
+  --light-error: #B00020; /* Red */
+  --light-text: #212121; /* Nearly Black */
+  --light-text-secondary: #757575; /* Gray */
+  --light-divider: #BDBDBD; /* Light Gray */
+  --light-board-light: #E8D0AA; /* Light square */
+  --light-board-dark: #B58863; /* Dark square */
+  
+  /* Dark theme colors */
+  --dark-primary: #D4AF37; /* Gold */
+  --dark-secondary: #A67C52; /* Light Brown */
+  --dark-background: #121212; /* Very Dark Gray */
+  --dark-surface: #1E1E1E; /* Dark Gray */
+  --dark-error: #CF6679; /* Light Red */
+  --dark-text: #E0E0E0; /* Light Gray */
+  --dark-text-secondary: #AFAFAF; /* Medium Gray */
+  --dark-divider: #4A4A4A; /* Medium-Dark Gray */
+  --dark-board-light: #E8D0AA; /* Light square (same as light theme) */
+  --dark-board-dark: #B58863; /* Dark square (same as light theme) */
+  
+  /* Default to light theme */
+  --primary: var(--light-primary);
+  --secondary: var(--light-secondary);
+  --background: var(--light-background);
+  --surface: var(--light-surface);
+  --error: var(--light-error);
+  --text: var(--light-text);
+  --text-secondary: var(--light-text-secondary);
+  --divider: var(--light-divider);
+  --board-light: var(--light-board-light);
+  --board-dark: var(--light-board-dark);
 }
 
-/* Light Theme Variables */
-:root[data-theme="light"] {
-  --background: #f8f8f8;
-  --surface: #ffffff;
-  --primary-accent: #b58863; /* Chess brown */
-  --primary-accent-hover: #9e7655;
-  --text-primary: #1a1a1a; /* Dark text for contrast */
-  --text-secondary: #555555; /* Darkened secondary text */
-  --card-border: #dddddd;
-  --neutral-button-bg: #e0e0e0;
-  --neutral-button-hover: #d0d0d0;
-  --chart-line: #b58863;
-  --card-bg: #ffffff;
-  --nav-bg: #ffffff;
-  --nav-border: #eeeeee;
-  --nav-active: #b58863;
-  --font-weight-heading: 600;
-  --font-weight-normal: 400;
-  --table-row-alt: #f5f5f5;
-  --table-header-bg: #f0f0f0;
+/* Dark Theme Class */
+.dark-theme {
+  --primary: var(--dark-primary);
+  --secondary: var(--dark-secondary);
+  --background: var(--dark-background);
+  --surface: var(--dark-surface);
+  --error: var(--dark-error);
+  --text: var(--dark-text);
+  --text-secondary: var(--dark-text-secondary);
+  --divider: var(--dark-divider);
+  --board-light: var(--dark-board-light);
+  --board-dark: var(--dark-board-dark);
 }
 
+/* Common styles */
 body {
-  background-color: var(--background);
-  color: var(--text-primary);
-  font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.5;
-  font-weight: var(--font-weight-normal);
+  font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Card layout */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Button styling */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: rgba(139, 90, 43, 0.1);
+}
+
+/* Card styling */
 .card {
   background-color: var(--surface);
-  border-radius: 1rem;
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--card-border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Headings */
-h1 {
-  font-size: 1.8rem;
-  font-weight: var(--font-weight-heading);
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  letter-spacing: 0.01em;
-}
-
-h2, .card h2,
-.section-title {
-  font-size: 1.3rem;
-  font-weight: var(--font-weight-heading);
-  margin-bottom: 0.75rem;
-  color: var(--text-primary);
-  text-transform: capitalize;
-  letter-spacing: 0.01em;
-}
-
-h3 {
-  font-size: 1.1rem;
-  font-weight: var(--font-weight-heading);
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
-  letter-spacing: 0.01em;
-}
-
-/* Buttons: gold variant */
-.button, 
-.btn-primary {
-  background-color: var(--primary-accent);
-  color: #ffffff; /* Always white text on primary button for max contrast */
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.75rem;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.02em;
-  text-transform: capitalize;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.button:hover,
-.btn-primary:hover {
-  background-color: var(--primary-accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.button:active,
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-/* Optional: neutral version of button instead of gold */
-.button-neutral,
-.btn-secondary {
-  background-color: var(--neutral-button-bg);
-  color: var(--text-primary);
-  border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.button-neutral:hover,
-.btn-secondary:hover {
-  background-color: var(--neutral-button-hover);
-  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.button-neutral:active,
-.btn-secondary:active {
-  transform: translateY(0);
+/* Input styling */
+.input-field {
+  border: 1px solid var(--divider);
+  background-color: var(--surface);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  outline: none;
 }
 
-/* Time filter small buttons */
-.btn-sm {
-  padding: 0.4rem 0.7rem;
-  font-size: 0.8rem;
-  border-radius: 0.5rem;
+.input-field:focus {
+  border-color: var(--primary);
 }
 
-/* Tables */
-table {
+/* Chess-specific styling */
+.chess-pattern {
+  background-image: linear-gradient(45deg, var(--board-dark) 25%, transparent 25%),
+                    linear-gradient(-45deg, var(--board-dark) 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, var(--board-dark) 75%),
+                    linear-gradient(-45deg, transparent 75%, var(--board-dark) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.knight-icon {
+  color: var(--primary);
+}
+
+/* Table styling for rankings and games */
+.chess-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin: 16px 0;
 }
 
-table th,
-table td {
-  padding: 0.6rem;
+.chess-table th {
+  background-color: var(--primary);
+  color: white;
+  padding: 12px;
   text-align: left;
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--card-border);
 }
 
-table th {
-  background-color: var(--table-header-bg);
-  font-weight: var(--font-weight-heading);
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+.chess-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--divider);
 }
 
-table tbody tr:nth-child(odd) {
-  background-color: var(--table-row-alt);
+.chess-table tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Highlights like player names */
-.highlight,
-.player-name,
-.stat-highlight {
-  color: var(--primary-accent);
-  font-weight: bold;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-
-.stat-highlight {
-  font-size: 1.5rem;
-  margin: 0.5rem 0;
-  letter-spacing: 0.02em;
-}
-
-/* Enhanced highlight with underline on hover */
-.highlight:hover,
-.player-name:hover {
-  text-decoration: underline;
-  text-decoration-color: var(--primary-accent);
-  text-decoration-thickness: 2px;
-}
-
-/* Secondary text */
-.text-secondary {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
-
-/* Strong and emphasis */
-strong, b {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-em, i {
-  font-style: italic;
-  color: var(--text-primary);
-}
-
-/* Chart container spacing */
-.chart-container {
-  margin-top: 1rem;
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-
-/* Section dividers */
-.section-divider {
-  height: 1px;
-  background-color: var(--card-border);
-  margin: 1.5rem 0;
-}
-
-/* Dashboard grid */
-.dashboard-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-/* Stat cards */
-.stat-card {
-  background-color: var(--surface);
-  border-radius: 0.75rem;
-  padding: 1rem;
-  border-left: 3px solid var(--primary-accent);
+.chess-table tr:hover {
+  background-color: rgba(139, 90, 43, 0.05);
 }
 
 /* Mobile Navigation */
 .mobile-nav {
-  background-color: var(--nav-bg);
-  border-top: 1px solid var(--nav-border);
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
-  padding: 8px 0;
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
-  z-index: 100;
-}
-
-.mobile-nav-container {
+  right: 0;
+  background-color: var(--surface);
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-around;
-  max-width: 100%;
-  margin: 0 auto;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-}
-
-.mobile-nav-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  padding: 8px 0;
+  z-index: 100;
 }
 
 .mobile-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 8px 0;
-  min-width: 64px;
-  text-decoration: none;
   color: var(--text-secondary);
+  text-decoration: none;
   font-size: 12px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  padding: 4px 0;
 }
 
 .mobile-nav-item.active {
-  color: var(--nav-active);
+  color: var(--primary);
 }
 
 .mobile-nav-icon {
-  margin-bottom: 4px;
+  font-size: 24px;
+  margin-bottom: 2px;
 }
 
-/* Responsive adjustments for mobile */
+/* Responsive styling */
 @media (max-width: 768px) {
-  /* Main content padding to accommodate fixed bottom nav */
-  main, .container {
-    padding-bottom: 80px;
+  .desktop-only {
+    display: none;
   }
   
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  /* Make tables scrollable on mobile */
-  table {
+  .mobile-only {
     display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-    width: 100%;
   }
   
-  /* Adjust time period filter buttons on mobile */
-  .btn-sm {
-    padding: 6px;
-    font-size: 0.75rem;
-    margin: 2px;
+  .container {
+    padding: 8px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  h2 {
+    font-size: 20px;
   }
 }
 
-.stat-card h3 {
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
+@media (min-width: 769px) {
+  .desktop-only {
+    display: block;
+  }
+  
+  .mobile-only {
+    display: none;
+  }
+  
+  .container {
+    padding: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
