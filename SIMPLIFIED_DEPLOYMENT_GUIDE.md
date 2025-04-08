@@ -43,26 +43,66 @@ No server backend is needed as we've migrated all functionality to Firebase!
    - Create a new GitHub repository
    - Push your code to this repository
 
-3. Import your repository in Vercel:
+3. Create a `vercel.json` configuration file in the root directory:
+   ```json
+   {
+     "version": 2,
+     "framework": "vite",
+     "buildCommand": "cd web && npm install && npm run build",
+     "outputDirectory": "web/dist",
+     "routes": [
+       { "handle": "filesystem" },
+       { "src": "/assets/(.*)", "dest": "/assets/$1" },
+       { "src": "/(.*)", "dest": "/index.html" }
+     ]
+   }
+   ```
+
+4. Make sure your `web/package.json` has all necessary dependencies:
+   ```json
+   {
+     "name": "chess-club-web",
+     "private": true,
+     "version": "0.0.0",
+     "type": "module",
+     "scripts": {
+       "dev": "vite --host 0.0.0.0",
+       "build": "vite build",
+       "preview": "vite preview"
+     },
+     "dependencies": {
+       "chart.js": "^4.4.0",
+       "firebase": "^10.5.0",
+       "react": "^18.2.0",
+       "react-chartjs-2": "^5.2.0",
+       "react-dom": "^18.2.0",
+       "react-router-dom": "^6.16.0",
+       "react-transition-group": "^4.4.5"
+     },
+     "devDependencies": {
+       "@types/node": "^20.8.6",
+       "@vitejs/plugin-react": "^4.1.0",
+       "vite": "^4.4.11"
+     }
+   }
+   ```
+
+5. Import your repository in Vercel:
    - On Vercel dashboard, click "Add New..." → "Project"
    - Import your GitHub repository
-   - Configure the project:
-     - Framework Preset: Vite
-     - Root Directory: web (since our frontend is in the web folder)
-     - Build Command: npm run build
-     - Output Directory: dist
+   - Vercel will automatically detect the configuration in `vercel.json`
 
-4. Set up environment variables:
+6. Set up environment variables:
    - Add your Firebase configuration variables:
      - VITE_FIREBASE_API_KEY
      - VITE_FIREBASE_PROJECT_ID
      - VITE_FIREBASE_APP_ID
    
-5. Deploy:
+7. Deploy:
    - Click "Deploy"
    - Wait for deployment to complete
 
-6. Visit your deployed app:
+8. Visit your deployed app:
    - Click the deployment URL to see your live app
    - The URL will be something like: chess-club.vercel.app
 
@@ -137,3 +177,6 @@ To update your app:
 - **Authentication issues**: Check Firebase authentication settings
 - **Database access denied**: Verify Firestore security rules
 - **App not updating**: Make sure your GitHub repository is connected to Vercel and automatic deployments are enabled
+- **Build command failure**: Verify that dependencies in web/package.json are correct
+- **Missing JavaScript files**: Ensure the outputDirectory in vercel.json matches where Vite builds your files
+- **Deployment configuration errors**: This is a web application using Vite/React - not an Android app. No Gradle wrapper or ADB tools needed.
