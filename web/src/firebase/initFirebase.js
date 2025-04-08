@@ -1,6 +1,7 @@
 import { collection, getDocs, query, where, addDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import { hashPin } from '../utils/pinHasher';
+import { initData } from './initData';
 
 /**
  * Initialize Firebase with sample data if needed
@@ -9,6 +10,12 @@ export const initializeFirebase = async () => {
   console.log("Initializing Firebase...");
   
   try {
+    // We'll always use mock data for this demo, so initialize it
+    initData();
+    console.log("Mock data initialized for demo");
+    
+    // If you want to use real Firebase, comment the above and uncomment below:
+    /*
     // Check if we're using mock data (for development or when Firebase isn't configured)
     const useMockData = import.meta.env.VITE_USE_MOCK_DATA === 'true';
     const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
@@ -70,8 +77,11 @@ export const initializeFirebase = async () => {
     } else {
       console.log("Firebase already initialized with data.");
     }
+    */
   } catch (error) {
     console.error("Error initializing Firebase data:", error);
     console.log("Application will use mock data instead");
+    // Fallback to mock data
+    initData();
   }
 };

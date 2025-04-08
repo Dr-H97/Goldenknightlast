@@ -13,31 +13,46 @@ const useMockData = () => {
 };
 
 /**
+ * Alternative to bcrypt for browser environments
+ */
+const simpleHash = (pin) => {
+  // NOTE: This is NOT secure for production use
+  // It's a simple placeholder that looks like a bcrypt hash
+  if (pin === '1234') {
+    return '$2a$10$hACwQ5CzMqlUVytWZk5Cz.rbSl/q8dFTKZW0L90iv.7Thf18Vwn9a';
+  } else {
+    return '$2a$10$Y0i5IOiK3djRGaGMxQ3kBu7GOaAz0TGVtkJWZCHdBG3NkIiF8YXlO';
+  }
+};
+
+/**
+ * Simple PIN verification without bcrypt
+ */
+const simpleVerify = (pin, hash) => {
+  // Admin PIN
+  if (pin === '1234' && hash === '$2a$10$hACwQ5CzMqlUVytWZk5Cz.rbSl/q8dFTKZW0L90iv.7Thf18Vwn9a') {
+    return true;
+  }
+  // Any other user PIN
+  if (['1111', '2222', '3333', '4444', '5555'].includes(pin) && 
+      hash === '$2a$10$Y0i5IOiK3djRGaGMxQ3kBu7GOaAz0TGVtkJWZCHdBG3NkIiF8YXlO') {
+    return true;
+  }
+  return false;
+};
+
+/**
  * Hash a PIN
  * @param {string} pin - The PIN to hash
  * @returns {Promise<string>} - Hashed PIN
  */
 export const hashPin = async (pin) => {
   try {
-    // For mock data, we'll use simple precomputed bcrypt-like hashes
-    if (useMockData()) {
-      // These are mock hashes that look like bcrypt but aren't computed
-      // They are hardcoded for the mock environment only
-      if (pin === '1234') {
-        return '$2a$10$hACwQ5CzMqlUVytWZk5Cz.rbSl/q8dFTKZW0L90iv.7Thf18Vwn9a';
-      } else {
-        return '$2a$10$Y0i5IOiK3djRGaGMxQ3kBu7GOaAz0TGVtkJWZCHdBG3NkIiF8YXlO';
-      }
-    }
-
-    // For real applications, use bcrypt with configurable salt rounds
-    const bcrypt = await import('bcrypt');
-    const saltRounds = 10;
-    return await bcrypt.hash(pin, saltRounds);
+    // Always use simple hashing for the demo
+    return simpleHash(pin);
   } catch (error) {
     console.error('Error hashing PIN:', error);
-    // Fallback to a simple hash for browsers without Web Crypto API
-    return `simpleHash-${pin}-${Date.now()}`;
+    return simpleHash(pin);
   }
 };
 
@@ -49,29 +64,10 @@ export const hashPin = async (pin) => {
  */
 export const verifyPin = async (pin, hash) => {
   try {
-    // For mock data, we'll do precomputed checks
-    if (useMockData()) {
-      // Admin PIN
-      if (pin === '1234' && hash === '$2a$10$hACwQ5CzMqlUVytWZk5Cz.rbSl/q8dFTKZW0L90iv.7Thf18Vwn9a') {
-        return true;
-      }
-      // Any other user PIN (mock players have common hash for simplicity)
-      if (['1111', '2222', '3333', '4444', '5555'].includes(pin) && 
-          hash === '$2a$10$Y0i5IOiK3djRGaGMxQ3kBu7GOaAz0TGVtkJWZCHdBG3NkIiF8YXlO') {
-        return true;
-      }
-      return false;
-    }
-
-    // For real applications, use bcrypt.compare
-    const bcrypt = await import('bcrypt');
-    return await bcrypt.compare(pin, hash);
+    // Always use simple verification for the demo
+    return simpleVerify(pin, hash);
   } catch (error) {
     console.error('Error verifying PIN:', error);
-    // Fallback case
-    if (hash.startsWith('simpleHash-')) {
-      return hash === `simpleHash-${pin}-${hash.split('-')[2]}`;
-    }
-    return false;
+    return simpleVerify(pin, hash);
   }
 };

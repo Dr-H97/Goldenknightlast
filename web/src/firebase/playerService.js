@@ -22,9 +22,8 @@ import {
 
 // Check if we should use mock data
 const useMockData = () => {
-  const mockMode = import.meta.env.VITE_USE_MOCK_DATA === 'true';
-  const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
-  return mockMode || apiKey === 'your-api-key' || !apiKey;
+  // Always use mock data for the demo
+  return true;
 };
 
 /**
