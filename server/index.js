@@ -100,8 +100,9 @@ app.use(cors({
            'https://golden-knight-chess-club.onrender.com', 
            'https://golden-knight-chess-club.up.railway.app',
            process.env.RAILWAY_STATIC_URL, 
+           process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : null,
            process.env.RENDER_EXTERNAL_URL,
-           '*'],
+           '*'].filter(Boolean),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
@@ -157,6 +158,9 @@ const startServer = async () => {
         if (process.env.RAILWAY_STATIC_URL) {
           // For Railway deployment
           host = process.env.RAILWAY_STATIC_URL.replace(/^https?:\/\//, '');
+        } else if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+          // Alternative Railway environment variable
+          host = process.env.RAILWAY_PUBLIC_DOMAIN;
         } else if (process.env.RENDER_EXTERNAL_URL) {
           // For Render deployment
           host = process.env.RENDER_EXTERNAL_URL.replace(/^https?:\/\//, '');
